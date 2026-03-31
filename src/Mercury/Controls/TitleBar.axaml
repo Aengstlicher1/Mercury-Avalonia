@@ -1,0 +1,25 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:material="clr-namespace:MaterialDesign.Avalonia.PackIcon;assembly=MaterialDesign.Avalonia.PackIcon"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Mercury.Controls.TitleBar">
+      <Border 
+          Background="Aqua"
+          PointerPressed="OnPointerPressed" 
+          PointerReleased="OnPointerReleased" 
+          PointerMoved="OnPointerMoved">
+          <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top">
+              <Button Width="32" Height="32">
+                  
+              </Button>
+              <Button Width="32" Height="32">
+                  
+              </Button>
+              <Button Width="32" Height="32">
+                  
+              </Button>
+          </StackPanel>
+      </Border>
+</UserControl>

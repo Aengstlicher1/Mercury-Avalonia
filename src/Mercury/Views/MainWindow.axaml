@@ -1,0 +1,58 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Mercury.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:Mercury.Controls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Mercury.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaTitleBarHeightHint="48"
+        Width="950"
+        Height="500"
+        Title="Mercury">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+    <Grid Name="RootGrid" RowDefinitions="48, *" ColumnDefinitions="*, *, *">
+        <controls:TitleBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"></controls:TitleBar>
+        
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal"> 
+            
+        </StackPanel>
+        
+        <Grid Background="Red" Grid.Row="0" Grid.Column="1" ColumnDefinitions="4*, Auto, Auto" VerticalAlignment="Center">
+            <TextBox Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                     CornerRadius="4,0,0,4"
+                     BorderThickness="1,1,0, 1"></TextBox>
+            <Border Grid.Column="1" BorderThickness="1,0,0,0" BorderBrush="LightGray"></Border>
+            <ComboBox Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                      Margin="-1,0,2,0"
+                      CornerRadius="0,4,4,0"
+                      BorderThickness="0,1,1,1"
+                      ItemsSource="{Binding SearchFilters}"></ComboBox>
+        </Grid>
+        
+        <StackPanel Grid.Row="0" Grid.Column="2">
+            
+        </StackPanel>
+        
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" RowDefinitions="*, Auto">
+            <ContentPresenter Grid.Row="0">
+                
+            </ContentPresenter>
+            
+            <Border Grid.Row="1" Height="96" 
+                    BorderThickness="2,2,2,0" 
+                    Margin="-2,0,-2,0" 
+                    BorderBrush="Black" 
+                    CornerRadius="8,8,0,0">
+                <Grid>
+
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

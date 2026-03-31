@@ -1,0 +1,19 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Mercury.App"
+             xmlns:local="using:Mercury"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+             
+    <Application.Styles>
+        <StyleInclude Source="avares://MaterialDesign.Avalonia.PackIcon/Assets/Generic.xaml" />
+    </Application.Styles>
+             
+    <Application.Resources>
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#a15f6b"></SolidColorBrush>
+    </Application.Resources>
+</Application>

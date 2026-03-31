@@ -1,0 +1,31 @@
+﻿<svg width="720" height="720" viewBox="0 0 720 720" xmlns="http://www.w3.org/2000/svg" fill="none">
+	<defs>
+		<clipPath id="frame-clip">
+			<rect rx="64" ry="64" x="0" y="0" width="720" height="720"/>
+		</clipPath>
+		<filter id="flood-filter">
+			<feFlood flood-color="white" result="FloodResult"/>
+			<feComposite in="FloodResult" in2="SourceGraphic" operator="in" result="comp"/>
+		</filter>
+		<clipPath id="shape-clip">
+			<polyline points="650.886,30 650.886,690 69.114,690 69.114,30"/>
+		</clipPath>
+		<mask id="shape-mask" x="69.114" y="30" width="581.772" height="660" maskUnits="userSpaceOnUse">
+			<g filter="url(#flood-filter)">
+				<path d="M620.273,324.643L130.340,41.786C89.523,18.214,69.114,30,69.114,77.143L69.114,642.857C69.114,690,89.523,701.786,130.340,678.214L620.273,395.357C661.090,371.786,661.090,348.214,620.273,324.643Z" fill="rgb(249,250,255)"/>
+			</g>
+		</mask>
+	</defs>
+
+	<g clip-path="url(#frame-clip)">
+		<rect rx="64" ry="64" x="0" y="0" width="720" height="720"/>
+
+		<g clip-path="url(#shape-clip)">
+			<g mask="url(#shape-mask)">
+				<rect x="454.114" y="30" width="196.625" height="660" fill="rgb(109,174,255)"/>
+				<rect x="261.614" y="30" width="192.5"   height="660" fill="rgb(3,121,213)"/>
+				<rect x="69.114"  y="30" width="192.5"   height="660" fill="rgb(0,96,171)"/>
+			</g>
+		</g>
+	</g>
+</svg>
