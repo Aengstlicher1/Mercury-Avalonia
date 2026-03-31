@@ -1,0 +1,41 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ico="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+
+    <ControlTheme x:Key="CaptionButton" TargetType="Button">
+        <Setter Property="Background" Value="Red"></Setter>
+    </ControlTheme>
+    
+    <ControlTheme x:Key="{x:Type WindowDrawnDecorations}" TargetType="WindowDrawnDecorations">
+        <Setter Property="Template">
+            <WindowDrawnDecorationsTemplate>
+                <WindowDrawnDecorationsContent>
+                    <WindowDrawnDecorationsContent.Underlay>
+                        <Panel WindowDecorationProperties.ElementRole="TitleBar"/>
+                    </WindowDrawnDecorationsContent.Underlay>
+                    <WindowDrawnDecorationsContent.Overlay>
+                        <StackPanel
+                            Height="32"
+                            Margin="0,8,8,0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Orientation="Horizontal">
+                            <Button
+                                Theme="{StaticResource CaptionButton}"
+                                Content="{ico:MaterialIconExt Minus}"
+                                WindowDecorationProperties.ElementRole="MinimizeButton" />
+                            <Button
+                                Theme="{StaticResource CaptionButton}"
+                                Content="{ico:MaterialIconExt SquareOutline}"
+                                WindowDecorationProperties.ElementRole="MaximizeButton" />
+                            <Button
+                                Theme="{StaticResource CaptionButton}"
+                                Content="{ico:MaterialIconExt Close}"
+                                WindowDecorationProperties.ElementRole="CloseButton" />
+                        </StackPanel>
+                    </WindowDrawnDecorationsContent.Overlay>
+                </WindowDrawnDecorationsContent>
+            </WindowDrawnDecorationsTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

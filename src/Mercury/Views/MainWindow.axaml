@@ -3,7 +3,6 @@
         xmlns:vm="using:Mercury.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:controls="clr-namespace:Mercury.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Mercury.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -17,23 +16,26 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
     <Grid Name="RootGrid" RowDefinitions="48, *" ColumnDefinitions="*, *, *">
-        <controls:TitleBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"></controls:TitleBar>
-        
-        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal"> 
+        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
+                WindowDecorationProperties.ElementRole="TitleBar">
+            <Grid ColumnDefinitions="*, *, *">
+                <Grid Grid.Column="1" ColumnDefinitions="*, Auto, Auto" VerticalAlignment="Center">
+                    <TextBox Grid.Column="0" PlaceholderText="Search for Songs, Albums, Playlists"
+                             CornerRadius="8,0,0,8" 
+                             WindowDecorationProperties.ElementRole="User"/>
+                    <Border Grid.Column="1" BorderBrush="{StaticResource OutlineBrush}" BorderThickness="0,0,1,0" />
+                    <ComboBox Grid.Column="2" CornerRadius="0,8,8,0"
+                              ItemsSource="{Binding SearchFilters}"
+                              SelectedItem="{Binding SelectedSearchFilter}"
+                              WindowDecorationProperties.ElementRole="User"/>
+                </Grid>
+            </Grid>
+        </Border>
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
             
         </StackPanel>
         
-        <Grid Background="Red" Grid.Row="0" Grid.Column="1" ColumnDefinitions="4*, Auto, Auto" VerticalAlignment="Center">
-            <TextBox Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                     CornerRadius="4,0,0,4"
-                     BorderThickness="1,1,0, 1"></TextBox>
-            <Border Grid.Column="1" BorderThickness="1,0,0,0" BorderBrush="LightGray"></Border>
-            <ComboBox Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                      Margin="-1,0,2,0"
-                      CornerRadius="0,4,4,0"
-                      BorderThickness="0,1,1,1"
-                      ItemsSource="{Binding SearchFilters}"></ComboBox>
-        </Grid>
+        
         
         <StackPanel Grid.Row="0" Grid.Column="2">
             

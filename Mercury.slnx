@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="src/Core/Mercury.Core.Test/Mercury.Core.Test.csproj" />
   <Project Path="src/Core/Mercury.Core/Mercury.Core.csproj" />
+  <Project Path="src/Icons/Material.Icons.Avalonia/Material.Icons.Avalonia.csproj" />
   <Project Path="src/Mercury/Mercury.csproj" />
 </Solution>

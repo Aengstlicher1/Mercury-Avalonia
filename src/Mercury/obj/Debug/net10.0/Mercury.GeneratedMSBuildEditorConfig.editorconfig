@@ -31,7 +31,13 @@ build_property.EnableCodeStyleSeverity =
 [D:/Rider/Mercury/src/Mercury/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[D:/Rider/Mercury/src/Mercury/Controls/TitleBar.axaml]
+[D:/Rider/Mercury/src/Mercury/Resources/Colors.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/Rider/Mercury/src/Mercury/Resources/WindowDrawnDecorations.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/Rider/Mercury/src/Mercury/Styles/Button.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [D:/Rider/Mercury/src/Mercury/Views/MainWindow.axaml]

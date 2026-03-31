@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Avalonia.Controls;
-using Mercury.Core.Models;
+using static Mercury.Core.Models.Enums;
 
 namespace Mercury.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public IEnumerable<Enums.SearchFilter> SearchFilters =>
-        Enum.GetValues(typeof(Enums.SearchFilter)).Cast<Enums.SearchFilter>()
+    public IEnumerable<SearchFilter> SearchFilters =>
+        Enum.GetValues(typeof(SearchFilter)).Cast<SearchFilter>()
             .Where(s =>
-                s != Enums.SearchFilter.Episodes &&
-                s != Enums.SearchFilter.Profiles
+                s != SearchFilter.Episodes &&
+                s != SearchFilter.Profiles
             );
-    
+
+    public SearchFilter SelectedSearchFilter { get; set; } = SearchFilter.All;
 }
