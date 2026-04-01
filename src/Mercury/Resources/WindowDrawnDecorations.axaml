@@ -3,7 +3,7 @@
         xmlns:ico="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
 
     <ControlTheme x:Key="CaptionButton" TargetType="Button">
-        <Setter Property="Background" Value="Red"></Setter>
+        <Setter Property="WindowDecorationProperties.ElementRole" Value="DecorationsElement" />
     </ControlTheme>
     
     <ControlTheme x:Key="{x:Type WindowDrawnDecorations}" TargetType="WindowDrawnDecorations">
@@ -14,25 +14,40 @@
                         <Panel WindowDecorationProperties.ElementRole="TitleBar"/>
                     </WindowDrawnDecorationsContent.Underlay>
                     <WindowDrawnDecorationsContent.Overlay>
-                        <StackPanel
-                            Height="32"
-                            Margin="0,8,8,0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
-                            Orientation="Horizontal">
-                            <Button
-                                Theme="{StaticResource CaptionButton}"
-                                Content="{ico:MaterialIconExt Minus}"
-                                WindowDecorationProperties.ElementRole="MinimizeButton" />
-                            <Button
-                                Theme="{StaticResource CaptionButton}"
-                                Content="{ico:MaterialIconExt SquareOutline}"
-                                WindowDecorationProperties.ElementRole="MaximizeButton" />
-                            <Button
-                                Theme="{StaticResource CaptionButton}"
-                                Content="{ico:MaterialIconExt Close}"
-                                WindowDecorationProperties.ElementRole="CloseButton" />
-                        </StackPanel>
+                        <Grid ColumnDefinitions="36, *" RowDefinitions="42, *">
+                            <Image
+                                Grid.Row="0" Grid.Column="0" 
+                                Margin="6,6,2,2"
+                                IsHitTestVisible="False"
+                                Source="../Assets/Icon.png"/>
+                            
+                            <StackPanel
+                                Grid.Row="0" Grid.Column="1" 
+                                Height="32"
+                                Margin="0,5,5,0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Orientation="Horizontal">
+                                <!-- ReSharper disable once InconsistentNaming -->
+                                <Button
+                                    Name="PART_MinimizeButton"
+                                    Theme="{StaticResource CaptionButton}"
+                                    Content="{ico:MaterialIconExt Minus}"
+                                    WindowDecorationProperties.ElementRole="MinimizeButton" />
+                                <!-- ReSharper disable once InconsistentNaming -->
+                                <Button
+                                    Name="PART_MaximizeButton"
+                                    Theme="{StaticResource CaptionButton}"
+                                    Content="{ico:MaterialIconExt SquareOutline}"
+                                    WindowDecorationProperties.ElementRole="MaximizeButton" />
+                                <!-- ReSharper disable once InconsistentNaming -->
+                                <Button
+                                    Name="PART_CloseButton"
+                                    Theme="{StaticResource CaptionButton}"
+                                    Content="{ico:MaterialIconExt Close}"
+                                    WindowDecorationProperties.ElementRole="CloseButton" />
+                            </StackPanel>
+                        </Grid>
                     </WindowDrawnDecorationsContent.Overlay>
                 </WindowDrawnDecorationsContent>
             </WindowDrawnDecorationsTemplate>

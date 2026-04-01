@@ -3,58 +3,118 @@
         xmlns:vm="using:Mercury.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ico="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Mercury.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaTitleBarHeightHint="48"
+        Background="{StaticResource WindowSurfaceBrush}"
+        TransparencyLevelHint="AcrylicBlur, Mica, Transparent"
         Width="950"
         Height="500"
         Title="Mercury">
-
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-    <Grid Name="RootGrid" RowDefinitions="48, *" ColumnDefinitions="*, *, *">
-        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
-                WindowDecorationProperties.ElementRole="TitleBar">
-            <Grid ColumnDefinitions="*, *, *">
-                <Grid Grid.Column="1" ColumnDefinitions="*, Auto, Auto" VerticalAlignment="Center">
-                    <TextBox Grid.Column="0" PlaceholderText="Search for Songs, Albums, Playlists"
-                             CornerRadius="8,0,0,8" 
-                             WindowDecorationProperties.ElementRole="User"/>
-                    <Border Grid.Column="1" BorderBrush="{StaticResource OutlineBrush}" BorderThickness="0,0,1,0" />
-                    <ComboBox Grid.Column="2" CornerRadius="0,8,8,0"
-                              ItemsSource="{Binding SearchFilters}"
-                              SelectedItem="{Binding SelectedSearchFilter}"
-                              WindowDecorationProperties.ElementRole="User"/>
-                </Grid>
-            </Grid>
-        </Border>
-        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-            
-        </StackPanel>
+    <Panel>
+        <Panel IsHitTestVisible="False">
+            <!-- White base -->
+            <Border Background="{StaticResource WindowSurfaceBrush}"/>
+    
+            <!-- 50% image on top -->
+            <Border>
+                <Border.Background>
+                    <ImageBrush Source="{Binding CurrentBackgroundImage}" Stretch="UniformToFill" Opacity="0.1">
+                        <ImageBrush.Transform>
+                            <TransformGroup>
+                                <TranslateTransform X="100" Y="-20"/>
+                                <ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
+                            </TransformGroup>
+                        </ImageBrush.Transform>
+                    </ImageBrush>
+                </Border.Background>
+                <Border.Effect>
+                    <BlurEffect Radius="80"/>
+                </Border.Effect>
+            </Border>
+        </Panel>
         
-        
-        
-        <StackPanel Grid.Row="0" Grid.Column="2">
-            
-        </StackPanel>
-        
-        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" RowDefinitions="*, Auto">
-            <ContentPresenter Grid.Row="0">
-                
-            </ContentPresenter>
-            
-            <Border Grid.Row="1" Height="96" 
-                    BorderThickness="2,2,2,0" 
-                    Margin="-2,0,-2,0" 
-                    BorderBrush="Black" 
-                    CornerRadius="8,8,0,0">
-                <Grid>
-
+        <Grid Name="RootGrid" RowDefinitions="42, *" ColumnDefinitions="*, *, *">
+            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+                <Grid ColumnDefinitions="*, *, *">
+                    <Grid Grid.Column="1" 
+                          ColumnDefinitions="*, Auto, Auto" 
+                          VerticalAlignment="Center"
+                          WindowDecorationProperties.ElementRole="User">
+                        <TextBox Grid.Column="0" PlaceholderText="Search for Songs, Albums, Playlists"
+                                 Text="{Binding SearchText, Mode=TwoWay}"
+                                 CornerRadius="8,0,0,8" 
+                                 WindowDecorationProperties.ElementRole="User"/>
+                        <Border Grid.Column="1" BorderBrush="{StaticResource OutlineBrush}" BorderThickness="0,0,1,0" />
+                        <ComboBox Grid.Column="2" CornerRadius="0,8,8,0"
+                                  ItemsSource="{Binding SearchFilters}"
+                                  SelectedItem="{Binding SelectedSearchFilter}"
+                                  WindowDecorationProperties.ElementRole="User"/>
+                    </Grid>
                 </Grid>
             </Border>
+            
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" ColumnDefinitions="42, *" RowDefinitions="*, Auto">
+                <Grid Grid.Row="0" Grid.Column="0" 
+                      RowDefinitions="Auto, *, Auto, *, Auto">
+                    <StackPanel Grid.Row="0" Margin="0,4,0,0">
+                        <Button Content="{ico:MaterialIconExt }" />
+                    </StackPanel>
+                </Grid>
+            
+                <Border Grid.Row="0" Grid.Column="1" 
+                        CornerRadius="8" 
+                        Margin="0,0,6,3">
+                    <NavigationPage Background="Transparent"/>
+                </Border>
+                
+                <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                      ColumnDefinitions="*, 3*">
+                    <Border Grid.Column="0" Height="72" 
+                            Background="{StaticResource SurfaceBrush}"
+                            Margin="0,3,12,0"
+                            CornerRadius="0,8,0,0">
+                        <Grid ColumnDefinitions="*, 1.5*, *">
+                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <Border CornerRadius="12"
+                                        Width="64" Height="64"
+                                        Margin="8"
+                                        BorderThickness="1"
+                                        BorderBrush="{StaticResource OutlineBrush}">
+                                    <Border
+                                        CornerRadius="12">
+                                        <Border.Background>
+                                            <ImageBrush Source="{Binding CurrentTrackImage}"/>
+                                        </Border.Background>
+                                    </Border>
+                                </Border>
+                            
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Foreground="{StaticResource TextBrush}" 
+                                               Text="{Binding CurrentTrack.Title}"
+                                               TextWrapping="NoWrap">
+                                    </TextBlock>
+                                    <TextBlock Foreground="{StaticResource TextBrush}" 
+                                               Text="{Binding CurrentTrack.Artists}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    
+                    <Border Grid.Column="1"
+                            Background="{StaticResource SurfaceBrush}"
+                            Margin="12,3,0,0"
+                            CornerRadius="8,0,0,0">
+                        
+                    </Border>
+                </Grid>
+            </Grid>
         </Grid>
-    </Grid>
+    </Panel>
 </Window>
