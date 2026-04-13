@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "t/k+V5/sNgs=",
+  "success": true,
+  "projectFilePath": "D:\\Rider\\Mercury\\src\\Icons\\Material.Icons.Avalonia\\Material.Icons.Avalonia.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\holzfa\\.nuget\\packages\\avalonia\\12.0.0-rc1\\avalonia.12.0.0-rc1.nupkg.sha512",
+    "C:\\Users\\holzfa\\.nuget\\packages\\avalonia.buildservices\\11.3.2\\avalonia.buildservices.11.3.2.nupkg.sha512",
+    "C:\\Users\\holzfa\\.nuget\\packages\\avalonia.remote.protocol\\12.0.0-rc1\\avalonia.remote.protocol.12.0.0-rc1.nupkg.sha512",
+    "C:\\Users\\holzfa\\.nuget\\packages\\material.icons\\1.1.10\\material.icons.1.1.10.nupkg.sha512",
+    "C:\\Users\\holzfa\\.nuget\\packages\\microcom.runtime\\0.11.0\\microcom.runtime.0.11.0.nupkg.sha512",
+    "C:\\Users\\holzfa\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

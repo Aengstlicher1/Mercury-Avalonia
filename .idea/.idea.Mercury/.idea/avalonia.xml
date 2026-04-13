@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="Views/MainWindow.axaml" value="Mercury.csproj" />
+        <entry key="src/Icons/Material.Icons.Avalonia/MaterialIcon.xaml" value="src/Mercury/Mercury.csproj" />
+        <entry key="src/Mercury/App.axaml" value="src/Mercury/Mercury.csproj" />
+        <entry key="src/Mercury/Controls/MacosTitleBar.axaml" value="src/Mercury/Mercury.csproj" />
+        <entry key="src/Mercury/Controls/NavigationBar.axaml" value="src/Mercury/Mercury.csproj" />
+        <entry key="src/Mercury/Controls/TitleBar.axaml" value="src/Mercury/Mercury.csproj" />
+        <entry key="src/Mercury/Controls/WindowsTitleBar.axaml" value="src/Mercury/Mercury.csproj" />
+        <entry key="src/Mercury/Resources/Colors.axaml" value="src/Mercury/Mercury.csproj" />
+        <entry key="src/Mercury/Resources/WindowDrawnDecorations.axaml" value="src/Mercury/Mercury.csproj" />
+        <entry key="src/Mercury/Styles/Button.axaml" value="src/Mercury/Mercury.csproj" />
+        <entry key="src/Mercury/Styles/WindowDrawnDecorations.axaml" value="src/Mercury/Mercury.csproj" />
+        <entry key="src/Mercury/Views/HomePage.axaml" value="src/Mercury/Mercury.csproj" />
+        <entry key="src/Mercury/Views/MainWindow.axaml" value="src/Mercury/Mercury.csproj" />
+      </map>
+    </option>
+  </component>
+</project>
