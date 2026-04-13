@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Mercury")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+71332dd78663ffa0a8c4c5f2f5b18ab464efb809")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ce61d5f1e878ec3988071ecd1855ef5fcafcc6c7")]
 [assembly: System.Reflection.AssemblyProductAttribute("Mercury")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Mercury")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

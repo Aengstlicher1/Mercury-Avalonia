@@ -1,33 +1,44 @@
+using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using Avalonia.Markup.Xaml;
+using Mercury.Services;
 using Mercury.ViewModels;
 using Mercury.Views;
+using Microsoft.Extensions.DependencyInjection;
 
 
 namespace Mercury;
 
 public partial class App : Application
 {
-    public override void Initialize()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
+    public static IServiceProvider Services { get; private set; } = null!;
 
     public override void OnFrameworkInitializationCompleted()
     {
+        var services = new ServiceCollection();
+
+        // Register services
+        services.AddSingleton<INavigationService, NavigationService>();
+
+        // Register ViewModels
+        services.AddTransient<MainWindowViewModel>();
+        services.AddTransient<HomePageViewModel>();
+
+        // Register Views
+        services.AddTransient<MainWindow>();
+        services.AddTransient<HomePage>();
+
+        Services = services.BuildServiceProvider();
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = new MainWindowViewModel(),
-            };
+            desktop.MainWindow = Services.GetRequiredService<MainWindow>();
         }
-        
+
         base.OnFrameworkInitializationCompleted();
     }
-
 }

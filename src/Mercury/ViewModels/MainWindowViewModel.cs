@@ -4,11 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mercury.Core;
 using Mercury.Core.Models;
+using Mercury.Models;
+using Mercury.Services;
 using static Mercury.Core.Models.Enums;
 
 namespace Mercury.ViewModels;
@@ -25,7 +29,7 @@ public partial class MainWindowViewModel : ViewModelBase
             );
 
     public SearchFilter SelectedSearchFilter { get; set; } = SearchFilter.All;
-
+    
     [ObservableProperty]
     private Track? _currentTrack;
 
@@ -34,7 +38,19 @@ public partial class MainWindowViewModel : ViewModelBase
     
     [ObservableProperty]
     private IImage? _currentBackgroundImage;
-
+    
+    private readonly INavigationService _navigationService;
+    public PageInfo[] PageInfos => _navigationService.PageInfos;
+    public IRelayCommand<PageInfo> NavigateToCommand =>  _navigationService.NavigateToCommand;
+    
+    public MainWindowViewModel(INavigationService navigationService)
+    {
+        _navigationService = navigationService;
+        _navigationService.NavigateTo(_navigationService.PageInfos[0]);
+        _ = Test();
+    }
+    
+    
     private async Task<Bitmap> LoadTrackImageAsync(string url)
     {
         var bytes = await _client.GetByteArrayAsync(url);
@@ -54,12 +70,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private string _searchText = string.Empty;
-    
-    public MainWindowViewModel()
-    {
-        _ = Test();
-    }
 
+    
     private async Task Test()
     {
         while (true)
@@ -75,7 +87,7 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 CurrentTrack = results.First(m => m is Track) as Track;
             }
-                
+            
             await Task.Delay(TimeSpan.FromSeconds(4));
         }
     }
