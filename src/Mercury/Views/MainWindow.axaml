@@ -84,6 +84,7 @@
                         <TextBox Grid.Column="0" PlaceholderText="Search for Songs, Albums, Playlists"
                                  Text="{Binding SearchText, Mode=TwoWay}"
                                  CornerRadius="8,0,0,8" 
+                                 GotFocus="SearchBox_GotFocus"
                                  WindowDecorationProperties.ElementRole="User"/>
                         <Border Grid.Column="1" BorderBrush="{StaticResource OutlineBrush}" BorderThickness="0,0,1,0" />
                         <ComboBox Grid.Column="2" CornerRadius="0,8,8,0"

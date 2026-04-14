@@ -4,6 +4,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Mercury.Views.HomePage"
-        Header="Home">
-    Welcome to Mercury!
+        Name="Home"
+        NavigationPage.HasNavigationBar="False"
+        Background="Transparent">
+    <TextBlock Text="Welcome to Mercury!" 
+               FontSize="28"
+               FontWeight="DemiBold"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"/>
 </ContentPage>

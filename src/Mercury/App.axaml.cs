@@ -23,14 +23,17 @@ public partial class App : Application
 
         // Register services
         services.AddSingleton<INavigationService, NavigationService>();
+        services.AddSingleton<ISearchService, SearchService>();
 
         // Register ViewModels
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<HomePageViewModel>();
+        services.AddTransient<SearchPageViewModel>();
 
         // Register Views
         services.AddTransient<MainWindow>();
         services.AddTransient<HomePage>();
+        services.AddTransient<SearchPage>();
 
         Services = services.BuildServiceProvider();
 

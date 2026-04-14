@@ -13,6 +13,7 @@ using Mercury.Core;
 using Mercury.Core.Models;
 using Mercury.Models;
 using Mercury.Services;
+using Microsoft.Extensions.DependencyInjection;
 using static Mercury.Core.Models.Enums;
 
 namespace Mercury.ViewModels;
@@ -40,14 +41,15 @@ public partial class MainWindowViewModel : ViewModelBase
     private IImage? _currentBackgroundImage;
     
     private readonly INavigationService _navigationService;
+    private readonly ISearchService _searchService;
     public PageInfo[] PageInfos => _navigationService.PageInfos;
     public IRelayCommand<PageInfo> NavigateToCommand =>  _navigationService.NavigateToCommand;
     
-    public MainWindowViewModel(INavigationService navigationService)
+    public MainWindowViewModel()
     {
-        _navigationService = navigationService;
+        _navigationService = App.Services.GetRequiredService<INavigationService>();
+        _searchService = App.Services.GetRequiredService<ISearchService>();
         _navigationService.NavigateTo(_navigationService.PageInfos[0]);
-        _ = Test();
     }
     
     
@@ -66,29 +68,12 @@ public partial class MainWindowViewModel : ViewModelBase
             CurrentTrackImage = CurrentBackgroundImage;
         }
     }
-        
 
     [ObservableProperty]
-    private string _searchText = string.Empty;
+    private string _searchText = "";
 
-    
-    private async Task Test()
+    partial void OnSearchTextChanged(string value)
     {
-        while (true)
-        {
-            string txt = SearchText;
-            
-            if (string.IsNullOrWhiteSpace(txt))
-                txt = "Heartless";
-                
-            var results = await YoutubeMusic.Search.SearchAsync(txt);
-
-            if (results != null && results.Any())
-            {
-                CurrentTrack = results.First(m => m is Track) as Track;
-            }
-            
-            await Task.Delay(TimeSpan.FromSeconds(4));
-        }
+        _searchService.SearchQuery = value;
     }
 }

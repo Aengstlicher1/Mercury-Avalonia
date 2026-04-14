@@ -12,9 +12,10 @@ public interface INavigationService
     public PageInfo? CurrentPageInfo { get; set; }
     public Page? CurrentPage { get; }
     
-    public static ContentPage[] Pages { get; }
+    public ContentPage[] Pages { get; }
     public PageInfo[] PageInfos { get; }
 
     public Task NavigateTo(PageInfo pageInfo);
+    public Task NavigateTo(Page page, bool slideLeft = false);
     public IAsyncRelayCommand<PageInfo> NavigateToCommand { get; }
 }

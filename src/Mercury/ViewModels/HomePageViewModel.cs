@@ -1,6 +1,6 @@
 namespace Mercury.ViewModels;
 
-public class HomePageViewModel
+public class HomePageViewModel : ViewModelBase
 {
     
 }
