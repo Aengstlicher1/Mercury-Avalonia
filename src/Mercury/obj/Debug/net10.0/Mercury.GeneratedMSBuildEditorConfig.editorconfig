@@ -45,3 +45,6 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [D:/Rider/Mercury/src/Mercury/Views/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/Rider/Mercury/src/Mercury/Views/SearchPage.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

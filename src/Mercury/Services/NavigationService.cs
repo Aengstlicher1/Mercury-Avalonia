@@ -47,7 +47,7 @@ public partial class NavigationService : INavigationService
         }).ToArray();
     }
 
-    public async Task NavigateTo(Page page, bool slideLeft = false)
+    public void NavigateTo(Page page, bool slideLeft = false)
     {
         if (Navigation != null)
         {
@@ -57,12 +57,12 @@ public partial class NavigationService : INavigationService
                 SlideLeft = slideLeft
             };
             
-            await Navigation.ReplaceAsync(page, transition);
+            _ = Navigation.ReplaceAsync(page, transition);
         }
     }
     
     [RelayCommand]
-    public async Task NavigateTo(PageInfo pageInfo)
+    public void NavigateTo(PageInfo pageInfo)
     {
         foreach (var p in PageInfos)
             p.IsSelected = false;
@@ -81,7 +81,7 @@ public partial class NavigationService : INavigationService
             slideleft = false;
         }
         
-        await NavigateTo(pageInfo.Page, slideleft);
+        NavigateTo(pageInfo.Page, slideleft);
         CurrentPageInfo = pageInfo;
     }
 }

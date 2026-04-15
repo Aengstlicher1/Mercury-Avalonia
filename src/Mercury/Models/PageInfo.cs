@@ -5,8 +5,8 @@ namespace Mercury.Models;
 
 public partial class PageInfo : ObservableObject
 {
-    public string Name { get; set; }
-    public Page Page { get; set; }
+    public required string Name { get; set; }
+    public required Page Page { get; init; }
     
     [ObservableProperty] 
     private bool _isSelected = false;

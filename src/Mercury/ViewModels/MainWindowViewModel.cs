@@ -28,20 +28,23 @@ public partial class MainWindowViewModel : ViewModelBase
                 s != SearchFilter.Episodes &&
                 s != SearchFilter.Profiles
             );
-
-    public SearchFilter SelectedSearchFilter { get; set; } = SearchFilter.All;
     
     [ObservableProperty]
-    private Track? _currentTrack;
-
+    private Track? _currentTrack = null;
+    
     [ObservableProperty]
-    private IImage? _currentTrackImage;
+    private float _currentTrackPosition;
+
+    [ObservableProperty] 
+    private int _volume;
     
     [ObservableProperty]
     private IImage? _currentBackgroundImage;
     
     private readonly INavigationService _navigationService;
     private readonly ISearchService _searchService;
+    private readonly IPlayerService _playerService;
+    
     public PageInfo[] PageInfos => _navigationService.PageInfos;
     public IRelayCommand<PageInfo> NavigateToCommand =>  _navigationService.NavigateToCommand;
     
@@ -49,9 +52,14 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         _navigationService = App.Services.GetRequiredService<INavigationService>();
         _searchService = App.Services.GetRequiredService<ISearchService>();
+        _playerService = App.Services.GetRequiredService<IPlayerService>();
+        
         _navigationService.NavigateTo(_navigationService.PageInfos[0]);
+
+        _playerService.CurrentTrackChanged += (track) => CurrentTrack = track;
+        _playerService.PositionChanged += pos => CurrentTrackPosition = pos; // update UI
+        _playerService.VolumeChanged += vol => Volume = vol;
     }
-    
     
     private async Task<Bitmap> LoadTrackImageAsync(string url)
     {
@@ -60,20 +68,37 @@ public partial class MainWindowViewModel : ViewModelBase
         return new Bitmap(ms);
     }
 
-    async partial void OnCurrentTrackChanged(Track? value)
+    partial void OnCurrentTrackChanged(Track? value)
     {
-        if (value!.Thumbnails.TryGetWithSize(new Dimensions(240, 240), true, out var thumbnail))
+        Task.Run(async () =>
         {
-            CurrentBackgroundImage = await LoadTrackImageAsync(thumbnail.Url);
-            CurrentTrackImage = CurrentBackgroundImage;
-        }
+            CurrentBackgroundImage = await LoadTrackImageAsync(value!.Thumbnails.LowestRes.Url);
+        });
     }
 
     [ObservableProperty]
     private string _searchText = "";
+    
+    [ObservableProperty]
+    private Enums.SearchFilter _searchFilter = SearchFilter.All;
 
     partial void OnSearchTextChanged(string value)
     {
         _searchService.SearchQuery = value;
+    }
+
+    partial void OnSearchFilterChanged(SearchFilter value)
+    {
+        _searchService.SearchFilter = value;
+    }
+
+    partial void OnCurrentTrackPositionChanged(float value)
+    {
+        _playerService.Position = value;
+    }
+
+    partial void OnVolumeChanged(int value)
+    {
+        _playerService.Volume = value;
     }
 }

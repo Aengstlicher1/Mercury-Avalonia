@@ -14,17 +14,11 @@
                         <Panel WindowDecorationProperties.ElementRole="TitleBar"/>
                     </WindowDrawnDecorationsContent.Underlay>
                     <WindowDrawnDecorationsContent.Overlay>
-                        <Grid ColumnDefinitions="36, *" RowDefinitions="42, *">
-                            <Image
-                                Grid.Row="0" Grid.Column="0" 
-                                Margin="6,6,2,2"
-                                IsHitTestVisible="False"
-                                Source="../Assets/Icon.png"/>
-                            
+                        <Grid RowDefinitions="42, *">
                             <StackPanel
-                                Grid.Row="0" Grid.Column="1" 
+                                Grid.Row="0"
                                 Height="32"
-                                Margin="0,5,5,0"
+                                Margin="0,6,6,0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top"
                                 Orientation="Horizontal">
