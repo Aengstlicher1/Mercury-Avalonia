@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "zY9B5JlTCUY=",
+  "dgSpecHash": "Mc3W8OI8RC0=",
   "success": true,
   "projectFilePath": "D:\\Rider\\Mercury\\src\\Mercury\\Mercury.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\holzfa\\.nuget\\packages\\asyncimageloader.avalonia\\3.7.1-nightly.0.2\\asyncimageloader.avalonia.3.7.1-nightly.0.2.nupkg.sha512",
     "C:\\Users\\holzfa\\.nuget\\packages\\avalonia\\12.0.0\\avalonia.12.0.0.nupkg.sha512",
     "C:\\Users\\holzfa\\.nuget\\packages\\avalonia.angle.windows.natives\\2.1.25547.20250602\\avalonia.angle.windows.natives.2.1.25547.20250602.nupkg.sha512",
     "C:\\Users\\holzfa\\.nuget\\packages\\avalonia.buildservices\\11.3.2\\avalonia.buildservices.11.3.2.nupkg.sha512",
@@ -27,6 +28,7 @@
     "C:\\Users\\holzfa\\.nuget\\packages\\harfbuzzsharp.nativeassets.webassembly\\8.3.1.3\\harfbuzzsharp.nativeassets.webassembly.8.3.1.3.nupkg.sha512",
     "C:\\Users\\holzfa\\.nuget\\packages\\harfbuzzsharp.nativeassets.win32\\8.3.1.3\\harfbuzzsharp.nativeassets.win32.8.3.1.3.nupkg.sha512",
     "C:\\Users\\holzfa\\.nuget\\packages\\irihi.avalonia.shared\\0.4.0\\irihi.avalonia.shared.0.4.0.nupkg.sha512",
+    "C:\\Users\\holzfa\\.nuget\\packages\\libvlcsharp\\3.9.6\\libvlcsharp.3.9.6.nupkg.sha512",
     "C:\\Users\\holzfa\\.nuget\\packages\\material.icons\\3.0.2\\material.icons.3.0.2.nupkg.sha512",
     "C:\\Users\\holzfa\\.nuget\\packages\\material.icons.avalonia\\3.0.2\\material.icons.avalonia.3.0.2.nupkg.sha512",
     "C:\\Users\\holzfa\\.nuget\\packages\\microcom.runtime\\0.11.4\\microcom.runtime.0.11.4.nupkg.sha512",
@@ -38,7 +40,11 @@
     "C:\\Users\\holzfa\\.nuget\\packages\\skiasharp.nativeassets.macos\\3.119.3-preview.1.1\\skiasharp.nativeassets.macos.3.119.3-preview.1.1.nupkg.sha512",
     "C:\\Users\\holzfa\\.nuget\\packages\\skiasharp.nativeassets.webassembly\\3.119.3-preview.1.1\\skiasharp.nativeassets.webassembly.3.119.3-preview.1.1.nupkg.sha512",
     "C:\\Users\\holzfa\\.nuget\\packages\\skiasharp.nativeassets.win32\\3.119.3-preview.1.1\\skiasharp.nativeassets.win32.3.119.3-preview.1.1.nupkg.sha512",
-    "C:\\Users\\holzfa\\.nuget\\packages\\tmds.dbus.protocol\\0.90.3\\tmds.dbus.protocol.0.90.3.nupkg.sha512"
+    "C:\\Users\\holzfa\\.nuget\\packages\\soundflow\\1.4.0\\soundflow.1.4.0.nupkg.sha512",
+    "C:\\Users\\holzfa\\.nuget\\packages\\soundflow.codecs.ffmpeg\\1.4.0\\soundflow.codecs.ffmpeg.1.4.0.nupkg.sha512",
+    "C:\\Users\\holzfa\\.nuget\\packages\\tmds.dbus.protocol\\0.90.3\\tmds.dbus.protocol.0.90.3.nupkg.sha512",
+    "C:\\Users\\holzfa\\.nuget\\packages\\videolan.libvlc.mac\\3.1.3.1\\videolan.libvlc.mac.3.1.3.1.nupkg.sha512",
+    "C:\\Users\\holzfa\\.nuget\\packages\\videolan.libvlc.windows\\3.0.23\\videolan.libvlc.windows.3.0.23.nupkg.sha512"
   ],
   "logs": [
     {

@@ -24,6 +24,7 @@ public partial class App : Application
         // Register services
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<ISearchService, SearchService>();
+        services.AddSingleton<IPlayerService, PlayerService>();
 
         // Register ViewModels
         services.AddTransient<MainWindowViewModel>();

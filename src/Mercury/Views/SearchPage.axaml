@@ -3,28 +3,185 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:models="clr-namespace:Mercury.Core.Models;assembly=Mercury.Core"
+             xmlns:vm="clr-namespace:Mercury.ViewModels"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Mercury.Views.SearchPage"
              Name="Search"
              NavigationPage.HasNavigationBar="False"
-             Background="Transparent">
+             Background="Transparent"
+             x:DataType="vm:SearchPageViewModel">
+    <Design.DataContext>
+        <vm:SearchPageViewModel/>
+    </Design.DataContext>
+    
     <Grid>
-        <TextBlock Text="TEST - SearchPage" />
-        <ItemsControl>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="models:Media">
-                    <Border>
-                        <Grid>
-                            <TextBlock Text="{Binding Title}" />
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <ScrollViewer>
+            <ItemsControl ItemsSource="{Binding SearchResults}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="6" Margin="0,0,12,0"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.DataTemplates>
+                    <DataTemplate DataType="models:Song" x:DataType="models:Song">
+                        <Button Height="60" 
+                                CornerRadius="8"
+                                Padding="0"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
+                                Command="{Binding $parent[ItemsControl].((vm:SearchPageViewModel)DataContext).PlayTrackCommand}"
+                                CommandParameter="{Binding .}">
+                            <Grid ColumnDefinitions="Auto, *, Auto">
+                                <Border Grid.Column="0" 
+                                        VerticalAlignment="Stretch"
+                                        Margin="8"
+                                        Width="{Binding $self.Bounds.Height}"
+                                        CornerRadius="8">
+                                    <Border.Background>
+                                        <ImageBrush Stretch="UniformToFill" asyncImageLoader:ImageBrushLoader.Source="{Binding Thumbnails.LowestRes.Url}" />
+                                    </Border.Background>
+                                </Border>
+                                <StackPanel Grid.Column="1" Margin="4,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Title}"
+                                               FontSize="16"
+                                               TextTrimming="WordEllipsis"
+                                               TextWrapping="NoWrap"
+                                               Foreground="{DynamicResource TextBrush}">
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding Artists}"
+                                               FontSize="12"
+                                               TextTrimming="CharacterEllipsis"
+                                               TextWrapping="NoWrap"
+                                               Foreground="{DynamicResource SubTextBrush}"/>
+                                </StackPanel>
+                                <TextBlock Grid.Column="2" 
+                                           Text="3:02"
+                                           FontSize="14"
+                                           Margin="0,0,8,0"
+                                           Foreground="{DynamicResource SubTextBrush}"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+                        </Button>
+                    </DataTemplate>
+                    
+                    <DataTemplate DataType="models:Video" x:DataType="models:Video">
+                        <Button Height="60" 
+                                CornerRadius="8"
+                                Padding="0"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
+                                Command="{Binding $parent[ItemsControl].((vm:SearchPageViewModel)DataContext).PlayTrackCommand}"
+                                CommandParameter="{Binding .}">
+                            <Grid ColumnDefinitions="Auto, *, Auto">
+                                <Border Grid.Column="0" 
+                                        VerticalAlignment="Stretch"
+                                        Margin="8"
+                                        Width="{Binding $self.Bounds.Height}"
+                                        CornerRadius="8">
+                                    <Border.Background>
+                                        <ImageBrush Stretch="UniformToFill" asyncImageLoader:ImageBrushLoader.Source="{Binding Thumbnails.LowestRes.Url}" />
+                                    </Border.Background>
+                                </Border>
+                                <StackPanel Grid.Column="1" Margin="4,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Title}"
+                                               FontSize="16"
+                                               TextTrimming="WordEllipsis"
+                                               TextWrapping="NoWrap"
+                                               Foreground="{DynamicResource TextBrush}"/>
+                                    <TextBlock Text="{Binding Artists}"
+                                               FontSize="12"
+                                               TextTrimming="CharacterEllipsis"
+                                               TextWrapping="NoWrap"
+                                               Foreground="{DynamicResource SubTextBrush}"/>
+                                </StackPanel>
+                                <TextBlock Grid.Column="2" 
+                                           Text="3:04"
+                                           FontSize="14"
+                                           Margin="0,0,8,0"
+                                           Foreground="{DynamicResource SubTextBrush}"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+                        </Button>
+                    </DataTemplate>
+                    
+                    <DataTemplate DataType="models:Episode" x:DataType="models:Episode">
+                        <Button Height="60" 
+                                CornerRadius="8"
+                                Padding="0"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
+                                Command="{Binding $parent[ItemsControl].((vm:SearchPageViewModel)DataContext).PlayTrackCommand}"
+                                CommandParameter="{Binding .}">
+                            <Grid ColumnDefinitions="Auto, *, Auto">
+                                <Border Grid.Column="0" 
+                                        VerticalAlignment="Stretch"
+                                        Margin="8"
+                                        Width="{Binding $self.Bounds.Height}"
+                                        CornerRadius="8">
+                                    <Border.Background>
+                                        <ImageBrush Stretch="UniformToFill" asyncImageLoader:ImageBrushLoader.Source="{Binding Thumbnails.LowestRes.Url}" />
+                                    </Border.Background>
+                                </Border>
+                                <StackPanel Grid.Column="1" Margin="4,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Title}"
+                                               FontSize="16"
+                                               TextTrimming="WordEllipsis"
+                                               TextWrapping="NoWrap"
+                                               Foreground="{DynamicResource TextBrush}"/>
+                                    <TextBlock Text="{Binding Artists}"
+                                               FontSize="12"
+                                               TextTrimming="CharacterEllipsis"
+                                               TextWrapping="NoWrap"
+                                               Foreground="{DynamicResource SubTextBrush}"/>
+                                </StackPanel>
+                                <TextBlock Grid.Column="2"
+                                           Text="3:06"
+                                           FontSize="14"
+                                           Margin="0,0,8,0"
+                                           Foreground="{DynamicResource SubTextBrush}"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+                        </Button>
+                    </DataTemplate>
+                    
+                    <DataTemplate DataType="models:Media" x:DataType="models:Media">
+                        <Button Height="60" 
+                                CornerRadius="8"
+                                Padding="0"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch">
+                            <Grid ColumnDefinitions="Auto, *">
+                                <Border Grid.Column="0" 
+                                        VerticalAlignment="Stretch"
+                                        Margin="8"
+                                        Width="{Binding $self.Bounds.Height}"
+                                        CornerRadius="8">
+                                    <Border.Background>
+                                        <ImageBrush Stretch="UniformToFill" asyncImageLoader:ImageBrushLoader.Source="{Binding Thumbnails.LowestRes.Url}" />
+                                    </Border.Background>
+                                </Border>
+                                <StackPanel Grid.Column="1" Margin="4,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Title}"
+                                               FontSize="16"
+                                               TextTrimming="WordEllipsis"
+                                               TextWrapping="NoWrap"
+                                               Foreground="{DynamicResource TextBrush}"/>
+                                    <TextBlock Text="{Binding Artists}"
+                                               FontSize="12"
+                                               TextTrimming="CharacterEllipsis"
+                                               TextWrapping="NoWrap"
+                                               Foreground="{DynamicResource SubTextBrush}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.DataTemplates>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </ContentPage>

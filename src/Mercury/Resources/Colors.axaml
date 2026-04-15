@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
     <Color x:Key="WindowSurfaceColor">#f1f2f7</Color>
-    <Color x:Key="SurfaceColor">#08000000</Color>
+    <Color x:Key="SurfaceColor">#04000000</Color>
+    <Color x:Key="SurfaceItemColor">#ffffff</Color>
     <Color x:Key="OutlineColor">#c4c4cc</Color>
     <Color x:Key="HoverColor">#14000000</Color>
     <Color x:Key="SelectedColor">#3573f0</Color>
@@ -12,8 +13,10 @@
     
     <SolidColorBrush x:Key="WindowSurfaceBrush" Color="{StaticResource WindowSurfaceColor}"/>
     <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
+    <SolidColorBrush x:Key="SurfaceItemBrush" Color="{StaticResource SurfaceItemColor}"/>
     <SolidColorBrush x:Key="OutlineBrush" Color="{StaticResource OutlineColor}"/>
     <SolidColorBrush x:Key="HoverBrush" Color="{StaticResource HoverColor}"/>
     <SolidColorBrush x:Key="SelectedBrush" Color="{StaticResource SelectedColor}"/>
     <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}"/>
+    <SolidColorBrush x:Key="SubTextBrush" Color="{StaticResource SubTextColor}"/>
 </ResourceDictionary>

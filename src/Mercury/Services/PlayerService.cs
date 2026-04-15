@@ -1,0 +1,128 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
+using LibVLCSharp.Shared;
+using Mercury.Core;
+using Mercury.Core.Models;
+using SoundFlow.Abstracts.Devices;
+using SoundFlow.Backends.MiniAudio;
+using SoundFlow.Components;
+using SoundFlow.Codecs.FFMpeg;
+using SoundFlow.Interfaces;
+using SoundFlow.Providers;
+using SoundFlow.Structs;
+using Media = LibVLCSharp.Shared.Media;
+
+namespace Mercury.Services;
+
+public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
+{
+    public event Action<float>? PositionChanged;
+    public event Action<int>? VolumeChanged;
+    public event Action<Track>? CurrentTrackChanged;
+    public event Action<Playlist>? CurrentPlaylistChanged;
+
+    private readonly LibVLC _libVlc;
+    private readonly MediaPlayer _mediaPlayer;
+    private Media? _currentMedia;
+    
+    /// <summary>
+    /// Volume: 0 - 100
+    /// </summary>
+    public int Volume
+    {
+        get => _mediaPlayer.Volume;
+        set => _mediaPlayer.Volume = value;
+    }
+    /// <summary>
+    /// Position: 0.0f - 1.0f
+    /// </summary>
+    public float Position
+    {
+        get => _mediaPlayer.Position;
+        set => _mediaPlayer.Position = value;
+    }
+
+    
+    [ObservableProperty]
+    private Track? _currentTrack;
+
+    [ObservableProperty]
+    private Playlist? _currentPlaylist;
+
+    
+    public PlayerService()
+    {
+        // "--no-video" ensures no video decoding/rendering — audio only
+        _libVlc = new LibVLC("--no-video");
+        _mediaPlayer = new MediaPlayer(_libVlc);
+        
+        _mediaPlayer.PositionChanged += (s, e) =>
+        {
+            PositionChanged?.Invoke(e.Position);
+        };
+
+        _mediaPlayer.VolumeChanged += (s, e) =>
+        {
+            VolumeChanged?.Invoke((int)e.Volume);
+        };
+    }
+
+    
+    public async Task SetTrack(Track track, bool autoPlay)
+    {
+        // Stop current playback immediately
+        _mediaPlayer.Stop();
+        _currentMedia?.Dispose();
+        
+        var streamData = await YoutubeMusic.Player.GetStreamDataAsync(track.Id);
+        if (streamData is null) return;
+
+        var stream = streamData.Streams
+            .Where(s => s is AudioStreamInfo)
+            .MaxBy(x => x.Bitrate)!;
+        
+        _currentMedia = new Media(_libVlc, new Uri(stream.Url));
+        _mediaPlayer.Media = _currentMedia;
+        
+        CurrentTrack =  track;
+        
+        if (autoPlay)
+            _mediaPlayer.Play();
+    }
+
+    public void StartPlayblack()
+    {
+        _mediaPlayer.Play();
+    }
+    
+    public void PausePlayblack()
+    {
+        _mediaPlayer.Pause();
+    }
+    
+    public void StopPlayblack()
+    {
+        _mediaPlayer.Stop();
+    }
+    
+    public void Dispose()
+    {
+        _mediaPlayer.Stop();
+        _currentMedia?.Dispose();
+        _mediaPlayer.Dispose();
+        _libVlc.Dispose();
+    }
+
+    partial void OnCurrentTrackChanged(Track? value)
+    {
+        CurrentTrackChanged?.Invoke(value!);
+    }
+    partial void OnCurrentPlaylistChanged(Playlist? value)
+    {
+        CurrentPlaylistChanged?.Invoke(value!);
+    }
+}

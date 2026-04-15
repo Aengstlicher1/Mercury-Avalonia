@@ -11,23 +11,21 @@ namespace Mercury.Views;
 
 public partial class MainWindow : Window
 {
-    INavigationService _ns;
-    SearchPage _sp;
+    private readonly INavigationService _ns;
+    private readonly SearchPage _sp;
     
-    public MainWindow(MainWindowViewModel vm, INavigationService ns, SearchPage sp)
+    public MainWindow()
     {
         InitializeComponent();
-        DataContext = vm;
+        DataContext = App.Services.GetRequiredService<MainWindowViewModel>();
+        _sp = App.Services.GetRequiredService<SearchPage>();
+        _ns = App.Services.GetRequiredService<INavigationService>();
         
-        _ns = ns;
-        Navigator.Content = _ns.PageInfos[0].Page;
         _ns.Navigation = Navigator;
-
-        _sp = sp;
     }
 
     private void SearchBox_GotFocus(object? sender, FocusChangedEventArgs e)
     {
-        _ = _ns.NavigateTo(_sp);
+        _ns.NavigateTo(_sp);
     }
 }
