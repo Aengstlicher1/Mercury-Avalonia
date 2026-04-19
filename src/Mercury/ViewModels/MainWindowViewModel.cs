@@ -36,7 +36,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private float _currentTrackPosition;
 
     [ObservableProperty] 
-    private int _volume;
+    private int _volume = 60;
     
     [ObservableProperty]
     private IImage? _currentBackgroundImage;
@@ -80,7 +80,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private string _searchText = "";
     
     [ObservableProperty]
-    private Enums.SearchFilter _searchFilter = SearchFilter.All;
+    private SearchFilter _searchFilter = SearchFilter.All;
 
     partial void OnSearchTextChanged(string value)
     {

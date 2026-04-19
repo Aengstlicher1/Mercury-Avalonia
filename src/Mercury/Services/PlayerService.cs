@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LibVLCSharp.Shared;
@@ -28,25 +29,46 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     private readonly LibVLC _libVlc;
     private readonly MediaPlayer _mediaPlayer;
     private Media? _currentMedia;
+
     
+    
+    private int _volume = 50;
     /// <summary>
     /// Volume: 0 - 100
     /// </summary>
     public int Volume
     {
-        get => _mediaPlayer.Volume;
-        set => _mediaPlayer.Volume = value;
+        get => _volume;
+        set
+        {
+            value = Math.Clamp(value, 0, 100);
+            if (_volume == value) return;
+
+            _volume = value;
+
+            if (_mediaPlayer.Media is not null)
+                _mediaPlayer.Volume = _volume;
+
+            VolumeChanged?.Invoke(_volume); // notify UI immediately
+        }
     }
+
+    
     /// <summary>
     /// Position: 0.0f - 1.0f
     /// </summary>
     public float Position
     {
         get => _mediaPlayer.Position;
-        set => _mediaPlayer.Position = value;
+        set
+        {
+            if (Math.Abs(_mediaPlayer.Position - value) < 0.005f) return;
+
+            _mediaPlayer.Position = value;
+        }
     }
 
-    
+
     [ObservableProperty]
     private Track? _currentTrack;
 
@@ -57,7 +79,13 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     public PlayerService()
     {
         // "--no-video" ensures no video decoding/rendering — audio only
-        _libVlc = new LibVLC("--no-video");
+        _libVlc = new LibVLC(
+            new[]
+            {
+                "--no-video",
+                "--verbose=2"
+            }
+        );
         _mediaPlayer = new MediaPlayer(_libVlc);
         
         _mediaPlayer.PositionChanged += (s, e) =>
@@ -65,38 +93,48 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
             PositionChanged?.Invoke(e.Position);
         };
 
-        _mediaPlayer.VolumeChanged += (s, e) =>
+        _mediaPlayer.Playing += (s, e) =>
         {
-            VolumeChanged?.Invoke((int)e.Volume);
+            Console.WriteLine("VLC: Playback started");
         };
     }
 
     
     public async Task SetTrack(Track track, bool autoPlay)
     {
-        // Stop current playback immediately
-        _mediaPlayer.Stop();
-        _currentMedia?.Dispose();
-        
-        var streamData = await YoutubeMusic.Player.GetStreamDataAsync(track.Id);
-        if (streamData is null) return;
+        try
+        {
+            _mediaPlayer.Stop();
+            _currentMedia?.Dispose();
 
-        var stream = streamData.Streams
-            .Where(s => s is AudioStreamInfo)
-            .MaxBy(x => x.Bitrate)!;
-        
-        _currentMedia = new Media(_libVlc, new Uri(stream.Url));
-        _mediaPlayer.Media = _currentMedia;
-        
-        CurrentTrack =  track;
-        
-        if (autoPlay)
-            _mediaPlayer.Play();
+            var streamData = await YoutubeMusic.Player.GetStreamDataAsync(track.Id);
+            if (streamData is null) return;
+
+            var stream = streamData.Streams
+                .Where(s => s is AudioStreamInfo)
+                .MaxBy(x => x.Bitrate)!;
+
+            _currentMedia = new Media(_libVlc, new Uri(stream.Url));
+            _mediaPlayer.Media = _currentMedia;
+
+            CurrentTrack = track;
+
+            if (autoPlay)
+            {
+                StartPlayblack();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"SetTrack error: {ex}");
+        }
     }
+
 
     public void StartPlayblack()
     {
         _mediaPlayer.Play();
+        _mediaPlayer.Volume = Volume;
     }
     
     public void PausePlayblack()

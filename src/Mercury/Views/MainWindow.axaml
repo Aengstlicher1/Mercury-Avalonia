@@ -24,6 +24,7 @@
         <converters:VolumeIconConverter x:Key="VolumeIconConverter"/>
         <converters:NotNullConverter x:Key="NotNullConverter"/>
     </Window.Resources>
+    
     <Panel>
         <Panel IsHitTestVisible="False">
             <!-- White base -->
@@ -115,18 +116,33 @@
                             CornerRadius="0,8,0,0">
                         <Grid ColumnDefinitions="*, 1.5*, *">
                             <StackPanel Grid.Column="0" Orientation="Horizontal">
-                                <Border CornerRadius="12"
-                                        Width="64" Height="64"
-                                        Margin="8"
-                                        BorderThickness="1"
-                                        BorderBrush="{StaticResource OutlineBrush}">
+                                <Grid Width="64" Height="64" 
+                                      IsVisible="{Binding CurrentTrack, Converter={StaticResource NotNullConverter}}"
+                                      Margin="8">
                                     <Border
                                         CornerRadius="12">
                                         <Border.Background>
-                                            <ImageBrush imageLoader:ImageBrushLoader.Source="{Binding CurrentTrack.Thumbnails.LowestRes}"/>
+                                            <ImageBrush imageLoader:ImageBrushLoader.Source="{Binding CurrentTrack.Thumbnails.LowestRes.Url}"/>
                                         </Border.Background>
                                     </Border>
-                                </Border>
+                                    
+                                    <Button CornerRadius="12"
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Stretch"
+                                            VerticalAlignment="Stretch"
+                                            VerticalContentAlignment="Stretch">
+                                        <Button.Styles>
+                                            <Style Selector="Button:pointerover">
+                                                <Setter Property="ContentTemplate">
+                                                    <DataTemplate>
+                                                        <ico:MaterialIcon Kind="Fullscreen" IconSize="24"/>
+                                                    </DataTemplate>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Styles>
+                                    </Button>
+                                </Grid>
+                                
                             
                                 <StackPanel VerticalAlignment="Center">
                                     <TextBlock Foreground="{StaticResource TextBrush}" 
@@ -167,6 +183,7 @@
                             </StackPanel>
                             
                             <Slider Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"
+                                    Background="{DynamicResource SurfaceBrush}"
                                     HorizontalAlignment="Stretch"
                                     IsEnabled="{Binding CurrentTrack, Converter={StaticResource NotNullConverter}}"
                                     Value="{Binding CurrentTrackPosition, Mode=TwoWay}"
@@ -178,13 +195,15 @@
                                         Margin="4"
                                         Width="{Binding $self.Bounds.Height}"
                                         CornerRadius="32">
-                                    <ico:MaterialIcon Kind="{Binding Volume, Converter={StaticResource VolumeIconConverter}}"/>
+                                    <ico:MaterialIcon Kind="{Binding Volume, Converter={StaticResource VolumeIconConverter}}"
+                                                      Foreground="{DynamicResource TextBrush}"/>
                                 </Border>
                                 <Slider Width="120"
+                                        Background="{DynamicResource SurfaceBrush}"
                                         VerticalAlignment="Center"
                                         Value="{Binding Volume}"
                                         Minimum="0"
-                                        Maximum="100"/>
+                                        Maximum="100" />
                             </StackPanel>
                         </Grid>
                     </Border>

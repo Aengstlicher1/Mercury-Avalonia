@@ -3109,39 +3109,32 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\holzfa\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/home/aengstlicher/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Rider\\Mercury\\src\\Mercury\\Mercury.csproj",
+      "projectUniqueName": "/home/aengstlicher/RiderProjects/Mercury-Avalonia/src/Mercury/Mercury.csproj",
       "projectName": "Mercury",
-      "projectPath": "D:\\Rider\\Mercury\\src\\Mercury\\Mercury.csproj",
-      "packagesPath": "C:\\Users\\holzfa\\.nuget\\packages\\",
-      "outputPath": "D:\\Rider\\Mercury\\src\\Mercury\\obj\\",
+      "projectPath": "/home/aengstlicher/RiderProjects/Mercury-Avalonia/src/Mercury/Mercury.csproj",
+      "packagesPath": "/home/aengstlicher/.nuget/packages/",
+      "outputPath": "/home/aengstlicher/RiderProjects/Mercury-Avalonia/src/Mercury/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\holzfa\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/home/aengstlicher/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "D:\\Rider\\Mercury\\src\\Core\\Mercury.Core\\Mercury.Core.csproj": {
-              "projectPath": "D:\\Rider\\Mercury\\src\\Core\\Mercury.Core\\Mercury.Core.csproj"
+            "/home/aengstlicher/RiderProjects/Mercury-Avalonia/src/Core/Mercury.Core/Mercury.Core.csproj": {
+              "projectPath": "/home/aengstlicher/RiderProjects/Mercury-Avalonia/src/Core/Mercury.Core/Mercury.Core.csproj"
             }
           }
         }
@@ -3156,7 +3149,7 @@
         "auditLevel": "low",
         "auditMode": "all"
       },
-      "SdkAnalysisLevel": "10.0.200"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net10.0": {
@@ -3268,12 +3261,18 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[10.0.4, 10.0.4]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.104/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",

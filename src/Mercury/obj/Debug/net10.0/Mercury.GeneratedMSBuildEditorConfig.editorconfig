@@ -22,29 +22,29 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Mercury
-build_property.ProjectDir = D:\Rider\Mercury\src\Mercury\
+build_property.ProjectDir = /home/aengstlicher/RiderProjects/Mercury-Avalonia/src/Mercury/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
-[D:/Rider/Mercury/src/Mercury/App.axaml]
+[/home/aengstlicher/RiderProjects/Mercury-Avalonia/src/Mercury/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[D:/Rider/Mercury/src/Mercury/Resources/Colors.axaml]
+[/home/aengstlicher/RiderProjects/Mercury-Avalonia/src/Mercury/Resources/Colors.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[D:/Rider/Mercury/src/Mercury/Resources/WindowDrawnDecorations.axaml]
+[/home/aengstlicher/RiderProjects/Mercury-Avalonia/src/Mercury/Resources/WindowDrawnDecorations.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[D:/Rider/Mercury/src/Mercury/Styles/Button.axaml]
+[/home/aengstlicher/RiderProjects/Mercury-Avalonia/src/Mercury/Styles/Button.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[D:/Rider/Mercury/src/Mercury/Views/HomePage.axaml]
+[/home/aengstlicher/RiderProjects/Mercury-Avalonia/src/Mercury/Views/HomePage.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[D:/Rider/Mercury/src/Mercury/Views/MainWindow.axaml]
+[/home/aengstlicher/RiderProjects/Mercury-Avalonia/src/Mercury/Views/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[D:/Rider/Mercury/src/Mercury/Views/SearchPage.axaml]
+[/home/aengstlicher/RiderProjects/Mercury-Avalonia/src/Mercury/Views/SearchPage.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
