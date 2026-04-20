@@ -22,15 +22,16 @@
     </Design.DataContext>
     <Window.Resources>
         <converters:VolumeIconConverter x:Key="VolumeIconConverter"/>
+        <converters:PlayIconConverter x:Key="PlayIconConverter"/>
         <converters:NotNullConverter x:Key="NotNullConverter"/>
     </Window.Resources>
     
     <Panel>
         <Panel IsHitTestVisible="False">
-            <!-- White base -->
-            <Border Background="{StaticResource WindowSurfaceBrush}"/>
+            <!-- WindowBrush base -->
+            <Border Background="{DynamicResource WindowSurfaceBrush}"/>
     
-            <!-- 50% image on top -->
+            <!-- 10% image on top -->
             <Border>
                 <Border.Background>
                     <ImageBrush Source="{Binding CurrentBackgroundImage}" Stretch="UniformToFill" Opacity="0.1"/>
@@ -82,7 +83,7 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </Grid>
-                    <Grid Grid.Column="1" 
+                    <Grid Grid.Column="1"
                           ColumnDefinitions="*, Auto, Auto" 
                           VerticalAlignment="Top"
                           Margin="0,12,0,0"
@@ -114,45 +115,45 @@
                             Background="{StaticResource SurfaceBrush}"
                             Margin="0,3,12,0"
                             CornerRadius="0,8,0,0">
-                        <Grid ColumnDefinitions="*, 1.5*, *">
-                            <StackPanel Grid.Column="0" Orientation="Horizontal">
-                                <Grid Width="64" Height="64" 
-                                      IsVisible="{Binding CurrentTrack, Converter={StaticResource NotNullConverter}}"
-                                      Margin="8">
-                                    <Border
-                                        CornerRadius="12">
-                                        <Border.Background>
-                                            <ImageBrush imageLoader:ImageBrushLoader.Source="{Binding CurrentTrack.Thumbnails.LowestRes.Url}"/>
-                                        </Border.Background>
-                                    </Border>
-                                    
-                                    <Button CornerRadius="12"
-                                            HorizontalAlignment="Stretch"
-                                            HorizontalContentAlignment="Stretch"
-                                            VerticalAlignment="Stretch"
-                                            VerticalContentAlignment="Stretch">
-                                        <Button.Styles>
-                                            <Style Selector="Button:pointerover">
-                                                <Setter Property="ContentTemplate">
-                                                    <DataTemplate>
-                                                        <ico:MaterialIcon Kind="Fullscreen" IconSize="24"/>
-                                                    </DataTemplate>
-                                                </Setter>
-                                            </Style>
-                                        </Button.Styles>
-                                    </Button>
-                                </Grid>
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Grid Grid.Column="0" Width="64" Height="64" 
+                                  IsVisible="{Binding CurrentTrack, Converter={StaticResource NotNullConverter}}"
+                                  Margin="8">
+                                <Border
+                                    CornerRadius="12">
+                                    <Border.Background>
+                                        <ImageBrush imageLoader:ImageBrushLoader.Source="{Binding CurrentTrack.Thumbnails.LowestRes.Url}"/>
+                                    </Border.Background>
+                                </Border>
                                 
+                                <Button CornerRadius="12"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        VerticalContentAlignment="Stretch">
+                                    <Button.Styles>
+                                        <Style Selector="Button:pointerover">
+                                            <Setter Property="ContentTemplate">
+                                                <DataTemplate>
+                                                    <ico:MaterialIcon Kind="Fullscreen" IconSize="24"/>
+                                                </DataTemplate>
+                                            </Setter>
+                                        </Style>
+                                    </Button.Styles>
+                                </Button>
+                            </Grid>
                             
-                                <StackPanel VerticalAlignment="Center">
-                                    <TextBlock Foreground="{StaticResource TextBrush}" 
-                                               Text="{Binding CurrentTrack.Title}"
-                                               TextWrapping="NoWrap">
-                                    </TextBlock>
-                                    <TextBlock Foreground="{StaticResource TextBrush}" 
-                                               Text="{Binding CurrentTrack.Artists}"/>
-                                </StackPanel>
-                            </StackPanel>
+                            <Grid Grid.Column="1" VerticalAlignment="Center" RowDefinitions="*, *">
+                                <TextBlock Grid.Row="0" Foreground="{StaticResource TextBrush}" 
+                                           Text="{Binding CurrentTrack.Title}"
+                                           TextTrimming="CharacterEllipsis"
+                                           TextWrapping="NoWrap">
+                                </TextBlock>
+                                <TextBlock Grid.Row="1" Foreground="{StaticResource TextBrush}" 
+                                           Text="{Binding CurrentTrack.Artists}"
+                                           TextTrimming="CharacterEllipsis"
+                                           TextWrapping="NoWrap"/>
+                            </Grid>
                         </Grid>
                     </Border>
                     
@@ -168,18 +169,23 @@
                                         Padding="0"
                                         Margin="4"
                                         Width="{Binding $self.Bounds.Height}"
-                                        CornerRadius="32"/>
-                                <Button Content="{ico:MaterialIconExt Play, IconSize=20}"
-                                        IsEnabled="{Binding CurrentTrack, Converter={StaticResource NotNullConverter}}"
+                                        CornerRadius="32"
+                                        Command="{Binding SkipBackCommand}"/>
+                                <Button IsEnabled="{Binding CurrentTrack, Converter={StaticResource NotNullConverter}}"
                                         Padding="0"
                                         Width="{Binding $self.Bounds.Height}"
-                                        CornerRadius="32"/>
+                                        CornerRadius="32"
+                                        Command="{Binding TogglePlayCommand}">
+                                    <ico:MaterialIcon Kind="{Binding IsPlaying, 
+                                    Converter={StaticResource PlayIconConverter}}" IconSize="20"/>
+                                </Button>
                                 <Button Content="{ico:MaterialIconExt SkipForward, IconSize=16}"
                                         IsEnabled="{Binding CurrentTrack, Converter={StaticResource NotNullConverter}}"
                                         Padding="0"
                                         Margin="4"
                                         Width="{Binding $self.Bounds.Height}"
-                                        CornerRadius="32"/>
+                                        CornerRadius="32"
+                                        Command="{Binding SkipForwardCommand}"/>
                             </StackPanel>
                             
                             <Slider Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"

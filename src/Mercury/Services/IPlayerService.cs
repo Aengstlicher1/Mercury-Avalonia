@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Mercury.Core.Models;
 
@@ -10,6 +12,7 @@ public interface IPlayerService
     float Position { get; set; }
     
     Track? CurrentTrack { get; set; }
+    Collection<Track> CurrentQueue { get; set; }
     Playlist? CurrentPlaylist { get; set; }
     
     Task SetTrack(Track track, bool autoPlay = true);
@@ -18,10 +21,13 @@ public interface IPlayerService
     void StartPlayblack();
     void PausePlayblack();
     void StopPlayblack();
-
-    // Task MoveTrack(bool forwards = true);
+    
+    Task SkipForward(bool autoPlay = true);
+    Task SkipBack(bool autoPlay = true);
+    Task Skip(int relativeIndex, bool autoPlay = true);
 
     event Action<float>? PositionChanged;
+    event Action<bool>? PlayingChanged;
     event Action<int>? VolumeChanged;
     event Action<Track>? CurrentTrackChanged;
     event Action<Playlist>? CurrentPlaylistChanged;

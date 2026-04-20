@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Layout;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using Mercury.Models;
@@ -15,10 +16,10 @@ public partial class NavigationService : INavigationService
 {
     public INavigation? Navigation { get; set; }
     
-    public PageInfo? CurrentPageInfo { get; set; }
-    public Page? CurrentPage => CurrentPageInfo?.Page;
+    public PageInfo? CurrentPageInfo => PageInfos.FirstOrDefault(pi => pi.Page == CurrentPage);
+    public Page? CurrentPage { get; set; }
 
-    public ContentPage[] Pages { get; } = new ContentPage[3];
+    public ContentPage[] Pages { get; } = new ContentPage[2];
     
     public PageInfo[] PageInfos { get; }
 
@@ -27,24 +28,13 @@ public partial class NavigationService : INavigationService
         Pages[0] = App.Services.GetRequiredService<HomePage>();
         Pages[1] = new ContentPage
         {
-            Name = "Explore",
-            Background = Brushes.Transparent,
-            Content = new Button() { Content = "Filler - Explore" },
-            [NavigationPage.HasNavigationBarProperty] = false
-        };
-        Pages[2] = new ContentPage
-        {
             Name = "Library",
             Background = Brushes.Transparent,
-            Content = new Button() { Content = "Filler - Library" },
+            Content = new TextBlock() { Text = "Filler - Library", VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment =  HorizontalAlignment.Center },
             [NavigationPage.HasNavigationBarProperty] = false
         };
         
-        PageInfos = Pages.Select(p => new PageInfo
-        {
-            Name = p.Name!,
-            Page = p
-        }).ToArray();
+        PageInfos = Pages.Select(p => new PageInfo(p)).ToArray();
     }
 
     public void NavigateTo(Page page, bool slideLeft = false)
@@ -58,6 +48,7 @@ public partial class NavigationService : INavigationService
             };
             
             _ = Navigation.ReplaceAsync(page, transition);
+            CurrentPage = page;
         }
     }
     
@@ -65,23 +56,29 @@ public partial class NavigationService : INavigationService
     public void NavigateTo(PageInfo pageInfo)
     {
         foreach (var p in PageInfos)
+        {
             p.IsSelected = false;
+        }
         pageInfo.IsSelected = true;
 
-        bool slideleft;
-        if (PageInfos.Contains(pageInfo))
+        bool slideLeft;
+        if (CurrentPage is SearchPage)
+        {
+            slideLeft = true;
+        }
+        else if (PageInfos.Contains(pageInfo))
         {
             int currentIndex = PageInfos.IndexOf(CurrentPageInfo);
             int targetIndex = PageInfos.IndexOf(pageInfo);
                 
-            slideleft = targetIndex < currentIndex;
+            slideLeft = targetIndex < currentIndex;
         }
         else
         {
-            slideleft = false;
+            slideLeft = false;
         }
         
-        NavigateTo(pageInfo.Page, slideleft);
-        CurrentPageInfo = pageInfo;
+        NavigateTo(pageInfo.Page, slideLeft);
+        CurrentPage = pageInfo.Page;
     }
 }

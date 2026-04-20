@@ -9,7 +9,12 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="Resources/Colors.axaml"/>
+                <ResourceDictionary>
+                    <ResourceDictionary.ThemeDictionaries>
+                        <ResourceInclude x:Key="Light" Source="Resources/Colors Light.axaml"/>
+                        <ResourceInclude x:Key="Dark" Source="Resources/Colors Dark.axaml"/>
+                    </ResourceDictionary.ThemeDictionaries>
+                </ResourceDictionary>
                 <ResourceInclude Source="Resources/WindowDrawnDecorations.axaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -20,6 +25,7 @@
         <ico:MaterialIconStyles />
         
         <StyleInclude Source="Styles/Button.axaml"/>
+        <StyleInclude Source="Styles/ScrollViewer.axaml"/>
     </Application.Styles>
              
     

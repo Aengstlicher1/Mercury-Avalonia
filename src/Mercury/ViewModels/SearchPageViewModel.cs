@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace Mercury.ViewModels;
 public partial class SearchPageViewModel : ViewModelBase
 {
     private CancellationTokenSource _cts = new();
-    private IPlayerService _ps;
+    private readonly IPlayerService _ps;
     public ObservableCollection<Media> SearchResults { get; set; } = new ();
 
     public SearchPageViewModel()
@@ -23,6 +24,8 @@ public partial class SearchPageViewModel : ViewModelBase
         _ps = App.Services.GetRequiredService<IPlayerService>();
         
         var searchService = App.Services.GetRequiredService<ISearchService>();
+        
+        // redo Search on query or filter change
         searchService.SearchParamChanged += (query, filter) =>
         {
             _ = PerformSearch(query, filter);
@@ -31,6 +34,7 @@ public partial class SearchPageViewModel : ViewModelBase
 
     private async Task PerformSearch(string query, Enums.SearchFilter filter)
     {
+        // refresh CTS
         await _cts.CancelAsync();
         _cts = new CancellationTokenSource();
 
@@ -40,6 +44,7 @@ public partial class SearchPageViewModel : ViewModelBase
             return;
         }
         
+        // small delay to let the user type without spamming the API
         await Task.Delay(240, _cts.Token);
 
         _cts.Token.ThrowIfCancellationRequested();
@@ -55,7 +60,16 @@ public partial class SearchPageViewModel : ViewModelBase
             foreach (var result in results)
             {
                 SearchResults.Add(result);
-                Debug.WriteLine($"Added Search Result: {result.Title}");
+            }
+
+            // if we do not play from a playlist currently, make the Search the Queue
+            if (_ps.CurrentPlaylist == null)
+            {
+                _ps.CurrentQueue.Clear();
+                foreach (var result in results.OfType<Track>())
+                {
+                    _ps.CurrentQueue.Add(result);
+                }
             }
         }
     }
@@ -63,7 +77,7 @@ public partial class SearchPageViewModel : ViewModelBase
     [RelayCommand]
     private void PlayTrack(Track track)
     {
+        // Don't wait to keep UI responsive and active
         _ = _ps.SetTrack(track);
-        Debug.WriteLine($"Playing Track: {track.Title}");
     }
 }

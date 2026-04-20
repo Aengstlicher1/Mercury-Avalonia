@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -8,13 +10,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using LibVLCSharp.Shared;
 using Mercury.Core;
 using Mercury.Core.Models;
-using SoundFlow.Abstracts.Devices;
-using SoundFlow.Backends.MiniAudio;
-using SoundFlow.Components;
-using SoundFlow.Codecs.FFMpeg;
-using SoundFlow.Interfaces;
-using SoundFlow.Providers;
-using SoundFlow.Structs;
 using Media = LibVLCSharp.Shared.Media;
 
 namespace Mercury.Services;
@@ -22,6 +17,7 @@ namespace Mercury.Services;
 public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
 {
     public event Action<float>? PositionChanged;
+    public event Action<bool>? PlayingChanged;
     public event Action<int>? VolumeChanged;
     public event Action<Track>? CurrentTrackChanged;
     public event Action<Playlist>? CurrentPlaylistChanged;
@@ -30,30 +26,28 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     private readonly MediaPlayer _mediaPlayer;
     private Media? _currentMedia;
 
-    
-    
-    private int _volume = 50;
+
     /// <summary>
     /// Volume: 0 - 100
     /// </summary>
     public int Volume
     {
-        get => _volume;
+        get;
         set
         {
             value = Math.Clamp(value, 0, 100);
-            if (_volume == value) return;
+            if (field == value) return;
 
-            _volume = value;
+            field = value;
 
             if (_mediaPlayer.Media is not null)
-                _mediaPlayer.Volume = _volume;
+                _mediaPlayer.Volume = field;
 
-            VolumeChanged?.Invoke(_volume); // notify UI immediately
+            VolumeChanged?.Invoke(field); // notify UI immediately
         }
-    }
+    } = 50;
 
-    
+
     /// <summary>
     /// Position: 0.0f - 1.0f
     /// </summary>
@@ -71,6 +65,9 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
 
     [ObservableProperty]
     private Track? _currentTrack;
+    
+    [ObservableProperty]
+    private Collection<Track> _currentQueue = new ();
 
     [ObservableProperty]
     private Playlist? _currentPlaylist;
@@ -79,13 +76,7 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     public PlayerService()
     {
         // "--no-video" ensures no video decoding/rendering — audio only
-        _libVlc = new LibVLC(
-            new[]
-            {
-                "--no-video",
-                "--verbose=2"
-            }
-        );
+        _libVlc = new LibVLC("--no-video");
         _mediaPlayer = new MediaPlayer(_libVlc);
         
         _mediaPlayer.PositionChanged += (s, e) =>
@@ -96,6 +87,13 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
         _mediaPlayer.Playing += (s, e) =>
         {
             Console.WriteLine("VLC: Playback started");
+            PlayingChanged?.Invoke(true);
+        };
+
+        _mediaPlayer.Paused += (s, e) =>
+        {
+            Console.WriteLine("VLC: Playback paused");
+            PlayingChanged?.Invoke(false);
         };
     }
 
@@ -146,6 +144,29 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     {
         _mediaPlayer.Stop();
     }
+
+    public async Task SkipForward(bool autoPlay = true)
+        => await Skip(+1, autoPlay);
+    
+    public async Task SkipBack(bool autoPlay = true)
+        => await Skip(-1, autoPlay);
+    
+    public async Task Skip(int relativeIndex, bool autoPlay = true)
+    {
+        if (CurrentTrack != null && CurrentQueue.FirstOrDefault(t => t.Id == CurrentTrack.Id) != null)
+        {
+            int currentIndex = CurrentQueue.IndexOf(CurrentQueue.First(t => t.Id == CurrentTrack.Id));
+            if (currentIndex == -1) return;
+            
+            int targetIndex = (currentIndex + relativeIndex) % CurrentQueue.Count;
+            if (targetIndex < 0) targetIndex += CurrentQueue.Count;
+            
+            var target = CurrentQueue.ElementAt(targetIndex);
+            
+            await SetTrack(target, autoPlay);
+        }
+    } 
+    
     
     public void Dispose()
     {

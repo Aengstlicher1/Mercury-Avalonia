@@ -9,7 +9,7 @@ namespace Mercury.Services;
 public interface INavigationService
 {
     public INavigation? Navigation { get; internal set; }
-    public PageInfo? CurrentPageInfo { get; set; }
+    public PageInfo? CurrentPageInfo { get; }
     public Page? CurrentPage { get; }
     
     public ContentPage[] Pages { get; }

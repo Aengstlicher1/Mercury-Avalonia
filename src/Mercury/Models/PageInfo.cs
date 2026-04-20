@@ -3,10 +3,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Mercury.Models;
 
-public partial class PageInfo : ObservableObject
+public partial class PageInfo(Page page) : ObservableObject
 {
-    public required string Name { get; set; }
-    public required Page Page { get; init; }
+    public string Name => Page.Name ?? string.Empty;
+    public Page Page { get; init; } = page;
     
     [ObservableProperty] 
     private bool _isSelected = false;

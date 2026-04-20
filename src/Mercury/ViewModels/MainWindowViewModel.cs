@@ -4,12 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Mercury.Core;
 using Mercury.Core.Models;
 using Mercury.Models;
 using Mercury.Services;
@@ -30,7 +28,10 @@ public partial class MainWindowViewModel : ViewModelBase
             );
     
     [ObservableProperty]
-    private Track? _currentTrack = null;
+    private Track? _currentTrack;
+    
+    [ObservableProperty]
+    private bool _isPlaying;
     
     [ObservableProperty]
     private float _currentTrackPosition;
@@ -40,6 +41,13 @@ public partial class MainWindowViewModel : ViewModelBase
     
     [ObservableProperty]
     private IImage? _currentBackgroundImage;
+    
+    
+    [ObservableProperty]
+    private string _searchText = "";
+    
+    [ObservableProperty]
+    private SearchFilter _searchFilter = SearchFilter.All;
     
     private readonly INavigationService _navigationService;
     private readonly ISearchService _searchService;
@@ -56,9 +64,10 @@ public partial class MainWindowViewModel : ViewModelBase
         
         _navigationService.NavigateTo(_navigationService.PageInfos[0]);
 
-        _playerService.CurrentTrackChanged += (track) => CurrentTrack = track;
+        _playerService.CurrentTrackChanged += track => CurrentTrack = track;
         _playerService.PositionChanged += pos => CurrentTrackPosition = pos; // update UI
         _playerService.VolumeChanged += vol => Volume = vol;
+        _playerService.PlayingChanged += playing => IsPlaying = playing;
     }
     
     private async Task<Bitmap> LoadTrackImageAsync(string url)
@@ -68,6 +77,29 @@ public partial class MainWindowViewModel : ViewModelBase
         return new Bitmap(ms);
     }
 
+
+    [RelayCommand]
+    private void TogglePlay()
+    {
+        if (CurrentTrack != null)
+        {
+            switch (IsPlaying)
+            {
+                case true:  _playerService.PausePlayblack(); break;
+                case false: _playerService.StartPlayblack(); break;
+            }
+        }
+    }
+
+    [RelayCommand]
+    private void SkipForward()
+        => _playerService.SkipForward();
+    
+    [RelayCommand]
+    private void SkipBack()
+        => _playerService.SkipBack();
+    
+    
     partial void OnCurrentTrackChanged(Track? value)
     {
         Task.Run(async () =>
@@ -75,12 +107,6 @@ public partial class MainWindowViewModel : ViewModelBase
             CurrentBackgroundImage = await LoadTrackImageAsync(value!.Thumbnails.LowestRes.Url);
         });
     }
-
-    [ObservableProperty]
-    private string _searchText = "";
-    
-    [ObservableProperty]
-    private SearchFilter _searchFilter = SearchFilter.All;
 
     partial void OnSearchTextChanged(string value)
     {
