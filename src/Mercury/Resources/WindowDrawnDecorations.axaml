@@ -32,7 +32,7 @@
                                 <Button
                                     Name="PART_MaximizeButton"
                                     Theme="{StaticResource CaptionButton}"
-                                    Content="{ico:MaterialIconExt SquareOutline}"
+                                    Content="{ico:MaterialIconExt SquareRoundedOutline}"
                                     WindowDecorationProperties.ElementRole="MaximizeButton" />
                                 <!-- ReSharper disable once InconsistentNaming -->
                                 <Button

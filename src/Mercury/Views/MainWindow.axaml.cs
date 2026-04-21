@@ -12,6 +12,7 @@ namespace Mercury.Views;
 public partial class MainWindow : Window
 {
     private readonly INavigationService _ns;
+    private readonly IPlayerService _ps;
     private readonly SearchPage _sp;
     
     public MainWindow()
@@ -20,8 +21,13 @@ public partial class MainWindow : Window
         DataContext = App.Services.GetRequiredService<MainWindowViewModel>();
         _sp = App.Services.GetRequiredService<SearchPage>();
         _ns = App.Services.GetRequiredService<INavigationService>();
+        _ps = App.Services.GetRequiredService<IPlayerService>();
         
         _ns.Navigation = Navigator;
+        Closing += (s, e) =>
+        {
+            _ps.Dispose();
+        };
     }
 
     private void SearchBox_GotFocus(object? sender, FocusChangedEventArgs e)

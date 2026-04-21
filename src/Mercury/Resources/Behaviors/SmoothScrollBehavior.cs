@@ -9,6 +9,13 @@ namespace Mercury.Resources.Behaviors;
 
 public class SmoothScrollBehavior : AvaloniaObject
 {
+    // ===== TUNING PARAMETERS =====
+    private const double Friction = 0.85;              // Higher = stops faster (0.0 - 1.0)
+    private const double MinVelocity = 0.3;           // Velocity threshold to stop animation
+    private const double VelocityMultiplier = 20.0;   // Scroll speed per wheel tick
+    private const int TimerIntervalMs = 8;           // Animation frame interval (lower = smoother, more CPU)
+    // =============================
+
     public static readonly AttachedProperty<bool> IsEnabledProperty =
         AvaloniaProperty.RegisterAttached<SmoothScrollBehavior, ScrollViewer, bool>(
             "IsEnabled", defaultValue: false);
@@ -36,16 +43,34 @@ public class SmoothScrollBehavior : AvaloniaObject
         {
             sv.AddHandler(InputElement.PointerWheelChangedEvent, OnPointerWheelChanged,
                 Avalonia.Interactivity.RoutingStrategies.Tunnel);
+            
+            sv.DetachedFromVisualTree += OnDetached;
         }
         else
         {
             sv.RemoveHandler(InputElement.PointerWheelChangedEvent, OnPointerWheelChanged);
+            sv.DetachedFromVisualTree -= OnDetached;
 
-            if (_states.TryGetValue(sv, out var state))
-            {
-                state.Timer?.Stop();
-                _states.Remove(sv);
-            }
+            CleanupState(sv);
+        }
+    }
+
+    private static void OnDetached(object? sender, Avalonia.VisualTreeAttachmentEventArgs e)
+    {
+        if (sender is ScrollViewer sv)
+        {
+            CleanupState(sv);
+        }
+    }
+
+    private static void CleanupState(ScrollViewer sv)
+    {
+        if (_states.TryGetValue(sv, out var state))
+        {
+            state.Timer?.Stop();
+            state.Timer = null;
+            state.VelocityX = 0;
+            state.VelocityY = 0;
         }
     }
 
@@ -58,52 +83,69 @@ public class SmoothScrollBehavior : AvaloniaObject
     {
         if (sender is not ScrollViewer sv) return;
 
+        bool isVertical = e.Delta.Y != 0;
+        bool isHorizontal = e.Delta.X != 0;
+
+        bool shiftHeld = (e.KeyModifiers & KeyModifiers.Shift) != 0;
+        if (shiftHeld && isVertical)
+        {
+            isHorizontal = true;
+            isVertical = false;
+        }
+
+        bool canScrollVertically = sv.ScrollBarMaximum.Y > 0;
+        bool canScrollHorizontally = sv.ScrollBarMaximum.X > 0;
+
+        if (isVertical && !canScrollVertically) return;
+        if (isHorizontal && !canScrollHorizontally) return;
+
         e.Handled = true;
 
         var state = GetOrCreateState(sv);
         double speed = GetSpeedFactor(sv);
-        double deltaY = -e.Delta.Y * 80 * speed;
-        double deltaX = -e.Delta.X * 80 * speed;
 
-        if (!state.IsAnimating)
+        // Add velocity (momentum-based scrolling)
+        if (isHorizontal || shiftHeld)
         {
-            state.TargetOffsetY = sv.Offset.Y;
-            state.TargetOffsetX = sv.Offset.X;
+            double delta = shiftHeld ? e.Delta.Y : e.Delta.X;
+            state.VelocityX += -delta * VelocityMultiplier * speed;
         }
 
-        state.TargetOffsetY = Math.Clamp(state.TargetOffsetY + deltaY, 0, sv.ScrollBarMaximum.Y);
-        state.TargetOffsetX = Math.Clamp(state.TargetOffsetX + deltaX, 0, sv.ScrollBarMaximum.X);
+        if (isVertical && !shiftHeld)
+        {
+            state.VelocityY += -e.Delta.Y * VelocityMultiplier * speed;
+        }
 
-        AnimateScroll(sv, state);
+        StartInertiaScroll(sv, state);
     }
 
-    private static void AnimateScroll(ScrollViewer sv, ScrollState state)
+    private static void StartInertiaScroll(ScrollViewer sv, ScrollState state)
     {
-        if (state.IsAnimating) return;
+        if (state.Timer != null) return; // Already running
 
-        state.IsAnimating = true;
-        const double lerp = 0.15;
-
-        var timer = new DispatcherTimer(TimeSpan.FromMilliseconds(16), DispatcherPriority.Render, (_, _) =>
+        var timer = new DispatcherTimer(TimeSpan.FromMilliseconds(TimerIntervalMs), DispatcherPriority.Render, (_, _) =>
         {
-            double currentY = sv.Offset.Y;
-            double currentX = sv.Offset.X;
-            double diffY = state.TargetOffsetY - currentY;
-            double diffX = state.TargetOffsetX - currentX;
+            // Apply velocity
+            double newX = sv.Offset.X + state.VelocityX;
+            double newY = sv.Offset.Y + state.VelocityY;
 
-            bool doneY = Math.Abs(diffY) < 0.5;
-            bool doneX = Math.Abs(diffX) < 0.5;
+            // Clamp to valid scroll range
+            newX = Math.Clamp(newX, 0, sv.ScrollBarMaximum.X);
+            newY = Math.Clamp(newY, 0, sv.ScrollBarMaximum.Y);
 
-            double nextY = doneY ? state.TargetOffsetY : currentY + diffY * lerp;
-            double nextX = doneX ? state.TargetOffsetX : currentX + diffX * lerp;
+            sv.Offset = new Vector(newX, newY);
 
-            sv.Offset = new Vector(nextX, nextY);
+            // Apply friction
+            state.VelocityX *= Friction;
+            state.VelocityY *= Friction;
 
-            if (doneY && doneX)
+            // Stop when velocity is negligible
+            if (Math.Abs(state.VelocityX) < MinVelocity && Math.Abs(state.VelocityY) < MinVelocity)
             {
+                state.VelocityX = 0;
+                state.VelocityY = 0;
                 state.Timer?.Stop();
                 state.Timer = null;
-                state.IsAnimating = false;
             }
         });
 
@@ -113,9 +155,8 @@ public class SmoothScrollBehavior : AvaloniaObject
 
     private class ScrollState
     {
-        public double TargetOffsetY { get; set; }
-        public double TargetOffsetX { get; set; }
-        public bool IsAnimating { get; set; }
+        public double VelocityX { get; set; }
+        public double VelocityY { get; set; }
         public DispatcherTimer? Timer { get; set; }
     }
 }

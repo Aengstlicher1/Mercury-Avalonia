@@ -29,11 +29,13 @@ public partial class App : Application
         // Register ViewModels
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<HomePageViewModel>();
+        services.AddTransient<ExplorePageViewModel>();
         services.AddTransient<SearchPageViewModel>();
 
         // Register Views
         services.AddTransient<MainWindow>();
         services.AddTransient<HomePage>();
+        services.AddTransient<ExplorePage>();
         services.AddTransient<SearchPage>();
 
         Services = services.BuildServiceProvider();

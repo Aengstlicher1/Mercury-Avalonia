@@ -20,11 +20,6 @@
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-    <Window.Resources>
-        <converters:VolumeIconConverter x:Key="VolumeIconConverter"/>
-        <converters:PlayIconConverter x:Key="PlayIconConverter"/>
-        <converters:NotNullConverter x:Key="NotNullConverter"/>
-    </Window.Resources>
     
     <Panel>
         <Panel IsHitTestVisible="False">
@@ -150,7 +145,7 @@
                                            TextWrapping="NoWrap">
                                 </TextBlock>
                                 <TextBlock Grid.Row="1" Foreground="{StaticResource TextBrush}" 
-                                           Text="{Binding CurrentTrack.Artists}"
+                                           Text="{Binding CurrentTrack.Artist}"
                                            TextTrimming="CharacterEllipsis"
                                            TextWrapping="NoWrap"/>
                             </Grid>

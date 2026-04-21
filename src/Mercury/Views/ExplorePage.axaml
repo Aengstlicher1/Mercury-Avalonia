@@ -1,0 +1,144 @@
+﻿<ContentPage xmlns="https://github.com/avaloniaui"
+             xmlns:vm="using:Mercury.ViewModels"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="clr-namespace:Mercury.Core.Models;assembly=Mercury.Core"
+             xmlns:behaviors="clr-namespace:Mercury.Resources.Behaviors"
+             xmlns:eModels="clr-namespace:Mercury.Core.Models.Explore;assembly=Mercury.Core"
+             xmlns:image="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Mercury.Views.ExplorePage"
+             x:DataType="vm:ExplorePageViewModel"
+             Name="Explore"
+             NavigationPage.HasNavigationBar="False"
+             Background="Transparent">
+    <Design.DataContext>
+        <vm:ExplorePageViewModel/>
+    </Design.DataContext>
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  behaviors:SmoothScrollBehavior.IsEnabled="True"
+                  HorizontalScrollBarVisibility="Disabled">
+        <StackPanel>
+            
+            <!-- Releases Carousel -->
+            <TextBlock Text="New Albums and Singles" 
+                       Margin="0,8, 0, 0"
+                       FontSize="28"
+                       FontWeight="DemiBold"/>
+            <ScrollViewer HorizontalScrollBarVisibility="Hidden"
+                          VerticalScrollBarVisibility="Disabled"
+                          behaviors:SmoothScrollBehavior.IsEnabled="True"
+                          VerticalAlignment="Center" 
+                          Margin="0,8,0,0">
+                <ItemsControl ItemsSource="{Binding Releases}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="12"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.DataTemplates>
+                        <DataTemplate DataType="models:Album" x:DataType="models:Album">
+                            <Grid Width="160" RowDefinitions="*, 40">
+                                <Border Grid.Row="0" Height="160" CornerRadius="8">
+                                    <Border.Background>
+                                        <ImageBrush image:ImageBrushLoader.Source="{Binding Thumbnails.HighestRes.Url}"/>
+                                    </Border.Background>
+                                </Border>
+                                <StackPanel Grid.Row="1">
+                                    <TextBlock Text="{Binding Title}"
+                                               FontWeight="DemiBold"
+                                               TextTrimming="CharacterEllipsis"
+                                               TextWrapping="NoWrap"
+                                               FontSize="18"/>
+                                    <TextBlock Text="{Binding Artist}"
+                                               TextTrimming="CharacterEllipsis"
+                                               TextWrapping="NoWrap"
+                                               Foreground="{DynamicResource SubTextBrush}"
+                                               FontSize="16"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.DataTemplates>
+                </ItemsControl>
+            </ScrollViewer>
+            
+            <!-- Genres Carousel -->
+            <TextBlock Text="Moods &amp; Genres" 
+                       Margin="0,24, 0, 0"
+                       FontSize="28"
+                       FontWeight="DemiBold"/>
+            <ScrollViewer HorizontalScrollBarVisibility="Hidden"
+                          VerticalScrollBarVisibility="Disabled"
+                          behaviors:SmoothScrollBehavior.IsEnabled="True"
+                          VerticalAlignment="Center" 
+                          Margin="0,8,0,0">
+                <ItemsControl ItemsSource="{Binding Genres}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Vertical" 
+                                       ItemSpacing="12" 
+                                       LineSpacing="12"
+                                       MaxHeight="120"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.DataTemplates>
+                        <DataTemplate DataType="eModels:Genre" x:DataType="eModels:Genre">
+                            <Button Height="32" Width="120" CornerRadius="8" Padding="0"
+                                    VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                                <Grid ColumnDefinitions="8, *">
+                                    <Border Grid.Column="0" CornerRadius="8,0,0,8">
+                                        <Border.Background>
+                                            <SolidColorBrush Color="{Binding Color, Converter={StaticResource ColorConverter}}"/>
+                                        </Border.Background>
+                                    </Border>
+                                    
+                                    <Border Grid.Column="1" CornerRadius="0,8,8,0"
+                                            BorderBrush="{DynamicResource OutlineBrush}"
+                                            BorderThickness="0,1,1,1">
+                                        <TextBlock Text="{Binding Title}"
+                                                   Margin="4,0,0,0" 
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   TextWrapping="NoWrap"/>
+                                    </Border>
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.DataTemplates>
+                </ItemsControl>
+            </ScrollViewer>
+            
+            <!-- Genres Trending -->
+            <TextBlock Text="Trending" 
+                       Margin="0,24, 0, 0"
+                       FontSize="28"
+                       FontWeight="DemiBold"/>
+            <ScrollViewer HorizontalScrollBarVisibility="Hidden"
+                          VerticalScrollBarVisibility="Disabled"
+                          behaviors:SmoothScrollBehavior.IsEnabled="True"
+                          VerticalAlignment="Center" 
+                          Margin="0,8,0,0">
+                <ItemsControl ItemsSource="{Binding }">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <!-- Adjust MaxHeight based on (content_height * 3)-->
+                            <WrapPanel Orientation="Vertical" 
+                                       ItemSpacing="12" 
+                                       LineSpacing="12"
+                                       MaxHeight="120"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.DataTemplates>
+                        <DataTemplate DataType="eModels:Genre" x:DataType="eModels:Genre">
+                            <Border Height="42" Width="240">
+                                
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.DataTemplates>
+                </ItemsControl>
+            </ScrollViewer>
+        </StackPanel>
+    </ScrollViewer>
+</ContentPage>

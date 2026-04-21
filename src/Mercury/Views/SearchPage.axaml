@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:models="clr-namespace:Mercury.Core.Models;assembly=Mercury.Core"
              xmlns:vm="clr-namespace:Mercury.ViewModels"
+             xmlns:behaviors="clr-namespace:Mercury.Resources.Behaviors"
              xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Mercury.Views.SearchPage"
@@ -16,7 +17,7 @@
     </Design.DataContext>
     
     <Grid>
-        <ScrollViewer>
+        <ScrollViewer behaviors:SmoothScrollBehavior.IsEnabled="True">
             <ItemsControl ItemsSource="{Binding SearchResults}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -51,7 +52,7 @@
                                                TextWrapping="NoWrap"
                                                Foreground="{DynamicResource TextBrush}">
                                     </TextBlock>
-                                    <TextBlock Text="{Binding Artists}"
+                                    <TextBlock Text="{Binding Artist}"
                                                FontSize="12"
                                                TextTrimming="CharacterEllipsis"
                                                TextWrapping="NoWrap"
@@ -98,7 +99,7 @@
                                                TextTrimming="WordEllipsis"
                                                TextWrapping="NoWrap"
                                                Foreground="{DynamicResource TextBrush}"/>
-                                    <TextBlock Text="{Binding Artists}"
+                                    <TextBlock Text="{Binding Artist}"
                                                FontSize="12"
                                                TextTrimming="CharacterEllipsis"
                                                TextWrapping="NoWrap"
@@ -145,7 +146,7 @@
                                                TextTrimming="WordEllipsis"
                                                TextWrapping="NoWrap"
                                                Foreground="{DynamicResource TextBrush}"/>
-                                    <TextBlock Text="{Binding Artists}"
+                                    <TextBlock Text="{Binding Artist}"
                                                FontSize="12"
                                                TextTrimming="CharacterEllipsis"
                                                TextWrapping="NoWrap"
@@ -190,7 +191,7 @@
                                                TextTrimming="WordEllipsis"
                                                TextWrapping="NoWrap"
                                                Foreground="{DynamicResource TextBrush}"/>
-                                    <TextBlock Text="{Binding Artists}"
+                                    <TextBlock Text="{Binding Artist}"
                                                FontSize="12"
                                                TextTrimming="CharacterEllipsis"
                                                TextWrapping="NoWrap"

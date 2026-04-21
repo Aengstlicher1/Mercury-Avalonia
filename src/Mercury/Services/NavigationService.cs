@@ -19,14 +19,15 @@ public partial class NavigationService : INavigationService
     public PageInfo? CurrentPageInfo => PageInfos.FirstOrDefault(pi => pi.Page == CurrentPage);
     public Page? CurrentPage { get; set; }
 
-    public ContentPage[] Pages { get; } = new ContentPage[2];
+    public ContentPage[] Pages { get; } = new ContentPage[3];
     
     public PageInfo[] PageInfos { get; }
 
     public NavigationService()
     {
         Pages[0] = App.Services.GetRequiredService<HomePage>();
-        Pages[1] = new ContentPage
+        Pages[1] = App.Services.GetRequiredService<ExplorePage>();
+        Pages[2] = new ContentPage
         {
             Name = "Library",
             Background = Brushes.Transparent,
