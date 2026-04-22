@@ -2,11 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
     <Color x:Key="WindowSurfaceColor">#f1f2f7</Color>
-    <Color x:Key="SurfaceColor">#04000000</Color>
+    <Color x:Key="SurfaceColor">#e7e8ee</Color>
     <Color x:Key="SurfaceItemColor">#ffffff</Color>
     <Color x:Key="OutlineColor">#c4c4cc</Color>
     <Color x:Key="HoverColor">#14000000</Color>
-    <Color x:Key="SelectedColor">#3573f0</Color>
+    <Color x:Key="SelectedColor">#3a72e1</Color>
     <Color x:Key="TextColor">#494c40</Color>
     <Color x:Key="SubTextColor">#b7bbb6</Color>
     

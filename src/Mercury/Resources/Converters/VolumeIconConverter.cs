@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
-using Material.Icons;
+using IconPacks.Avalonia.MaterialDesign;
 
 namespace Mercury.Resources.Converters;
 
@@ -14,15 +14,15 @@ public class VolumeIconConverter : IValueConverter
             switch (volume)
             {
                 case 0:
-                    return MaterialIconKind.VolumeMute;
+                    return PackIconMaterialDesignKind.VolumeOffRound;
                 case > 0 and <= 33:
-                    return MaterialIconKind.VolumeLow;
+                    return PackIconMaterialDesignKind.VolumeMuteRound;
                 case > 33 and <= 66:
-                    return MaterialIconKind.VolumeMedium;
+                    return PackIconMaterialDesignKind.VolumeDownRound;
                 case > 66 and <= 100:
-                    return MaterialIconKind.VolumeHigh;
+                    return PackIconMaterialDesignKind.VolumeUpRound;
                 default:
-                    return MaterialIconKind.VolumeMedium; // fallback
+                    return PackIconMaterialDesignKind.VolumeOffRound; // fallback
             }
         }
 
