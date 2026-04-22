@@ -7,14 +7,14 @@
                 CornerRadius="8">
         </Button>
     </Design.PreviewWith>
-    <Color x:Key="WindowSurfaceColor">#3c3f41</Color>
-    <Color x:Key="SurfaceColor">#4c4f41</Color>
-    <Color x:Key="SurfaceItemColor">#2b2b2b</Color>
-    <Color x:Key="OutlineColor">#515151</Color>
+    <Color x:Key="WindowSurfaceColor">#26282c</Color>
+    <Color x:Key="SurfaceColor">#191a1c</Color>
+    <Color x:Key="SurfaceItemColor">#1e1f22</Color>
+    <Color x:Key="OutlineColor">#3c3d3e</Color>
     <Color x:Key="HoverColor">#14FFFFFF</Color>
-    <Color x:Key="SelectedColor">#54a9ff</Color>
-    <Color x:Key="TextColor">#ced0d6</Color>
-    <Color x:Key="SubTextColor">#979693</Color>
+    <Color x:Key="SelectedColor">#548af7</Color>
+    <Color x:Key="TextColor">#c3c5cb</Color>
+    <Color x:Key="SubTextColor">#7f8186</Color>
 
     
     

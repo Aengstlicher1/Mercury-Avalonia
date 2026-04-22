@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mercury.Core;
 using Mercury.Core.Models;
 using Mercury.Core.Models.Explore;
@@ -11,8 +13,6 @@ namespace Mercury.ViewModels;
 
 public partial class ExplorePageViewModel : ViewModelBase
 {
-    private ExploreFeed _feed = null!;
-    
     [ObservableProperty]
     private ObservableCollection<Album> _releases = new();
     
@@ -20,32 +20,27 @@ public partial class ExplorePageViewModel : ViewModelBase
     private ObservableCollection<Genre> _genres = new();
     
     [ObservableProperty]
-    private ObservableCollection<Genre> _trending = new();
+    private ObservableCollection<Track> _trending = new();
     
     [ObservableProperty]
-    private ObservableCollection<Genre> _musicVideos = new();
+    private ObservableCollection<Video> _musicVideos = new();
     
     public ExplorePageViewModel()
     {
-        Task.Run(async () =>
-        {
-            _feed = await YoutubeMusic.Browse.GetExploreFeedAsync();
-            LoadFeed();
-        });
+        LoadFeedCommand.ExecuteAsync(null);
     }
     
-    private void LoadFeed()
+    [RelayCommand]
+    private async Task LoadFeedAsync()
     {
-        Releases.Clear();
-        foreach (var item in _feed.Releases.Content)
+        var feed = await YoutubeMusic.Browse.GetExploreFeedAsync();
+
+        await Dispatcher.UIThread.InvokeAsync(() =>
         {
-            Releases.Add(item);
-        }
-        
-        Genres.Clear();
-        foreach (var item in _feed.Genres.Content)
-        {
-            Genres.Add(item);
-        }
+            Releases = new ObservableCollection<Album>(feed.Releases.Content);
+            Genres = new ObservableCollection<Genre>(feed.Genres.Content);
+            Trending = new ObservableCollection<Track>(feed.Trending.Content);
+            MusicVideos = new ObservableCollection<Video>(feed.NewMusicVideos.Content);
+        });
     }
 }
