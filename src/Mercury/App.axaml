@@ -2,7 +2,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:semi="https://irihi.tech/semi"
              xmlns:converters="clr-namespace:Mercury.Resources.Converters"
-             xmlns:ico="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              x:Class="Mercury.App"
              xmlns:local="using:Mercury"
              RequestedThemeVariant="Default">
@@ -29,10 +28,11 @@
              
     <Application.Styles>
         <semi:SemiTheme />
-        <ico:MaterialIconStyles />
+        <StyleInclude Source="avares://IconPacks.Avalonia.MaterialDesign/MaterialDesign.axaml" />
         
         <StyleInclude Source="Styles/Button.axaml"/>
         <StyleInclude Source="Styles/TextBlock.axaml"/>
+        <StyleInclude Source="Styles/MaterialDesignIcon.axaml"/>
     </Application.Styles>
              
     

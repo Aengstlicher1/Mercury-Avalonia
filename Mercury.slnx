@@ -1,5 +1,7 @@
 <Solution>
   <Project Path="src/Core/Mercury.Core.Test/Mercury.Core.Test.csproj" />
   <Project Path="src/Core/Mercury.Core/Mercury.Core.csproj" />
+  <Project Path="src/IconPacks.Avalonia/IconPacks.Avalonia.Core/IconPacks.Avalonia.Core.csproj" />
+  <Project Path="src/IconPacks.Avalonia/IconPacks.Avalonia.MaterialDesign/IconPacks.Avalonia.MaterialDesign.csproj" />
   <Project Path="src/Mercury/Mercury.csproj" />
 </Solution>
