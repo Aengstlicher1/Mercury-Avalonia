@@ -1,6 +1,6 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:ico="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+        xmlns:icon="clr-namespace:IconPacks.Avalonia.MaterialDesign;assembly=IconPacks.Avalonia.MaterialDesign">
 
     <ControlTheme x:Key="CaptionButton" TargetType="Button">
         <Setter Property="WindowDecorationProperties.ElementRole" Value="DecorationsElement" />
@@ -26,19 +26,19 @@
                                 <Button
                                     Name="PART_MinimizeButton"
                                     Theme="{StaticResource CaptionButton}"
-                                    Content="{ico:MaterialIconExt Minus}"
+                                    Content="{icon:MaterialDesign Kind=MinimizeRound}"
                                     WindowDecorationProperties.ElementRole="MinimizeButton" />
                                 <!-- ReSharper disable once InconsistentNaming -->
                                 <Button
                                     Name="PART_MaximizeButton"
                                     Theme="{StaticResource CaptionButton}"
-                                    Content="{ico:MaterialIconExt SquareRoundedOutline}"
+                                    Content="{icon:MaterialDesign Kind=MaximizeRound}"
                                     WindowDecorationProperties.ElementRole="MaximizeButton" />
                                 <!-- ReSharper disable once InconsistentNaming -->
                                 <Button
                                     Name="PART_CloseButton"
                                     Theme="{StaticResource CaptionButton}"
-                                    Content="{ico:MaterialIconExt Close}"
+                                    Content="{icon:MaterialDesign Kind=CloseRound}"
                                     WindowDecorationProperties.ElementRole="CloseButton" />
                             </StackPanel>
                         </Grid>

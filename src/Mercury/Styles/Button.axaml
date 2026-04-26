@@ -12,6 +12,8 @@
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Padding" Value="8"/>
         <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
     </Style>
     <Style Selector="Button:pointerover">
         <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>

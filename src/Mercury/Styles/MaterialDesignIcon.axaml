@@ -1,0 +1,14 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:icon="clr-namespace:IconPacks.Avalonia.MaterialDesign;assembly=IconPacks.Avalonia.MaterialDesign">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <icon:PackIconMaterialDesign Kind="FullscreenRound" Height="24" Width="24"/>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="icon|PackIconMaterialDesign">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+</Styles>

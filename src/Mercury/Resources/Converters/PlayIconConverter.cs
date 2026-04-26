@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
-using Material.Icons;
+using IconPacks.Avalonia.MaterialDesign;
 
 namespace Mercury.Resources.Converters;
 
@@ -13,11 +13,11 @@ public class PlayIconConverter : IValueConverter
         {
             switch (playing)
             {
-                case true: return MaterialIconKind.Pause;
-                case false: return MaterialIconKind.Play;
+                case true: return PackIconMaterialDesignKind.PauseRound;
+                case false: return PackIconMaterialDesignKind.PlayArrowRound;
             }
         }
-        return MaterialIconKind.PlayPause;
+        return PackIconMaterialDesignKind.PlayDisabledRound;
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
