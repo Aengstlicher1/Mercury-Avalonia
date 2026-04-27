@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.Input;
 using Mercury.Core.Models;
 using Mercury.Models;
 using Mercury.Services;
+using Mercury.Views;
 using Microsoft.Extensions.DependencyInjection;
 using static Mercury.Core.Models.Enums;
 
@@ -126,6 +127,12 @@ public partial class MainWindowViewModel : ViewModelBase
                 RepeatState = RepeatState.NoRepeat;
                 break;
         }
+    }
+
+    [RelayCommand]
+    private void EnterPlaying()
+    {
+        _navigationService.NavigateTo(App.Services.GetRequiredService<PlayingPage>());
     }
     
     partial void OnCurrentTrackChanged(Track? value)

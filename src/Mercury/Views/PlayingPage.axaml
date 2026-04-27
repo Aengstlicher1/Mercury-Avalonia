@@ -1,8 +1,58 @@
 <ContentPage xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Mercury.ViewModels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:icon="clr-namespace:IconPacks.Avalonia.MaterialDesign;assembly=IconPacks.Avalonia.MaterialDesign"
+             xmlns:imageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:behaviors="clr-namespace:Mercury.Resources.Behaviors"
+             xmlns:models="clr-namespace:Mercury.Models"
+             xmlns:cmodels="clr-namespace:Mercury.Core.Models;assembly=Mercury.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:PlayingPageViewModel"
+             Background="Transparent"
+             NavigationPage.HasNavigationBar="False"
              x:Class="Mercury.Views.PlayingPage">
-    <Rectangle Fill="Azure" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+    <Design.DataContext>
+        <vm:PlayingPageViewModel/>
+    </Design.DataContext>
+    <Grid ColumnDefinitions="*, *">
+        <Border Grid.Column="0"
+            Margin="16"
+            HorizontalAlignment="Stretch"
+            CornerRadius="16">
+            <Border.Background>
+                <ImageBrush Stretch="Uniform" imageLoader:ImageBrushLoader.Source="{Binding CurrentTrack.Thumbnails.HighestRes.Url }"/>
+            </Border.Background>
+        </Border>
+        <Border Grid.Column="1">
+            <Grid RowDefinitions="42, *">
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Lyrics"/>
+                    <Button Content="Queue"/>
+                    <Button Content="Info"/>
+                </StackPanel>
+                <ScrollViewer Grid.Row="1" behaviors:SmoothScrollBehavior.IsEnabled="True">
+                    <ItemsControl ItemsSource="{Binding Lyrics.SyncedLyrics}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="cmodels:LyricLine">
+                                <Button HorizontalAlignment="Center" VerticalAlignment="Center"
+                                        ToolTip.Tip="{Binding Duration}"
+                                        ToolTip.ServiceEnabled="False">
+                                    <TextBlock Text="{Binding Content}" FontSize="18"
+                                               TextWrapping="Wrap" Foreground="{DynamicResource SubTextBrush}"
+                                               TextAlignment="Center"/>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </Grid>
 </ContentPage>

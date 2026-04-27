@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Mercury.Services;
 
-public partial class NavigationService : INavigationService
+public partial class NavigationService : ServiceBase, INavigationService
 {
     public INavigation? Navigation { get; set; }
     
@@ -42,6 +42,9 @@ public partial class NavigationService : INavigationService
     {
         if (Navigation != null)
         {
+            if (CurrentPage != null && CurrentPage.Name == page.Name)
+                return;
+            
             var transition = new DirectionalPageSlide()
             {
                 Duration = TimeSpan.FromMilliseconds(160),
@@ -80,6 +83,5 @@ public partial class NavigationService : INavigationService
         }
         
         NavigateTo(pageInfo.Page, slideLeft);
-        CurrentPage = pageInfo.Page;
     }
 }

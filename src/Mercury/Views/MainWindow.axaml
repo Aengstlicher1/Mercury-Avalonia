@@ -93,6 +93,10 @@
                                   SelectedItem="{Binding SearchFilter}"
                                   WindowDecorationProperties.ElementRole="User"/>
                     </Grid>
+                    
+                    <Border Grid.Column="0" Grid.ColumnSpan="3" Margin="12,4,12,8"
+                            Height="1" Background="{DynamicResource OutlineBrush}"
+                            CornerRadius="6" VerticalAlignment="Bottom"/>
                 </Grid>
             </Border>
             
@@ -127,7 +131,6 @@
                                 
                                 <!-- Toggle Playback -->
                                 <Button CornerRadius="64"
-                                        HotKey="Space"
                                         Command="{Binding TogglePlayCommand}">
                                     <icon:PackIconMaterialDesign Width="32" Height="32"
                                         Kind="{Binding IsPlaying, Converter={StaticResource PlayIconConverter}}"/>
@@ -141,7 +144,8 @@
                         </Grid>
                         
                         <!-- Middle track display -->
-                        <Grid Grid.Column="2" Margin="12" ColumnDefinitions="Auto, Auto">
+                        <Grid Grid.Column="2" Margin="12" ColumnDefinitions="Auto, Auto"
+                              IsVisible="{Binding CurrentTrack, Converter={StaticResource NotNullConverter}}">
                             <!-- Thumbnail -->
                             <Border Grid.Column="0" 
                                     CornerRadius="8"
@@ -153,6 +157,7 @@
                             
                             <!-- Thumbnail overlay -->
                             <Button Grid.Column="0" 
+                                    Command="{Binding EnterPlayingCommand}"
                                     Width="{Binding $self.Bounds.Height}"
                                     VerticalAlignment="Stretch"
                                     VerticalContentAlignment="Stretch"

@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Chrome;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Mercury.Services;
 using Mercury.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
