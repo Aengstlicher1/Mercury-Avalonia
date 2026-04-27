@@ -1,15 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LibVLCSharp.Shared;
 using Mercury.Core;
 using Mercury.Core.Models;
+using Mercury.Models;
 using Media = LibVLCSharp.Shared.Media;
 
 namespace Mercury.Services;
@@ -21,6 +18,7 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     public event Action<int>? VolumeChanged;
     public event Action<Track>? CurrentTrackChanged;
     public event Action<Playlist>? CurrentPlaylistChanged;
+    public event Action<RepeatState>? RepeatStateChanged;
 
     private readonly LibVLC _libVlc;
     private readonly MediaPlayer _mediaPlayer;
@@ -62,16 +60,19 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
         }
     }
 
-
+    [ObservableProperty]
+    private RepeatState _repeatState = RepeatState.RepeatSingle;
+    
     [ObservableProperty]
     private Track? _currentTrack;
     
     [ObservableProperty]
-    private Collection<Track> _currentQueue = new ();
-
-    [ObservableProperty]
     private Playlist? _currentPlaylist;
-
+    
+    [ObservableProperty]
+    private Collection<Track> _currentQueue = new ();
+    
+    private Collection<Track> ShuffledTracks { get; set; } = new ();
     
     public PlayerService()
     {
@@ -95,14 +96,64 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
             Console.WriteLine("VLC: Playback paused");
             PlayingChanged?.Invoke(false);
         };
+
+        _mediaPlayer.Stopped += MediaStopped;
+    }
+    
+    
+    private void MediaStopped(object? sender, EventArgs e)
+    {
+        if (RepeatState is not RepeatState.NoRepeat)
+        {
+            if (RepeatState is RepeatState.RepeatSingle && CurrentTrack is not null)
+            {
+                _ = BaseSetTrack(CurrentTrack, true, false);
+            }
+            else if (RepeatState is RepeatState.RepeatAll)
+            {
+                _ = BaseSkip(+1, true, false);
+            }
+            else if (RepeatState is RepeatState.Shuffle)
+            {
+                var track = GetRandomTrack();
+                _ = BaseSetTrack(track, true, false);
+            }
+        }
     }
 
+    private Track GetRandomTrack()
+    {
+        if (!CurrentQueue.Any()) return CurrentTrack!;
+        
+        if (CurrentTrack is not null && !ShuffledTracks.Contains(CurrentTrack))
+            ShuffledTracks.Add(CurrentTrack);
+        
+        var tracks = CurrentQueue.Where(t => !ShuffledTracks.Contains(t)).ToArray();
+        if (tracks.Any())
+        {
+            var rndTrack = tracks.Shuffle().First();
+            ShuffledTracks.Add(rndTrack);
+            return rndTrack;
+        }
+        else
+        {
+            ShuffledTracks.Clear();
+                    
+            tracks = CurrentQueue.Where(t => !ShuffledTracks.Contains(t)).ToArray();
+                    
+            var rndTrack = tracks.Shuffle().First();
+            ShuffledTracks.Add(rndTrack);
+            return rndTrack;
+        }
+    }
     
-    public async Task SetTrack(Track track, bool autoPlay)
+    public async Task SetTrack(Track track, bool autoPlay) => await BaseSetTrack(track, autoPlay);
+    private async Task BaseSetTrack(Track track, bool autoPlay, bool preStop = true)
     {
         try
         {
-            _mediaPlayer.Stop();
+            if (preStop)
+                _mediaPlayer.Stop();
             _currentMedia?.Dispose();
 
             var streamData = await YoutubeMusic.Player.GetStreamDataAsync(track.Id);
@@ -151,20 +202,32 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     public async Task SkipBack(bool autoPlay = true)
         => await Skip(-1, autoPlay);
     
-    public async Task Skip(int relativeIndex, bool autoPlay = true)
+    public async Task Skip(int relativeIndex, bool autoPlay = true) => await BaseSkip(relativeIndex, autoPlay);
+    private async Task BaseSkip(int relativeIndex, bool autoPlay = true, bool preStop = true)
     {
-        if (CurrentTrack != null && CurrentQueue.FirstOrDefault(t => t.Id == CurrentTrack.Id) != null)
+        if (CurrentTrack is null || CurrentQueue.Count == 0) return;
+        
+        var match = CurrentQueue.FirstOrDefault(t => t.Id == CurrentTrack.Id);
+        Track target;
+        
+        if (match is not null)
         {
-            int currentIndex = CurrentQueue.IndexOf(CurrentQueue.First(t => t.Id == CurrentTrack.Id));
-            if (currentIndex == -1) return;
-            
+            int currentIndex = CurrentQueue.IndexOf(match);
             int targetIndex = (currentIndex + relativeIndex) % CurrentQueue.Count;
             if (targetIndex < 0) targetIndex += CurrentQueue.Count;
-            
-            var target = CurrentQueue.ElementAt(targetIndex);
-            
-            await SetTrack(target, autoPlay);
+
+            target = RepeatState is RepeatState.Shuffle
+                ? GetRandomTrack()
+                : CurrentQueue.ElementAt(targetIndex);
         }
+        else
+        {
+            target = relativeIndex > 0
+                ? CurrentQueue.First()
+                : CurrentQueue.Last();
+        }
+        
+        await BaseSetTrack(target, autoPlay, preStop);
     } 
     
     
@@ -183,5 +246,13 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     partial void OnCurrentPlaylistChanged(Playlist? value)
     {
         CurrentPlaylistChanged?.Invoke(value!);
+    }
+    partial void OnCurrentQueueChanged(Collection<Track> value)
+    {
+        ShuffledTracks.Clear();
+    }
+    partial void OnRepeatStateChanged(RepeatState value)
+    {
+        RepeatStateChanged?.Invoke(value);
     }
 }

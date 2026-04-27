@@ -14,31 +14,31 @@
                         <Panel WindowDecorationProperties.ElementRole="TitleBar"/>
                     </WindowDrawnDecorationsContent.Underlay>
                     <WindowDrawnDecorationsContent.Overlay>
-                        <Grid RowDefinitions="42, *">
+                        <Grid RowDefinitions="64, *">
                             <StackPanel
                                 Grid.Row="0"
                                 Height="32"
-                                Margin="0,6,6,0"
+                                Margin="12"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top"
                                 Orientation="Horizontal">
-                                <!-- ReSharper disable once InconsistentNaming -->
                                 <Button
                                     Name="PART_MinimizeButton"
                                     Theme="{StaticResource CaptionButton}"
-                                    Content="{icon:MaterialDesign Kind=MinimizeRound}"
+                                    Content="{icon:MaterialDesign Kind=RemoveRound}"
+                                    Width="32" Height="32"
                                     WindowDecorationProperties.ElementRole="MinimizeButton" />
-                                <!-- ReSharper disable once InconsistentNaming -->
                                 <Button
                                     Name="PART_MaximizeButton"
                                     Theme="{StaticResource CaptionButton}"
-                                    Content="{icon:MaterialDesign Kind=MaximizeRound}"
+                                    Content="{icon:MaterialDesign Kind=FullscreenRound}"
+                                    Width="32" Height="32"
                                     WindowDecorationProperties.ElementRole="MaximizeButton" />
-                                <!-- ReSharper disable once InconsistentNaming -->
                                 <Button
                                     Name="PART_CloseButton"
                                     Theme="{StaticResource CaptionButton}"
                                     Content="{icon:MaterialDesign Kind=CloseRound}"
+                                    Width="32" Height="32"
                                     WindowDecorationProperties.ElementRole="CloseButton" />
                             </StackPanel>
                         </Grid>

@@ -39,7 +39,7 @@
         <Grid Name="RootGrid"
               RowDefinitions="64, *">
             <Border Grid.Row="0" Grid.Column="0">
-                <Grid ColumnDefinitions="*, *" Margin="60,0,60,0">
+                <Grid ColumnDefinitions="*, *, 96" Margin="60,0,60,0">
                     <Grid Grid.Column="0">
                         <ItemsControl
                             VerticalAlignment="Top"
@@ -81,8 +81,7 @@
                     <Grid Grid.Column="1"
                           ColumnDefinitions="*, Auto, Auto" 
                           VerticalAlignment="Top"
-                          Margin="0,12,0,0"
-                          WindowDecorationProperties.ElementRole="User">
+                          Margin="0,12,0,0">
                         <TextBox Grid.Column="0" PlaceholderText="Search for Songs, Albums, Playlists"
                                  Text="{Binding SearchText, Mode=TwoWay}"
                                  CornerRadius="8,0,0,8" 
@@ -128,6 +127,7 @@
                                 
                                 <!-- Toggle Playback -->
                                 <Button CornerRadius="64"
+                                        HotKey="Space"
                                         Command="{Binding TogglePlayCommand}">
                                     <icon:PackIconMaterialDesign Width="32" Height="32"
                                         Kind="{Binding IsPlaying, Converter={StaticResource PlayIconConverter}}"/>
@@ -184,13 +184,17 @@
                         <!-- Right music controls -->
                         <StackPanel Grid.Column="4"
                                     Orientation="Horizontal"
-                                    Margin="4,4,16,4">
-                            <icon:PackIconMaterialDesign Margin="0,0,8,0"
-                                Width="16" Height="16"
-                                Kind="{Binding Volume, Converter={StaticResource VolumeIconConverter}}"/>
+                                    Margin="4,4,16,4"
+                                    Spacing="8">
+                            <Button Command="{Binding SwitchRepeatStateCommand}">
+                                <icon:PackIconMaterialDesign Width="16" Height="16"
+                                                             Kind="{Binding RepeatState, Converter={StaticResource RepeatIconConverter}}"/>
+                            </Button>
+                            <icon:PackIconMaterialDesign Width="16" Height="16"
+                                                         Kind="{Binding Volume, Converter={StaticResource VolumeIconConverter}}"/>
                             <Slider Value="{Binding Volume, Mode=TwoWay}"
                                     VerticalAlignment="Center"
-                                    Width="140"
+                                    Width="120"
                                     Minimum="0"
                                     Maximum="100"/>
                         </StackPanel>

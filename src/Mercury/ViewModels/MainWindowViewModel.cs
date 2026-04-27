@@ -37,7 +37,10 @@ public partial class MainWindowViewModel : ViewModelBase
     private float _currentTrackPosition;
 
     [ObservableProperty] 
-    private int _volume = 60;
+    private int _volume;
+    
+    [ObservableProperty]
+    private RepeatState _repeatState;
     
     [ObservableProperty]
     private IImage? _currentBackgroundImage;
@@ -65,9 +68,12 @@ public partial class MainWindowViewModel : ViewModelBase
         _navigationService.NavigateTo(_navigationService.PageInfos[0]);
 
         _playerService.CurrentTrackChanged += track => CurrentTrack = track;
-        _playerService.PositionChanged += pos => CurrentTrackPosition = pos; // update UI
+        _playerService.PositionChanged += pos => CurrentTrackPosition = pos;
         _playerService.VolumeChanged += vol => Volume = vol;
         _playerService.PlayingChanged += playing => IsPlaying = playing;
+        _playerService.RepeatStateChanged += state => RepeatState = state;
+        RepeatState = _playerService.RepeatState;
+        Volume = _playerService.Volume;
     }
     
     private async Task<Bitmap> LoadTrackImageAsync(string url)
@@ -98,7 +104,29 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void SkipBack()
         => _playerService.SkipBack();
-    
+
+    [RelayCommand]
+    private void SwitchRepeatState()
+    {
+        switch (RepeatState)
+        {
+            case RepeatState.NoRepeat:
+                RepeatState = RepeatState.RepeatSingle;
+                break;
+            
+            case RepeatState.RepeatSingle:
+                RepeatState = RepeatState.RepeatAll;
+                break;
+            
+            case RepeatState.RepeatAll:
+                RepeatState = RepeatState.Shuffle;
+                break;
+            
+            case RepeatState.Shuffle:
+                RepeatState = RepeatState.NoRepeat;
+                break;
+        }
+    }
     
     partial void OnCurrentTrackChanged(Track? value)
     {
@@ -126,5 +154,10 @@ public partial class MainWindowViewModel : ViewModelBase
     partial void OnVolumeChanged(int value)
     {
         _playerService.Volume = value;
+    }
+
+    partial void OnRepeatStateChanged(RepeatState value)
+    {
+        _playerService.RepeatState = value;
     }
 }
