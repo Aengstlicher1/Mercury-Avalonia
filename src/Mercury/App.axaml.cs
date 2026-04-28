@@ -26,13 +26,14 @@ public partial class App : Application
         services.AddSingleton<ISearchService, SearchService>();
         services.AddSingleton<IPlayerService, PlayerService>();
         services.AddSingleton<ILyricService, LyricService>();
-
+        
         // Register ViewModels
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<HomePageViewModel>();
         services.AddTransient<ExplorePageViewModel>();
         services.AddTransient<SearchPageViewModel>();
         services.AddTransient<PlayingPageViewModel>();
+        services.AddTransient<LyricsViewerViewModel>();
 
         // Register Views
         services.AddTransient<MainWindow>();

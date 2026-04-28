@@ -80,4 +80,11 @@ public partial class SearchPageViewModel : ViewModelBase
         // Don't wait to keep UI responsive and active
         _ = _ps.SetTrack(track);
     }
+
+    [RelayCommand]
+    private void PlayPlaylist(Playlist playlist)
+    {
+        // Don't wait to keep UI responsive and active
+        _ = _ps.SetPlaylist(playlist);
+    }
 }

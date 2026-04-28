@@ -16,6 +16,7 @@
                     <converters:NotNullConverter x:Key="NotNullConverter"/>
                     <converters:CollectionIndexConverter x:Key="CollectionIndexConverter"/>
                     <converters:RepeatIconConverter x:Key="RepeatIconConverter"/>
+                    <converters:NotConverter x:Key="NotConverter"/>
                     
                     <ResourceDictionary.ThemeDictionaries>
                         <ResourceInclude x:Key="Light" Source="Resources/Colors Light.axaml"/>
