@@ -43,7 +43,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Core\Mercury.Core\Mercury.Core.csproj" />
+      <ProjectReference Include="..\Core\src\Mercury.Core\Mercury.Core.csproj" />
       <ProjectReference Include="..\IconPacks.Avalonia\IconPacks.Avalonia.MaterialDesign\IconPacks.Avalonia.MaterialDesign.csproj" />
     </ItemGroup>
 
