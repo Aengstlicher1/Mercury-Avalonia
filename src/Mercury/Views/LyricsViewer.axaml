@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Mercury.ViewModels"
+             xmlns:behaviors="clr-namespace:Mercury.Resources.Behaviors"
+             x:DataType="vm:LyricsViewerViewModel"
+             x:Class="Mercury.Views.LyricsViewer">
+    <Design.DataContext>
+        <vm:LyricsViewerViewModel/>
+    </Design.DataContext>
+
+    <Grid>
+        <Button
+            ZIndex="1"
+            Margin="8,8,0,0"
+            Background="{DynamicResource SubSurfaceBrush}"
+            IsVisible="{Binding AutoScroll, Converter={StaticResource NotConverter}}"
+            Command="{Binding ToggleAutoScrollCommand}"
+            Content="Autoscroll"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"/>
+        <ScrollViewer x:Name="LyricsScroller"
+                      behaviors:SmoothScrollBehavior.IsEnabled="True"
+                      behaviors:LyricAutoScrollBehavior.IsEnabled="{Binding AutoScroll}"
+                      behaviors:LyricAutoScrollBehavior.CurrentLineIndex="{Binding CurrentLineIndex}"
+                      behaviors:LyricAutoScrollBehavior.ItemsControl="{Binding #LyricsItems}">
+            <ItemsControl x:Name="LyricsItems" ItemsSource="{Binding LyricLines}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="vm:LyricLineViewModel">
+                        <Button HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Command="{Binding $parent[ItemsControl].((vm:LyricsViewerViewModel)DataContext).GoToLineCommand}"
+                                CommandParameter="{Binding Line}"
+                                ToolTip.Tip="{Binding Timing}"
+                                ToolTip.ServiceEnabled="False">
+                            <TextBlock Classes="lyricLine"
+                                       Classes.current="{Binding IsCurrent}"
+                                       Classes.past="{Binding IsPast}"
+                                       Text="{Binding Content}"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                <TextBlock.Transitions>
+                                    <Transitions>
+                                        <DoubleTransition Property="FontSize" Duration="0:0:0.25" Easing="CubicEaseOut"/>
+                                        <BrushTransition Property="Foreground" Duration="0:0:0.2" Easing="CubicEaseOut"/>
+                                    </Transitions>
+                                </TextBlock.Transitions>
+                                <TextBlock.Styles>
+                                    <Style Selector="TextBlock.lyricLine">
+                                        <Setter Property="FontSize" Value="20"/>
+                                        <Setter Property="FontWeight" Value="Normal"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource SubTextBrush}"/>
+                                    </Style>
+                                    <Style Selector="TextBlock.lyricLine.current">
+                                        <Setter Property="FontSize" Value="24"/>
+                                        <Setter Property="FontWeight" Value="DemiBold"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                                    </Style>
+                                    <Style Selector="TextBlock.lyricLine.past">
+                                        <Setter Property="FontSize" Value="20"/>
+                                        <Setter Property="FontWeight" Value="DemiBold"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource SubTextBrush}"/>
+                                    </Style>
+                                </TextBlock.Styles>
+                            </TextBlock>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

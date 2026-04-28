@@ -171,6 +171,46 @@
                         </Button>
                     </DataTemplate>
                     
+                    <DataTemplate DataType="models:Playlist" x:DataType="models:Playlist">
+                        <Button Height="80" 
+                                CornerRadius="8"
+                                Padding="0"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
+                                Command="{Binding $parent[ItemsControl].((vm:SearchPageViewModel)DataContext).PlayPlaylistCommand}"
+                                CommandParameter="{Binding .}">
+                            <Grid ColumnDefinitions="Auto, *, Auto">
+                                <Border Grid.Column="0" 
+                                        VerticalAlignment="Stretch"
+                                        Margin="8"
+                                        Width="{Binding $self.Bounds.Height}"
+                                        CornerRadius="8">
+                                    <Border.Background>
+                                        <ImageBrush Stretch="UniformToFill" asyncImageLoader:ImageBrushLoader.Source="{Binding Thumbnails.LowestRes.Url}" />
+                                    </Border.Background>
+                                </Border>
+                                <StackPanel Grid.Column="1" Margin="4,0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Title}"
+                                               FontSize="16"
+                                               TextTrimming="WordEllipsis"
+                                               TextWrapping="NoWrap"
+                                               Foreground="{DynamicResource TextBrush}"/>
+                                    <TextBlock Text="{Binding Artist}"
+                                               FontSize="12"
+                                               TextTrimming="CharacterEllipsis"
+                                               TextWrapping="NoWrap"
+                                               Foreground="{DynamicResource SubTextBrush}"/>
+                                </StackPanel>
+                                <TextBlock Grid.Column="2" Text="{Binding Type}"
+                                           FontSize="14"
+                                           Margin="0,0,8,0"
+                                           Foreground="{DynamicResource SubTextBrush}"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+                        </Button>
+                    </DataTemplate>
+                    
                     <DataTemplate DataType="models:Media" x:DataType="models:Media">
                         <Button Height="80" 
                                 CornerRadius="8"

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LibVLCSharp.Shared;
@@ -55,8 +56,9 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
         set
         {
             if (Math.Abs(_mediaPlayer.Position - value) < 0.005f) return;
-
+            
             _mediaPlayer.Position = value;
+            PositionChanged?.Invoke(value);
         }
     }
 
@@ -80,18 +82,18 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
         _libVlc = new LibVLC("--no-video");
         _mediaPlayer = new MediaPlayer(_libVlc);
         
-        _mediaPlayer.PositionChanged += (s, e) =>
+        _mediaPlayer.PositionChanged += (_, e) =>
         {
             PositionChanged?.Invoke(e.Position);
         };
 
-        _mediaPlayer.Playing += (s, e) =>
+        _mediaPlayer.Playing += (_, _) =>
         {
             Console.WriteLine("VLC: Playback started");
             PlayingChanged?.Invoke(true);
         };
 
-        _mediaPlayer.Paused += (s, e) =>
+        _mediaPlayer.Paused += (_, _) =>
         {
             Console.WriteLine("VLC: Playback paused");
             PlayingChanged?.Invoke(false);
@@ -146,9 +148,14 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
             return rndTrack;
         }
     }
-    
-    public async Task SetTrack(Track track, bool autoPlay) => await BaseSetTrack(track, autoPlay);
-    private async Task BaseSetTrack(Track track, bool autoPlay, bool preStop = true)
+
+    public async Task SetTrack(Track track, bool autoPlay, CancellationToken cToken = default)
+    {
+        CurrentQueue.Clear();
+        CurrentPlaylist = null;
+        await BaseSetTrack(track, autoPlay, cToken: cToken);
+    }
+    private async Task BaseSetTrack(Track track, bool autoPlay, bool preStop = true, CancellationToken cToken = default)
     {
         try
         {
@@ -156,7 +163,7 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
                 _mediaPlayer.Stop();
             _currentMedia?.Dispose();
 
-            var streamData = await YoutubeMusic.Player.GetStreamDataAsync(track.Id);
+            var streamData = await YoutubeMusic.Player.GetStreamDataAsync(track.Id, cToken);
             if (streamData is null) return;
 
             var stream = streamData.Streams
@@ -167,6 +174,9 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
             _mediaPlayer.Media = _currentMedia;
 
             CurrentTrack = track;
+            CurrentTrack.Duration = streamData.Duration >= TimeSpan.FromHours(1) 
+                ? streamData.Duration.ToString(@"h\:mm\:ss") 
+                : streamData.Duration.ToString(@"m\:ss");
 
             if (autoPlay)
             {
@@ -180,6 +190,27 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     }
 
 
+    public async Task SetPlaylist(Playlist playlist, bool autoPlay, CancellationToken cToken = default)
+        => await BaseSetPlaylist(playlist, autoPlay, cToken: cToken);
+
+    private async Task BaseSetPlaylist(Playlist playlist, bool autoPlay, bool preStop = true, CancellationToken cToken = default)
+    {
+        var mediaInfo = await YoutubeMusic.Browse.GetInfoAsync(playlist, cToken);
+
+        if (mediaInfo is PlaylistInfo playlistInfo && playlistInfo.TracksCount > 0)
+        {
+            CurrentQueue.Clear();
+            foreach (var track in playlistInfo.Tracks)
+            {
+                CurrentQueue.Add(track);
+            }
+            
+            await BaseSetTrack(playlistInfo.Tracks.First(), autoPlay, preStop, cToken);
+            
+            CurrentPlaylist = playlist;
+        }
+    }
+    
     public void StartPlayblack()
     {
         _mediaPlayer.Play();
@@ -247,6 +278,7 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     {
         CurrentPlaylistChanged?.Invoke(value!);
     }
+    // ReSharper disable once UnusedParameterInPartialMethod
     partial void OnCurrentQueueChanged(Collection<Track> value)
     {
         ShuffledTracks.Clear();

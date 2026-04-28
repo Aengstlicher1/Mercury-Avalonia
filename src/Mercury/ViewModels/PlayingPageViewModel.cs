@@ -1,4 +1,8 @@
+using System;
+using System.Collections.ObjectModel;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mercury.Core.Models;
 using Mercury.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,31 +12,17 @@ namespace Mercury.ViewModels;
 public partial class PlayingPageViewModel : ViewModelBase
 {
     private readonly IPlayerService _playerService;
-    private readonly ILyricService _lyricService;
-    
+
     public PlayingPageViewModel()
     {
         _playerService = App.Services.GetRequiredService<IPlayerService>();
-        _lyricService = App.Services.GetRequiredService<ILyricService>();
-        
         _playerService.CurrentTrackChanged += track =>
-        {
-            CurrentTrack = track;
-        };
-        _lyricService.LyricsChanged += lyrics =>
-        {
-            Lyrics = lyrics;
-        };
-        
+            Dispatcher.UIThread.Post(() => CurrentTrack = track);
+
         CurrentTrack = _playerService.CurrentTrack;
     }
-    
-    [ObservableProperty]
-    private Track? _currentTrack;
-    
-    [ObservableProperty]
-    private Lyrics? _lyrics;
 
+    [ObservableProperty] private Track? _currentTrack;
 
     partial void OnCurrentTrackChanged(Track? value)
     {

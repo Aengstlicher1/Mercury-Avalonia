@@ -7,6 +7,7 @@
              xmlns:imageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
              xmlns:behaviors="clr-namespace:Mercury.Resources.Behaviors"
              xmlns:models="clr-namespace:Mercury.Models"
+             xmlns:views="clr-namespace:Mercury.Views"
              xmlns:cmodels="clr-namespace:Mercury.Core.Models;assembly=Mercury.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:PlayingPageViewModel"
@@ -16,7 +17,7 @@
     <Design.DataContext>
         <vm:PlayingPageViewModel/>
     </Design.DataContext>
-    <Grid ColumnDefinitions="*, *">
+    <Grid ColumnDefinitions="*, 1.5*">
         <Border Grid.Column="0"
             Margin="16"
             HorizontalAlignment="Stretch"
@@ -32,26 +33,7 @@
                     <Button Content="Queue"/>
                     <Button Content="Info"/>
                 </StackPanel>
-                <ScrollViewer Grid.Row="1" behaviors:SmoothScrollBehavior.IsEnabled="True">
-                    <ItemsControl ItemsSource="{Binding Lyrics.SyncedLyrics}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="cmodels:LyricLine">
-                                <Button HorizontalAlignment="Center" VerticalAlignment="Center"
-                                        ToolTip.Tip="{Binding Duration}"
-                                        ToolTip.ServiceEnabled="False">
-                                    <TextBlock Text="{Binding Content}" FontSize="18"
-                                               TextWrapping="Wrap" Foreground="{DynamicResource SubTextBrush}"
-                                               TextAlignment="Center"/>
-                                </Button>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
+                <views:LyricsViewer Grid.Row="1"/>
             </Grid>
         </Border>
     </Grid>
