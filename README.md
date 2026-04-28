@@ -16,7 +16,7 @@
 
 ## What is Mercury?
 
-Mercury is a lightweight music player that lets you search, stream, and enjoy music from YouTube Music — no browser needed. It runs on Windows, macOS, and Linux with a clean, modern interface.
+Mercury is a native music player that lets you search, stream, and enjoy music from YouTube Music — no browser needed. It runs on Windows, macOS, and Linux with a clean, modern interface.
 
 ## Features
 
@@ -25,7 +25,7 @@ Mercury is a lightweight music player that lets you search, stream, and enjoy mu
 - **Queue & Playback Controls** — Build your queue, shuffle, repeat, skip, and seek
 - **Home Feed** — Browse recommended and trending music right from the home page
 - **Cross-Platform** — One app for Windows, macOS, and Linux
-- **Lightweight** — No Electron, no bloat — just a fast native desktop app
+- **Native** — No Electron, no WebView — just a fast native desktop app
 
 ## Screenshots
 
