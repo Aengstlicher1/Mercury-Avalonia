@@ -9,7 +9,7 @@
     </Design.PreviewWith>
     <Color x:Key="WindowSurfaceColor">#26282c</Color>
     <Color x:Key="SurfaceColor">#191a1c</Color>
-    <Color x:Key="SubSurfaceColor">#82292a2c</Color>
+    <Color x:Key="SubSurfaceColor">#52292a2c</Color>
     <Color x:Key="SurfaceItemColor">#1e1f22</Color>
     <Color x:Key="OutlineColor">#3c3d3e</Color>
     <Color x:Key="HoverColor">#14FFFFFF</Color>
