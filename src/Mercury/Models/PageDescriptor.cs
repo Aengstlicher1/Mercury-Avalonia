@@ -8,5 +8,6 @@ public record PageDescriptor(
     PackIconMaterialDesignKind Icon,
     Type ViewType,
     Type ViewModelType,
-    bool IsTab = false
+    bool IsTab = false,
+    bool IsDetail = false
 );

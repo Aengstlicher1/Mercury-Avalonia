@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using Mercury.Core;
 using Mercury.Core.Models;
+using Mercury.Models;
 using Mercury.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,6 +31,9 @@ public partial class SearchPageViewModel : ViewModelBase
         {
             _ = PerformSearch(query, filter);
         };
+        
+        if (!string.IsNullOrWhiteSpace(searchService.SearchQuery))
+            _ = PerformSearch(searchService.SearchQuery, searchService.SearchFilter);
     }
 
     private async Task PerformSearch(string query, Enums.SearchFilter filter)
@@ -86,5 +90,6 @@ public partial class SearchPageViewModel : ViewModelBase
     {
         // Don't wait to keep UI responsive and active
         _ = _ps.SetPlaylist(playlist);
+        _ps.RepeatState = RepeatState.RepeatAll;
     }
 }

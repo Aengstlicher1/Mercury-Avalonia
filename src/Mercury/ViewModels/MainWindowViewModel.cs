@@ -76,6 +76,8 @@ public partial class MainWindowViewModel : ViewModelBase
         
         NavigationService.Register<HomePage, HomePageViewModel>("Home", PackIconMaterialDesignKind.HomeRound, isTab: true);
         NavigationService.Register<ExplorePage, ExplorePageViewModel>("Explore", PackIconMaterialDesignKind.ExploreRound, isTab: true);
+        NavigationService.Register<SearchPage, SearchPageViewModel>("Search", PackIconMaterialDesignKind.SearchRound, isTab: false);
+        NavigationService.Register<PlayingPage, PlayingPageViewModel>("Playing", PackIconMaterialDesignKind.PlayArrowRound, isTab: false);
     }
     
     private async Task<Bitmap> LoadTrackImageAsync(string url)

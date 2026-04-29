@@ -68,7 +68,8 @@ public partial class NavigationService : ObservableObject, INavigationService
             Icon: PackIconMaterialDesignKind.PagesRound, // default icon
             ViewType: viewType,
             ViewModelType: viewModelType,
-            IsTab: false // auto-registered pages are never tabs
+            IsTab: false,
+            IsDetail: true// auto-registered pages are never tabs
         );
 
         _registry[viewType] = descriptor;
@@ -105,7 +106,7 @@ public partial class NavigationService : ObservableObject, INavigationService
         object viewModel;
 
         // Cache tab pages, always create fresh detail pages
-        if (descriptor.IsTab && _pageCache.TryGetValue(viewType, out var cached))
+        if (!descriptor.IsDetail && _pageCache.TryGetValue(viewType, out var cached))
         {
             view = cached.View;
             viewModel = cached.ViewModel;
@@ -116,7 +117,7 @@ public partial class NavigationService : ObservableObject, INavigationService
             viewModel = _serviceProvider.GetRequiredService(descriptor.ViewModelType);
             view.DataContext = viewModel;
 
-            if (descriptor.IsTab)
+            if (!descriptor.IsDetail)
                 _pageCache[viewType] = (view, viewModel);
         }
 
