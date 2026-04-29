@@ -1,87 +1,172 @@
 using System;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Avalonia.Controls;
-using Avalonia.Layout;
-using Avalonia.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using IconPacks.Avalonia.MaterialDesign;
 using Mercury.Models;
 using Mercury.Resources;
-using Mercury.Views;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Mercury.Services;
 
-public partial class NavigationService : ServiceBase, INavigationService
+public partial class NavigationService : ObservableObject, INavigationService
 {
-    public INavigation? Navigation { get; set; }
-    
-    public PageInfo? CurrentPageInfo => PageInfos.FirstOrDefault(pi => pi.Page == CurrentPage);
-    public Page? CurrentPage { get; set; }
+    private readonly IServiceProvider _serviceProvider;
+    private readonly Dictionary<Type, PageDescriptor> _registry = new();
+    private readonly ObservableCollection<PageDescriptor> _tabs = [];
+    private readonly Stack<(Type VmType, Control View)> _backStack = new();
+    private readonly Dictionary<Type, (Control View, object ViewModel)> _pageCache = new();
 
-    public ContentPage[] Pages { get; } = new ContentPage[3];
-    
-    public PageInfo[] PageInfos { get; }
+    private Control? _currentView;
+    private TransitioningContentControl? _host;
 
-    public NavigationService()
+    [ObservableProperty]
+    private PageDescriptor? _currentDescriptor;
+
+    public NavigationService(IServiceProvider serviceProvider)
     {
-        Pages[0] = App.Services.GetRequiredService<HomePage>();
-        Pages[1] = App.Services.GetRequiredService<ExplorePage>();
-        Pages[2] = new ContentPage
-        {
-            Name = "Library",
-            Background = Brushes.Transparent,
-            Content = new TextBlock() { Text = "Filler - Library", VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment =  HorizontalAlignment.Center },
-            [NavigationPage.HasNavigationBarProperty] = false
-        };
-        
-        PageInfos = Pages.Select(p => new PageInfo(p)).ToArray();
+        _serviceProvider = serviceProvider;
     }
 
-    public void NavigateTo(Page page, bool slideLeft = false)
+    public void SetHost(TransitioningContentControl host) => _host = host;
+
+    // ── Registration ─────────────────────────────────────────────
+    public IReadOnlyList<PageDescriptor> Tabs => _tabs;
+
+    public void Register<TView, TViewModel>(
+        string title, PackIconMaterialDesignKind icon, bool isTab = false)
+        where TView : Control
+        where TViewModel : class
     {
-        if (Navigation != null)
-        {
-            if (CurrentPage != null && CurrentPage.Name == page.Name)
-                return;
-            
-            var transition = new DirectionalPageSlide()
-            {
-                Duration = TimeSpan.FromMilliseconds(160),
-                SlideLeft = slideLeft
-            };
-            
-            _ = Navigation.ReplaceAsync(page, transition);
-            CurrentPage = page;
-        }
+        var descriptor = new PageDescriptor(title, icon, typeof(TView), typeof(TViewModel), isTab);
+        _registry[typeof(TView)] = descriptor;
+
+        if (isTab)
+            _tabs.Add(descriptor);
+    }
+
+    private PageDescriptor AutoRegister(Type viewType)
+    {
+        // HomePage → HomePageViewModel
+        var viewModelTypeName = viewType.FullName!.Replace(".Views.", ".ViewModels.") + "ViewModel";
+        var viewModelType = viewType.Assembly.GetType(viewModelTypeName);
+
+        if (viewModelType is null)
+            throw new InvalidOperationException(
+                $"Could not auto-resolve ViewModel for '{viewType.Name}'. " +
+                $"Expected '{viewModelTypeName}'. Register it manually instead.");
+
+        // Derive a title from the type name: "PlaylistPage" → "Playlist"
+        var title = viewType.Name.EndsWith("Page")
+            ? viewType.Name[..^4]
+            : viewType.Name;
+
+        var descriptor = new PageDescriptor(
+            Title: title,
+            Icon: PackIconMaterialDesignKind.PagesRound, // default icon
+            ViewType: viewType,
+            ViewModelType: viewModelType,
+            IsTab: false // auto-registered pages are never tabs
+        );
+
+        _registry[viewType] = descriptor;
+        return descriptor;
     }
     
-    [RelayCommand]
-    public void NavigateTo(PageInfo pageInfo)
+    // ── Navigation ───────────────────────────────────────────────
+    public void NavigateTo<TView>(bool slideLeft = false)
+        where TView : Control
     {
-        foreach (var p in PageInfos)
-        {
-            p.IsSelected = false;
-        }
-        pageInfo.IsSelected = true;
+        NavigateInternal(typeof(TView), slideLeft, _ => { });
+    }
 
-        bool slideLeft;
-        if (CurrentPage is SearchPage)
+    public void NavigateTo<TView, TParam>(TParam parameter, bool slideLeft = false)
+        where TView : Control
+        where TParam : INavigationParameter
+    {
+        NavigateInternal(typeof(TView), slideLeft, vm =>
         {
-            slideLeft = true;
-        }
-        else if (PageInfos.Contains(pageInfo))
+            if (vm is INavigationParameterReceiver<TParam> receiver)
+                receiver.OnNavigatedTo(parameter);
+        });
+    }
+
+    private void NavigateInternal(Type viewType, bool slideLeft, Action<object> configureVm)
+    {
+        if (!_registry.TryGetValue(viewType, out var descriptor))
+            descriptor = AutoRegister(viewType);
+
+        if (_currentView is not null && CurrentDescriptor is not null)
+            _backStack.Push((CurrentDescriptor.ViewType, _currentView));
+
+        Control view;
+        object viewModel;
+
+        // Cache tab pages, always create fresh detail pages
+        if (descriptor.IsTab && _pageCache.TryGetValue(viewType, out var cached))
         {
-            int currentIndex = PageInfos.IndexOf(CurrentPageInfo);
-            int targetIndex = PageInfos.IndexOf(pageInfo);
-                
-            slideLeft = targetIndex < currentIndex;
+            view = cached.View;
+            viewModel = cached.ViewModel;
         }
         else
         {
-            slideLeft = false;
+            view = (Control)_serviceProvider.GetRequiredService(descriptor.ViewType);
+            viewModel = _serviceProvider.GetRequiredService(descriptor.ViewModelType);
+            view.DataContext = viewModel;
+
+            if (descriptor.IsTab)
+                _pageCache[viewType] = (view, viewModel);
         }
-        
-        NavigateTo(pageInfo.Page, slideLeft);
+
+        configureVm(viewModel);
+
+        if (_host is not null)
+        {
+            _host.PageTransition = new DirectionalPageSlide(slideLeft);
+            _host.Content = view;
+        }
+
+        _currentView = view;
+        CurrentDescriptor = descriptor;
+        GoBackInternalCommand.NotifyCanExecuteChanged();
     }
+
+
+
+    // ── Back navigation ──────────────────────────────────────────
+    public bool CanGoBack => _backStack.Count > 0;
+
+    public bool GoBack()
+    {
+        if (_backStack.Count == 0) return false;
+
+        var (_, prevView) = _backStack.Pop();
+
+        if (_host is not null)
+        {
+            _host.PageTransition = new DirectionalPageSlide(slideLeft: true);
+            _host.Content = prevView;
+        }
+
+        _currentView = prevView;
+        CurrentDescriptor = _registry.GetValueOrDefault(prevView.DataContext?.GetType()!);
+        GoBackInternalCommand.NotifyCanExecuteChanged();
+        return true;
+    }
+
+    // ── Commands ─────────────────────────────────────────────────
+    [RelayCommand(CanExecute = nameof(CanGoBack))]
+    private void GoBackInternal() => GoBack();
+
+    IRelayCommand INavigationService.GoBackCommand => GoBackInternalCommand;
+    
+    [RelayCommand]
+    private void NavigateToDescriptor(PageDescriptor descriptor)
+    {
+        NavigateInternal(descriptor.ViewType, false, _ => { });
+    }
+
+    IRelayCommand<PageDescriptor> INavigationService.NavigateToCommand => NavigateToDescriptorCommand;
 }

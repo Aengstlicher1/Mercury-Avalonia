@@ -6,10 +6,10 @@ using Avalonia.Animation;
 
 namespace Mercury.Resources;
 
-public class DirectionalPageSlide : IPageTransition
+public class DirectionalPageSlide(bool slideLeft) : IPageTransition
 {
     public TimeSpan Duration { get; set; } = TimeSpan.FromMilliseconds(100);
-    public bool SlideLeft { get; set; }
+    public bool SlideLeft { get; set; } = slideLeft;
 
     public async Task Start(Visual? from, Visual? to, bool forward, 
         CancellationToken cancellationToken)

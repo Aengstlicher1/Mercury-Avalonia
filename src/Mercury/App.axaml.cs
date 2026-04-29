@@ -1,10 +1,6 @@
 using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
-using Avalonia.Data.Core.Plugins;
-using System.Linq;
-using Avalonia.Markup.Xaml;
 using Mercury.Services;
 using Mercury.ViewModels;
 using Mercury.Views;

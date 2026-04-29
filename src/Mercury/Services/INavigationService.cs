@@ -1,21 +1,33 @@
-using System.Threading.Tasks;
-using System.Windows.Input;
+using System;
+using System.Collections.Generic;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
+using IconPacks.Avalonia.MaterialDesign;
 using Mercury.Models;
 
 namespace Mercury.Services;
 
 public interface INavigationService
 {
-    public INavigation? Navigation { get; internal set; }
-    public PageInfo? CurrentPageInfo { get; }
-    public Page? CurrentPage { get; }
-    
-    public ContentPage[] Pages { get; }
-    public PageInfo[] PageInfos { get; }
+    PageDescriptor? CurrentDescriptor { get; }
+    IReadOnlyList<PageDescriptor> Tabs { get; }
 
-    public void NavigateTo(PageInfo pageInfo);
-    public void NavigateTo(Page page, bool slideLeft = false);
-    public IRelayCommand<PageInfo> NavigateToCommand { get; }
+    void SetHost(TransitioningContentControl host);
+    
+    void Register<TView, TViewModel>(string title, PackIconMaterialDesignKind icon, bool isTab = false)
+        where TView : Avalonia.Controls.Control
+        where TViewModel : class;
+
+    void NavigateTo<TView>(bool slideLeft = false)
+        where TView : Avalonia.Controls.Control;
+
+    void NavigateTo<TView, TParam>(TParam parameter, bool slideLeft = false)
+        where TView : Avalonia.Controls.Control
+        where TParam : INavigationParameter;
+
+    bool GoBack();
+    bool CanGoBack { get; }
+
+    IRelayCommand GoBackCommand { get; }
+    IRelayCommand<PageDescriptor> NavigateToCommand { get; }
 }

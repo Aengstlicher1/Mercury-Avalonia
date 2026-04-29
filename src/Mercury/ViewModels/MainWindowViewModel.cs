@@ -8,6 +8,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using IconPacks.Avalonia.MaterialDesign;
 using Mercury.Core.Models;
 using Mercury.Models;
 using Mercury.Services;
@@ -53,20 +54,17 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private SearchFilter _searchFilter = SearchFilter.All;
     
-    private readonly INavigationService _navigationService;
+    public INavigationService NavigationService { get; }
     private readonly ISearchService _searchService;
     private readonly IPlayerService _playerService;
     
-    public PageInfo[] PageInfos => _navigationService.PageInfos;
-    public IRelayCommand<PageInfo> NavigateToCommand =>  _navigationService.NavigateToCommand;
+    public IRelayCommand<PageDescriptor> NavigateToCommand => NavigationService.NavigateToCommand;
     
     public MainWindowViewModel()
     {
-        _navigationService = App.Services.GetRequiredService<INavigationService>();
+        NavigationService = App.Services.GetRequiredService<INavigationService>();
         _searchService = App.Services.GetRequiredService<ISearchService>();
         _playerService = App.Services.GetRequiredService<IPlayerService>();
-        
-        _navigationService.NavigateTo(_navigationService.PageInfos[0]);
 
         _playerService.CurrentTrackChanged += track => CurrentTrack = track;
         _playerService.PositionChanged += pos => CurrentTrackPosition = pos;
@@ -75,6 +73,9 @@ public partial class MainWindowViewModel : ViewModelBase
         _playerService.RepeatStateChanged += state => RepeatState = state;
         RepeatState = _playerService.RepeatState;
         Volume = _playerService.Volume;
+        
+        NavigationService.Register<HomePage, HomePageViewModel>("Home", PackIconMaterialDesignKind.HomeRound, isTab: true);
+        NavigationService.Register<ExplorePage, ExplorePageViewModel>("Explore", PackIconMaterialDesignKind.ExploreRound, isTab: true);
     }
     
     private async Task<Bitmap> LoadTrackImageAsync(string url)
@@ -132,7 +133,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void EnterPlaying()
     {
-        _navigationService.NavigateTo(App.Services.GetRequiredService<PlayingPage>());
+        NavigationService.NavigateTo<PlayingPage>();
     }
     
     partial void OnCurrentTrackChanged(Track? value)
