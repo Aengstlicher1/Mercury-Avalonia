@@ -4,7 +4,7 @@ using Mercury.Core.Models;
 
 namespace Mercury.Services;
 
-public interface ISearchService
+public interface ISearchService : IServiceBase
 {
     string SearchQuery { get; set; }
     Enums.SearchFilter SearchFilter { get; set; }

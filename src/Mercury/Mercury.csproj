@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
+        <ApplicationIcon>Assets\Logo.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
@@ -48,6 +48,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controls\" />
+      <Compile Update="Controls\LyricsViewer.axaml.cs">
+        <DependentUpon>LyricsViewer.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>

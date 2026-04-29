@@ -34,4 +34,9 @@ public partial class LyricService : ServiceBase, ILyricService
     {
         LyricsChanged?.Invoke(value);
     }
+
+    public override void OnExit()
+    {
+        
+    }
 }

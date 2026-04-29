@@ -12,6 +12,5 @@ public partial class SearchPage : ContentPage
     public SearchPage()
     {
         InitializeComponent();
-        DataContext = App.Services.GetRequiredService<SearchPageViewModel>();
     }
 }

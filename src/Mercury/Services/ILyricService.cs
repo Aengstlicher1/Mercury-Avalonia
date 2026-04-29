@@ -3,7 +3,7 @@ using Mercury.Core.Models;
 
 namespace Mercury.Services;
 
-public interface ILyricService
+public interface ILyricService : IServiceBase
 {
     Lyrics Lyrics { get; }
     

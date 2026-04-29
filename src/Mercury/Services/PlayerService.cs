@@ -8,6 +8,7 @@ using LibVLCSharp.Shared;
 using Mercury.Core;
 using Mercury.Core.Models;
 using Mercury.Models;
+using Microsoft.Extensions.DependencyInjection;
 using Media = LibVLCSharp.Shared.Media;
 
 namespace Mercury.Services;
@@ -100,8 +101,22 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
         };
 
         _mediaPlayer.Stopped += MediaStopped;
+
+        LoadSettings();
     }
-    
+
+
+    private void LoadSettings()
+    {
+        var ss = App.Services.GetRequiredService<ISettingsService>();
+
+        CurrentTrack = ss.PlayerSettings.LastTrack;
+        CurrentPlaylist = ss.PlayerSettings.LastPlaylist;
+        CurrentQueue = ss.PlayerSettings.Queue;
+        
+        Volume = ss.PlayerSettings.Volume;
+        RepeatState = ss.PlayerSettings.RepeatState;
+    }
     
     private void MediaStopped(object? sender, EventArgs e)
     {
@@ -286,5 +301,20 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     partial void OnRepeatStateChanged(RepeatState value)
     {
         RepeatStateChanged?.Invoke(value);
+    }
+    
+    
+    public override void OnExit()
+    {
+        Dispose();
+        
+        var ss = App.Services.GetRequiredService<ISettingsService>();
+
+        ss.PlayerSettings.LastTrack = CurrentTrack;
+        ss.PlayerSettings.LastPlaylist = CurrentPlaylist;
+        ss.PlayerSettings.Queue = CurrentQueue;
+        
+        ss.PlayerSettings.Volume = Volume;
+        ss.PlayerSettings.RepeatState = RepeatState;
     }
 }

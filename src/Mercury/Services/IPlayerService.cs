@@ -8,7 +8,7 @@ using Mercury.Models;
 
 namespace Mercury.Services;
 
-public interface IPlayerService
+public interface IPlayerService : IServiceBase
 {
     int Volume { get; set; }
     /// <summary>

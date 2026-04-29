@@ -21,4 +21,10 @@ public partial class SearchService : ServiceBase, ISearchService
     {
         SearchParamChanged?.Invoke(SearchQuery, value);
     }
+    
+    
+    public override void OnExit()
+    {
+        
+    }
 }

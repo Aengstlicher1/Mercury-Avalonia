@@ -19,17 +19,29 @@ public partial class App : Application
 
         // Register services
         services.AddSingleton<INavigationService, NavigationService>();
+        services.AddSingleton<IServiceBase>(sp => sp.GetRequiredService<INavigationService>());
         services.AddSingleton<ISearchService, SearchService>();
+        services.AddSingleton<IServiceBase>(sp => sp.GetRequiredService<ISearchService>());
         services.AddSingleton<IPlayerService, PlayerService>();
+        services.AddSingleton<IServiceBase>(sp => sp.GetRequiredService<IPlayerService>());
         services.AddSingleton<ILyricService, LyricService>();
+        services.AddSingleton<IServiceBase>(sp => sp.GetRequiredService<ILyricService>());
+        services.AddSingleton<ISettingsService, SettingsService>();
+        services.AddSingleton<IServiceBase>(sp => sp.GetRequiredService<ISettingsService>());
         
         // Register ViewModels
         services.AddTransient<MainWindowViewModel>();
+        services.AddTransient<ViewModelBase>(sp => sp.GetRequiredService<MainWindowViewModel>());
         services.AddTransient<HomePageViewModel>();
+        services.AddTransient<ViewModelBase>(sp => sp.GetRequiredService<HomePageViewModel>());
         services.AddTransient<ExplorePageViewModel>();
+        services.AddTransient<ViewModelBase>(sp => sp.GetRequiredService<ExplorePageViewModel>());
         services.AddTransient<SearchPageViewModel>();
+        services.AddTransient<ViewModelBase>(sp => sp.GetRequiredService<SearchPageViewModel>());
         services.AddTransient<PlayingPageViewModel>();
+        services.AddTransient<ViewModelBase>(sp => sp.GetRequiredService<PlayingPageViewModel>());
         services.AddTransient<LyricsViewerViewModel>();
+        services.AddTransient<ViewModelBase>(sp => sp.GetRequiredService<LyricsViewerViewModel>());
 
         // Register Views
         services.AddTransient<MainWindow>();

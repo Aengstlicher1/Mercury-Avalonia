@@ -2,7 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Mercury.Services;
 
-public class ServiceBase : ObservableObject
+public abstract class ServiceBase : ObservableObject, IServiceBase
 {
-    
+    public abstract void OnExit();
 }

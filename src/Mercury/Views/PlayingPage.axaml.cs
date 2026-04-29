@@ -12,6 +12,5 @@ public partial class PlayingPage : ContentPage
     public PlayingPage()
     {
         InitializeComponent();
-        DataContext = App.Services.GetRequiredService<PlayingPageViewModel>();
     }
 }

@@ -11,6 +11,5 @@ public partial class ExplorePage : ContentPage
     public ExplorePage()
     {
         InitializeComponent();
-        DataContext = App.Services.GetRequiredService<ExplorePageViewModel>();
     }
 }

@@ -4,4 +4,5 @@ namespace Mercury.ViewModels;
 
 public abstract class ViewModelBase : ObservableObject
 {
+    
 }

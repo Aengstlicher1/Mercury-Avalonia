@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Mercury.Services;
 
-public partial class NavigationService : ObservableObject, INavigationService
+public partial class NavigationService : ServiceBase, INavigationService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly Dictionary<Type, PageDescriptor> _registry = new();
@@ -170,4 +170,9 @@ public partial class NavigationService : ObservableObject, INavigationService
     }
 
     IRelayCommand<PageDescriptor> INavigationService.NavigateToCommand => NavigateToDescriptorCommand;
+    
+    public override void OnExit()
+    {
+        
+    }
 }

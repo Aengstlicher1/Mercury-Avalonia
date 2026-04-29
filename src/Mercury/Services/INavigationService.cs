@@ -7,7 +7,7 @@ using Mercury.Models;
 
 namespace Mercury.Services;
 
-public interface INavigationService
+public interface INavigationService : IServiceBase
 {
     PageDescriptor? CurrentDescriptor { get; }
     IReadOnlyList<PageDescriptor> Tabs { get; }
