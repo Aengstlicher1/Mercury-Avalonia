@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="src/Mercury/Assets/Icon.png" alt="Mercury Logo" width="128" height="128" />
+  <img src="src/Mercury/Assets/Logo-100.png" alt="Mercury Logo" width="128" height="128" />
 </p>
 
 <h1 align="center">Mercury</h1>
