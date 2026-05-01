@@ -3,7 +3,7 @@
              xmlns:vm="using:Mercury.ViewModels"
              xmlns:behaviors="clr-namespace:Mercury.Resources.Behaviors"
              x:DataType="vm:LyricsViewerViewModel"
-             x:Class="Mercury.Views.LyricsViewer">
+             x:Class="Mercury.Controls.LyricsViewer">
     <Design.DataContext>
         <vm:LyricsViewerViewModel/>
     </Design.DataContext>
@@ -19,6 +19,7 @@
             VerticalAlignment="Top"
             HorizontalAlignment="Left"/>
         <ScrollViewer x:Name="LyricsScroller"
+                      VerticalScrollBarVisibility="Hidden"
                       behaviors:SmoothScrollBehavior.IsEnabled="True"
                       behaviors:LyricAutoScrollBehavior.IsEnabled="{Binding AutoScroll}"
                       behaviors:LyricAutoScrollBehavior.CurrentLineIndex="{Binding CurrentLineIndex}"

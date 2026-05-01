@@ -22,10 +22,6 @@ public partial class PlayingPageViewModel : ViewModelBase
         CurrentTrack = _playerService.CurrentTrack;
     }
 
-    [ObservableProperty] private Track? _currentTrack;
-
-    partial void OnCurrentTrackChanged(Track? value)
-    {
-        _playerService.CurrentTrack = value;
-    }
+    [ObservableProperty]
+    public partial Track? CurrentTrack { get; set; }
 }

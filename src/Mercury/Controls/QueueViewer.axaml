@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:imageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:vm="using:Mercury.ViewModels"
+             xmlns:cmodels="clr-namespace:Mercury.Core.Models;assembly=Mercury.Core"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             Name="_QueueViewer"
+             x:Class="Mercury.Controls.QueueViewer">
+    <Design.DataContext>
+        <vm:QueueViewerViewModel/>
+    </Design.DataContext>
+    
+    <Grid>
+        <ItemsControl x:Name="Queue">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="cmodels:Track" x:DataType="cmodels:Track">
+                    <Button>
+                        <Grid ColumnDefinitions="Auto, Auto, *, Auto">
+                            <TextBlock Grid.Column="0">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource CollectionIndexConverter}">
+                                        <Binding Path="."/>
+                                        <Binding ElementName="_QueueViewer"
+                                                 Path="((vm:QueueViewerViewModel)DataContext).Queue"
+                                                 x:DataType="vm:ExplorePageViewModel"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            
+                            <Border Grid.Column="1">
+                                <Border.Background>
+                                    <ImageBrush imageLoader:ImageBrushLoader.Source="{Binding Thumbnails.LowestRes.Url}"/>
+                                </Border.Background>
+                            </Border>
+                            
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="{Binding Title}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>

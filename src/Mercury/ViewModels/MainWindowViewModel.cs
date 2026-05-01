@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -14,46 +13,44 @@ using Mercury.Models;
 using Mercury.Services;
 using Mercury.Views;
 using Microsoft.Extensions.DependencyInjection;
+using static System.Enum;
 using static Mercury.Core.Models.Enums;
 
 namespace Mercury.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    private HttpClient _client = new HttpClient();
+    private readonly HttpClient _client = new HttpClient();
     
     public IEnumerable<SearchFilter> SearchFilters =>
-        Enum.GetValues(typeof(SearchFilter)).Cast<SearchFilter>()
+        GetValues(typeof(SearchFilter)).Cast<SearchFilter>()
             .Where(s =>
                 s != SearchFilter.Episodes &&
                 s != SearchFilter.Profiles
             );
-    
-    [ObservableProperty]
-    private Track? _currentTrack;
-    
-    [ObservableProperty]
-    private bool _isPlaying;
-    
-    [ObservableProperty]
-    private float _currentTrackPosition;
 
-    [ObservableProperty] 
-    private int _volume;
-    
     [ObservableProperty]
-    private RepeatState _repeatState;
-    
+    public partial Track? CurrentTrack { get; set; }
     [ObservableProperty]
-    private IImage? _currentBackgroundImage;
-    
-    
+    public partial bool IsPlaying { get; set; }
+
     [ObservableProperty]
-    private string _searchText = "";
-    
+    public partial float CurrentTrackPosition { get; set; }
+
     [ObservableProperty]
-    private SearchFilter _searchFilter = SearchFilter.All;
-    
+    public partial int Volume { get; set; }
+
+    [ObservableProperty]
+    public partial RepeatState RepeatState { get; set; }
+
+    [ObservableProperty]
+    public partial IImage? CurrentBackgroundImage { get; set; }
+
+    [ObservableProperty]
+    public partial string SearchText { get; set; } = "";
+
+    [ObservableProperty]
+    public partial SearchFilter SearchFilter { get; set; } = SearchFilter.All;
     public INavigationService NavigationService { get; }
     private readonly ISearchService _searchService;
     private readonly IPlayerService _playerService;

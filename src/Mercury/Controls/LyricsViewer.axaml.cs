@@ -3,7 +3,7 @@ using Avalonia.Input;
 using Mercury.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Mercury.Views;
+namespace Mercury.Controls;
 
 public partial class LyricsViewer : UserControl
 {
@@ -11,7 +11,7 @@ public partial class LyricsViewer : UserControl
     {
         InitializeComponent();
         DataContext = App.Services.GetRequiredService<LyricsViewerViewModel>();
-
+        
         LyricsScroller.AddHandler(
             InputElement.PointerWheelChangedEvent,
             OnLyricsScrollerWheelChanged,

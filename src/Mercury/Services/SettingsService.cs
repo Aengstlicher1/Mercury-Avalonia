@@ -1,7 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
+using Mercury.Core;
+using Mercury.Core.Models;
 using Mercury.Models;
 
 namespace Mercury.Services;
@@ -15,11 +20,11 @@ public class SettingsService : ServiceBase, ISettingsService
     
     public SettingsService()
     {
-        Load();
+        _ = Load();
     }
     
     
-    public void Save()
+    public async Task Save()
     {
         string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         string targetFolder = Path.Combine(appData, "Mercury");
@@ -29,14 +34,14 @@ public class SettingsService : ServiceBase, ISettingsService
         
         var options = new JsonSerializerOptions { WriteIndented = true };
 
-        string playerJson = JsonSerializer.Serialize(PlayerSettings, options);
-        File.WriteAllText(Path.Combine(targetFolder, "player.json"), playerJson);
+        string playerJson = JsonSerializer.Serialize(PlayerSettings.AsJson(), options);
+        await File.WriteAllTextAsync(Path.Combine(targetFolder, "player.json"), playerJson);
 
         string designJson = JsonSerializer.Serialize(DesignSettings, options);
-        File.WriteAllText(Path.Combine(targetFolder, "design.json"), designJson);
+        await File.WriteAllTextAsync(Path.Combine(targetFolder, "design.json"), designJson);
     }
 
-    public void Load()
+    public async Task Load()
     {
         string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         string targetFolder = Path.Combine(appData, "Mercury");
@@ -47,14 +52,44 @@ public class SettingsService : ServiceBase, ISettingsService
         var playerTarget = Path.Combine(targetFolder, "player.json");
         if (File.Exists(playerTarget))
         {
-            var text = File.ReadAllText(playerTarget);
-            PlayerSettings = JsonSerializer.Deserialize<PlayerSettings>(text) ?? PlayerSettings.Default;
+            var text = await File.ReadAllTextAsync(playerTarget);
+            var json = JsonSerializer.Deserialize<JsonPlayerSettings>(text);
+
+            if (json != null)
+            {
+                PlayerSettings.Volume = json.Volume;
+                PlayerSettings.RepeatState = json.RepeatState;
+
+                if (!string.IsNullOrWhiteSpace(json.LastTrackId))
+                {
+                    var lastTrack = await YoutubeMusic.Browse.GetAsync(json.LastTrackId);
+                    PlayerSettings.LastTrack = lastTrack as Track;
+                }
+
+                if (!string.IsNullOrWhiteSpace(json.LastPlaylistId))
+                {
+                    var lastPlaylist = await YoutubeMusic.Browse.GetAsync(json.LastPlaylistId);
+                    PlayerSettings.LastPlaylist = lastPlaylist as Playlist;
+                }
+
+                if (json.QueueIds.Any())
+                {
+                    Collection<Track> queue = [];
+                    foreach (var id in json.QueueIds)
+                    {
+                        var queueItem = await YoutubeMusic.Browse.GetAsync(id);
+                        if (queueItem is Track track) queue.Add(track);
+                    }
+                
+                    PlayerSettings.Queue = new (queue);
+                }
+            }
         }
 
         var designTarget = Path.Combine(targetFolder, "design.json");
         if (File.Exists(designTarget))
         {
-            var text = File.ReadAllText(playerTarget);
+            var text = await File.ReadAllTextAsync(playerTarget);
             PlayerSettings = JsonSerializer.Deserialize<PlayerSettings>(text) ?? PlayerSettings.Default;
         }
     }
@@ -62,6 +97,6 @@ public class SettingsService : ServiceBase, ISettingsService
     
     public override void OnExit()
     {
-        Save();
+        
     }
 }

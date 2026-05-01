@@ -67,6 +67,8 @@ public partial class LyricsViewerViewModel : ViewModelBase
         if (_currentTrack is not null && LyricLines.Any(l => l.Line == line))
         {
             var pos = (line.Timing + TimeSpan.FromMilliseconds(5)) / _currentTrack.DurationTimeSpan;
+            if (!_playerService.IsPlaying)
+                _playerService.StartPlayblack();
             _playerService.Position = (float)pos;
         }
     }

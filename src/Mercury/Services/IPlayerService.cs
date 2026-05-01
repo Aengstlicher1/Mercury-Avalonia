@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,10 +15,11 @@ public interface IPlayerService : IServiceBase
     /// </summary>
     float Position { get; set; }
     
+    bool IsPlaying { get; }
     RepeatState RepeatState  { get; set; }
-    Track? CurrentTrack { get; set; }
-    Collection<Track> CurrentQueue { get; set; }
-    Playlist? CurrentPlaylist { get; set; }
+    Track? CurrentTrack { get; }
+    ObservableCollection<Track> CurrentQueue { get; }
+    Playlist? CurrentPlaylist { get; }
     
     Task SetTrack(Track track, bool autoPlay = true, CancellationToken cToken = default);
     Task SetPlaylist(Playlist playlist, bool autoPlay = true, CancellationToken cToken = default);

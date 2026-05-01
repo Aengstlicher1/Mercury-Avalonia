@@ -6,6 +6,7 @@
         xmlns:icon="clr-namespace:IconPacks.Avalonia.MaterialDesign;assembly=IconPacks.Avalonia.MaterialDesign"
         xmlns:imageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
         xmlns:models="clr-namespace:Mercury.Models"
+        xmlns:viewModels="clr-namespace:Mercury.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Mercury.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -41,6 +42,7 @@
             <Border Grid.Row="0" Grid.Column="0">
                 <Grid ColumnDefinitions="*, *, 96" Margin="60,0,60,0">
                     <Grid Grid.Column="0">
+                        <TextBlock Text="{Binding NavigationService.Tabs.Count}" Foreground="Brown"/>
                         <ItemsControl
                             VerticalAlignment="Top"
                             Margin="8,12,0,0"

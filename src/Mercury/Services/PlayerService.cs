@@ -22,6 +22,8 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     public event Action<Playlist>? CurrentPlaylistChanged;
     public event Action<RepeatState>? RepeatStateChanged;
 
+    private readonly ISettingsService _settingsService;
+    
     private readonly LibVLC _libVlc;
     private readonly MediaPlayer _mediaPlayer;
     private Media? _currentMedia;
@@ -63,25 +65,28 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
         }
     }
 
+
+    [ObservableProperty] 
+    public partial bool IsPlaying { get; private set; } = false;
+
     [ObservableProperty]
-    private RepeatState _repeatState = RepeatState.RepeatSingle;
-    
+    public partial RepeatState RepeatState { get; set; } = RepeatState.RepeatSingle;
     [ObservableProperty]
-    private Track? _currentTrack;
-    
+    public partial Track? CurrentTrack { get; private set; }
+
     [ObservableProperty]
-    private Playlist? _currentPlaylist;
-    
+    public partial Playlist? CurrentPlaylist { get; private set; }
+
     [ObservableProperty]
-    private Collection<Track> _currentQueue = new ();
-    
-    private Collection<Track> ShuffledTracks { get; set; } = new ();
+    public partial ObservableCollection<Track> CurrentQueue { get; private set; } = [];
+    private Collection<Track> ShuffledTracks { get; set; } = [];
     
     public PlayerService()
     {
         // "--no-video" ensures no video decoding/rendering — audio only
         _libVlc = new LibVLC("--no-video");
         _mediaPlayer = new MediaPlayer(_libVlc);
+        _settingsService = App.Services.GetRequiredService<ISettingsService>();
         
         _mediaPlayer.PositionChanged += (_, e) =>
         {
@@ -91,50 +96,55 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
         _mediaPlayer.Playing += (_, _) =>
         {
             Console.WriteLine("VLC: Playback started");
-            PlayingChanged?.Invoke(true);
+            IsPlaying = true;
         };
 
         _mediaPlayer.Paused += (_, _) =>
         {
             Console.WriteLine("VLC: Playback paused");
-            PlayingChanged?.Invoke(false);
+            IsPlaying = false;
         };
-
-        _mediaPlayer.Stopped += MediaStopped;
-
-        LoadSettings();
+        _mediaPlayer.Stopped += (_, _) =>
+        {
+            Console.WriteLine("VLC: Playback stopped");
+            IsPlaying = false;
+        };
+        _mediaPlayer.EndReached += OnEndReached;
+        _settingsService.PlayerSettings.SettingsChanged += LoadSettings;
     }
 
 
-    private void LoadSettings()
+    private void LoadSettings(PlayerSettings settings)
     {
-        var ss = App.Services.GetRequiredService<ISettingsService>();
-
-        CurrentTrack = ss.PlayerSettings.LastTrack;
-        CurrentPlaylist = ss.PlayerSettings.LastPlaylist;
-        CurrentQueue = ss.PlayerSettings.Queue;
+        CurrentPlaylist = settings.LastPlaylist;
+        CurrentQueue = settings.Queue;
         
-        Volume = ss.PlayerSettings.Volume;
-        RepeatState = ss.PlayerSettings.RepeatState;
+        Volume = settings.Volume;
+        RepeatState = settings.RepeatState;
+        
+        if (settings.LastTrack != null && CurrentTrack == null)
+            _ = BaseSetTrack(settings.LastTrack, autoPlay: false, preStop: false);
     }
     
-    private void MediaStopped(object? sender, EventArgs e)
+    private void OnEndReached(object? sender, EventArgs e)
     {
-        if (RepeatState is not RepeatState.NoRepeat)
+        switch (RepeatState)
         {
-            if (RepeatState is RepeatState.RepeatSingle && CurrentTrack is not null)
-            {
-                _ = BaseSetTrack(CurrentTrack, true, false);
-            }
-            else if (RepeatState is RepeatState.RepeatAll)
-            {
+            case RepeatState.RepeatSingle:
+                if (CurrentTrack != null)
+                    _ = BaseSetTrack(CurrentTrack, true, false);
+                break;
+            case RepeatState.RepeatAll:
                 _ = BaseSkip(+1, true, false);
-            }
-            else if (RepeatState is RepeatState.Shuffle)
-            {
+                break;
+            case RepeatState.Shuffle:
                 var track = GetRandomTrack();
                 _ = BaseSetTrack(track, true, false);
-            }
+                break;
+            case RepeatState.NoRepeat:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 
@@ -294,7 +304,7 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
         CurrentPlaylistChanged?.Invoke(value!);
     }
     // ReSharper disable once UnusedParameterInPartialMethod
-    partial void OnCurrentQueueChanged(Collection<Track> value)
+    partial void OnCurrentQueueChanged(ObservableCollection<Track> value)
     {
         ShuffledTracks.Clear();
     }
@@ -302,19 +312,23 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     {
         RepeatStateChanged?.Invoke(value);
     }
-    
-    
+
+    partial void OnIsPlayingChanged(bool value)
+    {
+        PlayingChanged?.Invoke(value);
+    }
+
     public override void OnExit()
     {
         Dispose();
         
-        var ss = App.Services.GetRequiredService<ISettingsService>();
-
-        ss.PlayerSettings.LastTrack = CurrentTrack;
-        ss.PlayerSettings.LastPlaylist = CurrentPlaylist;
-        ss.PlayerSettings.Queue = CurrentQueue;
+        _settingsService.PlayerSettings.LastTrack = CurrentTrack;
+        _settingsService.PlayerSettings.LastPlaylist = CurrentPlaylist;
+        _settingsService.PlayerSettings.Queue = CurrentQueue;
         
-        ss.PlayerSettings.Volume = Volume;
-        ss.PlayerSettings.RepeatState = RepeatState;
+        _settingsService.PlayerSettings.Volume = Volume;
+        _settingsService.PlayerSettings.RepeatState = RepeatState;
+        
+        _settingsService.Save();
     }
 }
