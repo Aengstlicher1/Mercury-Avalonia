@@ -142,6 +142,9 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
                 _ = BaseSetTrack(track, true, false);
                 break;
             case RepeatState.NoRepeat:
+                if (CurrentTrack != null)
+                    /* Prepare the track to be able to start it again afterwards */
+                    _ = BaseSetTrack(CurrentTrack, false, false); 
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

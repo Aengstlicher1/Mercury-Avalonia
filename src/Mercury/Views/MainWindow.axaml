@@ -42,7 +42,6 @@
             <Border Grid.Row="0" Grid.Column="0">
                 <Grid ColumnDefinitions="*, *, 96" Margin="60,0,60,0">
                     <Grid Grid.Column="0">
-                        <TextBlock Text="{Binding NavigationService.Tabs.Count}" Foreground="Brown"/>
                         <ItemsControl
                             VerticalAlignment="Top"
                             Margin="8,12,0,0"

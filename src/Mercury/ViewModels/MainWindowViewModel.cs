@@ -60,8 +60,10 @@ public partial class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel()
     {
         NavigationService = App.Services.GetRequiredService<INavigationService>();
-        _searchService = App.Services.GetRequiredService<ISearchService>();
+        _searchService = App.Services.GetRequiredService<ISearchService>(); 
         _playerService = App.Services.GetRequiredService<IPlayerService>();
+        var discordService = App.Services.GetRequiredService<IDiscordService>();
+        discordService.Initialize();
 
         _playerService.CurrentTrackChanged += track => CurrentTrack = track;
         _playerService.PositionChanged += pos => CurrentTrackPosition = pos;

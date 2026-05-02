@@ -28,6 +28,8 @@ public partial class App : Application
         services.AddSingleton<IServiceBase>(sp => sp.GetRequiredService<ILyricService>());
         services.AddSingleton<ISettingsService, SettingsService>();
         services.AddSingleton<IServiceBase>(sp => sp.GetRequiredService<ISettingsService>());
+        services.AddSingleton<IDiscordService, DiscordService>();
+        services.AddSingleton<IServiceBase>(sp => sp.GetRequiredService<IDiscordService>());
         
         // Register ViewModels
         services.AddTransient<MainWindowViewModel>();
