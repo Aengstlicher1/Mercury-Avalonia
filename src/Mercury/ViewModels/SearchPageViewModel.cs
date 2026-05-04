@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mercury.Core;
 using Mercury.Core.Models;
@@ -19,6 +20,9 @@ public partial class SearchPageViewModel : ViewModelBase
     private CancellationTokenSource _cts = new();
     private readonly IPlayerService _ps;
     public ObservableCollection<Media> SearchResults { get; set; } = new ();
+    
+    [ObservableProperty]
+    public partial Track? CurrentTrack { get; set; }
 
     public SearchPageViewModel()
     {
@@ -31,6 +35,7 @@ public partial class SearchPageViewModel : ViewModelBase
         {
             _ = PerformSearch(query, filter);
         };
+        _ps.CurrentTrackChanged += track => CurrentTrack = track;
         
         if (!string.IsNullOrWhiteSpace(searchService.SearchQuery))
             _ = PerformSearch(searchService.SearchQuery, searchService.SearchFilter);

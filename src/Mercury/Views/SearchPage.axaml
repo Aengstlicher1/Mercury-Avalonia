@@ -5,7 +5,8 @@
              xmlns:models="clr-namespace:Mercury.Core.Models;assembly=Mercury.Core"
              xmlns:vm="clr-namespace:Mercury.ViewModels"
              xmlns:behaviors="clr-namespace:Mercury.Resources.Behaviors"
-             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:imageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:icon="https://github.com/MahApps/IconPacks.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Mercury.Views.SearchPage"
              Name="Search"
@@ -27,7 +28,7 @@
                 
                 <ItemsControl.DataTemplates>
                     <DataTemplate DataType="models:Song" x:DataType="models:Song">
-                        <Button Height="80"
+                        <Button Height="64"
                                 CornerRadius="8"
                                 Padding="0"
                                 HorizontalAlignment="Stretch"
@@ -36,15 +37,29 @@
                                 Command="{Binding $parent[ItemsControl].((vm:SearchPageViewModel)DataContext).PlayTrackCommand}"
                                 CommandParameter="{Binding .}">
                             <Grid ColumnDefinitions="Auto, *, Auto">
-                                <Border Grid.Column="0" 
-                                        VerticalAlignment="Stretch"
-                                        Margin="8"
-                                        Width="{Binding $self.Bounds.Height}"
-                                        CornerRadius="8">
-                                    <Border.Background>
-                                        <ImageBrush Stretch="UniformToFill" asyncImageLoader:ImageBrushLoader.Source="{Binding Thumbnails.LowestRes.Url}" />
-                                    </Border.Background>
-                                </Border>
+                                <Panel Grid.Column="0"
+                                       Width="{Binding $self.Bounds.Height}"
+                                       Margin="8">
+                                    <Border CornerRadius="8" ClipToBounds="True">
+                                        <Image imageLoader:ImageLoader.Source="{Binding Thumbnails.LowestRes.Url}"
+                                               Stretch="UniformToFill"/>
+                                    </Border>
+                                    <Border Background="{DynamicResource HoverBrush}"
+                                            CornerRadius="8">
+                                        <icon:PackIconMaterialDesign Kind="PlayArrowRound"
+                                                                     Width="24"
+                                                                     Height="24"
+                                                                     Foreground="{DynamicResource SurfaceBrush}"/>
+                                        <Border.IsVisible>
+                                            <MultiBinding Converter="{StaticResource TracksEqualConverter}">
+                                                <Binding Path="."/>
+                                                <Binding ElementName="Search"
+                                                         Path="((vm:SearchPageViewModel)DataContext).CurrentTrack"/>
+                                            </MultiBinding>
+                                        </Border.IsVisible>
+                                    </Border>
+                                </Panel>
+                                
                                 <StackPanel Grid.Column="1" Margin="4,0" HorizontalAlignment="Left" VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Title}"
                                                FontSize="16"
@@ -76,7 +91,7 @@
                     </DataTemplate>
                     
                     <DataTemplate DataType="models:Video" x:DataType="models:Video">
-                        <Button Height="80" 
+                        <Button Height="64" 
                                 CornerRadius="8"
                                 Padding="0"
                                 HorizontalAlignment="Stretch"
@@ -85,15 +100,28 @@
                                 Command="{Binding $parent[ItemsControl].((vm:SearchPageViewModel)DataContext).PlayTrackCommand}"
                                 CommandParameter="{Binding .}">
                             <Grid ColumnDefinitions="Auto, *, Auto">
-                                <Border Grid.Column="0" 
-                                        VerticalAlignment="Stretch"
-                                        Margin="8"
-                                        Width="{Binding $self.Bounds.Height}"
-                                        CornerRadius="8">
-                                    <Border.Background>
-                                        <ImageBrush Stretch="UniformToFill" asyncImageLoader:ImageBrushLoader.Source="{Binding Thumbnails.LowestRes.Url}" />
-                                    </Border.Background>
-                                </Border>
+                                <Panel Grid.Column="0"
+                                       Width="{Binding $self.Bounds.Height}"
+                                       Margin="8">
+                                    <Border CornerRadius="8" ClipToBounds="True">
+                                        <Image imageLoader:ImageLoader.Source="{Binding Thumbnails.LowestRes.Url}"
+                                               Stretch="UniformToFill"/>
+                                    </Border>
+                                    <Border Background="{DynamicResource HoverBrush}"
+                                            CornerRadius="8">
+                                        <icon:PackIconMaterialDesign Kind="PlayArrowRound"
+                                                                     Width="24"
+                                                                     Height="24"
+                                                                     Foreground="{DynamicResource SurfaceBrush}"/>
+                                        <Border.IsVisible>
+                                            <MultiBinding Converter="{StaticResource TracksEqualConverter}">
+                                                <Binding Path="."/>
+                                                <Binding ElementName="Search"
+                                                         Path="((vm:SearchPageViewModel)DataContext).CurrentTrack"/>
+                                            </MultiBinding>
+                                        </Border.IsVisible>
+                                    </Border>
+                                </Panel>
                                 <StackPanel Grid.Column="1" Margin="4,0" HorizontalAlignment="Left" VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Title}"
                                                FontSize="16"
@@ -124,7 +152,7 @@
                     </DataTemplate>
                     
                     <DataTemplate DataType="models:Episode" x:DataType="models:Episode">
-                        <Button Height="80" 
+                        <Button Height="64" 
                                 CornerRadius="8"
                                 Padding="0"
                                 HorizontalAlignment="Stretch"
@@ -133,15 +161,29 @@
                                 Command="{Binding $parent[ItemsControl].((vm:SearchPageViewModel)DataContext).PlayTrackCommand}"
                                 CommandParameter="{Binding .}">
                             <Grid ColumnDefinitions="Auto, *, Auto">
-                                <Border Grid.Column="0" 
-                                        VerticalAlignment="Stretch"
-                                        Margin="8"
-                                        Width="{Binding $self.Bounds.Height}"
-                                        CornerRadius="8">
-                                    <Border.Background>
-                                        <ImageBrush Stretch="UniformToFill" asyncImageLoader:ImageBrushLoader.Source="{Binding Thumbnails.LowestRes.Url}" />
-                                    </Border.Background>
-                                </Border>
+                                <Panel Grid.Column="0"
+                                       Width="{Binding $self.Bounds.Height}"
+                                       Margin="8">
+                                    <Border CornerRadius="8" ClipToBounds="True">
+                                        <Image imageLoader:ImageLoader.Source="{Binding Thumbnails.LowestRes.Url}"
+                                               Stretch="UniformToFill"/>
+                                    </Border>
+                                    <Border Background="{DynamicResource HoverBrush}"
+                                            CornerRadius="8">
+                                        <icon:PackIconMaterialDesign Kind="PlayArrowRound"
+                                                                     Width="24"
+                                                                     Height="24"
+                                                                     Foreground="{DynamicResource SurfaceBrush}"/>
+                                        <Border.IsVisible>
+                                            <MultiBinding Converter="{StaticResource TracksEqualConverter}">
+                                                <Binding Path="."/>
+                                                <Binding ElementName="Search"
+                                                         Path="((vm:SearchPageViewModel)DataContext).CurrentTrack"/>
+                                            </MultiBinding>
+                                        </Border.IsVisible>
+                                    </Border>
+                                </Panel>
+                                
                                 <StackPanel Grid.Column="1" Margin="4,0" HorizontalAlignment="Left" VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Title}"
                                                FontSize="16"
@@ -172,7 +214,7 @@
                     </DataTemplate>
                     
                     <DataTemplate DataType="models:Playlist" x:DataType="models:Playlist">
-                        <Button Height="80" 
+                        <Button Height="64" 
                                 CornerRadius="8"
                                 Padding="0"
                                 HorizontalAlignment="Stretch"
@@ -187,7 +229,7 @@
                                         Width="{Binding $self.Bounds.Height}"
                                         CornerRadius="8">
                                     <Border.Background>
-                                        <ImageBrush Stretch="UniformToFill" asyncImageLoader:ImageBrushLoader.Source="{Binding Thumbnails.LowestRes.Url}" />
+                                        <ImageBrush Stretch="UniformToFill" imageLoader:ImageBrushLoader.Source="{Binding Thumbnails.LowestRes.Url}" />
                                     </Border.Background>
                                 </Border>
                                 <StackPanel Grid.Column="1" Margin="4,0" HorizontalAlignment="Left" VerticalAlignment="Center">
@@ -212,7 +254,7 @@
                     </DataTemplate>
                     
                     <DataTemplate DataType="models:Media" x:DataType="models:Media">
-                        <Button Height="80" 
+                        <Button Height="64" 
                                 CornerRadius="8"
                                 Padding="0"
                                 HorizontalAlignment="Stretch"
@@ -225,7 +267,7 @@
                                         Width="{Binding $self.Bounds.Height}"
                                         CornerRadius="8">
                                     <Border.Background>
-                                        <ImageBrush Stretch="UniformToFill" asyncImageLoader:ImageBrushLoader.Source="{Binding Thumbnails.LowestRes.Url}" />
+                                        <ImageBrush Stretch="UniformToFill" imageLoader:ImageBrushLoader.Source="{Binding Thumbnails.LowestRes.Url}" />
                                     </Border.Background>
                                 </Border>
                                 <StackPanel Grid.Column="1" Margin="4,0" HorizontalAlignment="Left" VerticalAlignment="Center">

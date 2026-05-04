@@ -141,7 +141,7 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
                     _ = BaseSetTrack(CurrentTrack, true);
                 break;
             case RepeatState.RepeatAll:
-                _ = BaseSkip(+1, true, false);
+                _ = BaseSkip(+1, true);
                 break;
             case RepeatState.Shuffle:
                 var track = GetRandomTrack();
@@ -211,9 +211,23 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
             var streamData = await YoutubeMusic.Player.GetStreamDataAsync(track.Id, cToken);
             if (streamData is null) return;
 
-            var stream = streamData.Streams
-                .Where(s => s is AudioStreamInfo)
-                .MaxBy(x => x.Bitrate)!;
+            StreamInfo stream;
+            if (streamData.Streams.Any(si => si is AudioStreamInfo))
+            {
+                stream = streamData.Streams
+                    .Where(s => s is AudioStreamInfo)
+                    .MaxBy(x => x.Bitrate)!;
+            }
+            else if (streamData.Streams.Any(si => si is MuxedStreamInfo))
+            {
+                stream = streamData.Streams
+                    .Where(s => s is MuxedStreamInfo)
+                    .MaxBy(x => x.Bitrate)!;
+            }
+            else
+            {
+                throw new ArgumentException("Stream is not playable");
+            }
 
             _currentMedia = new Media(_libVlc, new Uri(stream.Url));
             _mediaPlayer.Media = _currentMedia;
@@ -276,7 +290,7 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
         => await Skip(-1, autoPlay);
     
     public async Task Skip(int relativeIndex, bool autoPlay = true) => await BaseSkip(relativeIndex, autoPlay);
-    private async Task BaseSkip(int relativeIndex, bool autoPlay = true, bool preStop = true)
+    private async Task BaseSkip(int relativeIndex, bool autoPlay = true)
     {
         if (CurrentTrack is null || CurrentQueue.Count == 0) return;
         
