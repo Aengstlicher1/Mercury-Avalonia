@@ -34,7 +34,7 @@
                     <Button Content="Queue"/>
                     <Button Content="Info"/>
                 </StackPanel>
-                <controls:QueueViewer Grid.Row="1"/>
+                <controls:LyricsViewer Grid.Row="1"/>
             </Grid>
         </Border>
     </Grid>
