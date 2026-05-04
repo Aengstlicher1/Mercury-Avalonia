@@ -6,20 +6,21 @@
              xmlns:vm="using:Mercury.ViewModels"
              xmlns:cmodels="clr-namespace:Mercury.Core.Models;assembly=Mercury.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             Name="_QueueViewer"
-             x:Class="Mercury.Controls.QueueViewer">
+             Name="Viewer"
+             x:Class="Mercury.Controls.QueueViewer"
+             x:DataType="vm:QueueViewerViewModel">
     <Design.DataContext>
         <vm:QueueViewerViewModel/>
     </Design.DataContext>
     
     <Grid>
-        <ItemsControl x:Name="Queue">
+        <ItemsControl x:Name="Queue" ItemsSource="{Binding Queue}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
+            <ItemsControl.DataTemplates>
                 <DataTemplate DataType="cmodels:Track" x:DataType="cmodels:Track">
                     <Button>
                         <Grid ColumnDefinitions="Auto, Auto, *, Auto">
@@ -27,7 +28,7 @@
                                 <TextBlock.Text>
                                     <MultiBinding Converter="{StaticResource CollectionIndexConverter}">
                                         <Binding Path="."/>
-                                        <Binding ElementName="_QueueViewer"
+                                        <Binding ElementName="Viewer"
                                                  Path="((vm:QueueViewerViewModel)DataContext).Queue"
                                                  x:DataType="vm:ExplorePageViewModel"/>
                                     </MultiBinding>
@@ -46,7 +47,7 @@
                         </Grid>
                     </Button>
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
+            </ItemsControl.DataTemplates>
         </ItemsControl>
     </Grid>
 </UserControl>

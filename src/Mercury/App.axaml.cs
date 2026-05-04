@@ -44,6 +44,8 @@ public partial class App : Application
         services.AddTransient<ViewModelBase>(sp => sp.GetRequiredService<PlayingPageViewModel>());
         services.AddTransient<LyricsViewerViewModel>();
         services.AddTransient<ViewModelBase>(sp => sp.GetRequiredService<LyricsViewerViewModel>());
+        services.AddTransient<QueueViewerViewModel>();
+        services.AddTransient<ViewModelBase>(sp => sp.GetRequiredService<QueueViewerViewModel>());
 
         // Register Views
         services.AddTransient<MainWindow>();

@@ -21,6 +21,7 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     public event Action<Track>? CurrentTrackChanged;
     public event Action<Playlist>? CurrentPlaylistChanged;
     public event Action<RepeatState>? RepeatStateChanged;
+    public event Action<Track[]>? QueueChanged;
 
     private readonly ISettingsService _settingsService;
     
@@ -111,6 +112,11 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
         };
         _mediaPlayer.EndReached += OnEndReached;
         _settingsService.PlayerSettings.SettingsChanged += LoadSettings;
+
+        CurrentQueue!.CollectionChanged += (_, _) =>
+        {
+            QueueChanged?.Invoke(CurrentQueue.ToArray());
+        };
     }
 
 
@@ -310,6 +316,7 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     partial void OnCurrentQueueChanged(ObservableCollection<Track> value)
     {
         ShuffledTracks.Clear();
+        QueueChanged?.Invoke(value.ToArray());
     }
     partial void OnRepeatStateChanged(RepeatState value)
     {

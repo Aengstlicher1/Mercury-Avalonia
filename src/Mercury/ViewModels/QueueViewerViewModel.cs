@@ -10,5 +10,12 @@ public partial class QueueViewerViewModel : ViewModelBase
 {
     private readonly IPlayerService _playerService = App.Services.GetRequiredService<IPlayerService>();
     
-    public ObservableCollection<Track> Queue => _playerService.CurrentQueue;
+    [ObservableProperty]
+    public partial ObservableCollection<Track> Queue { get; set; } = new();
+    
+    public QueueViewerViewModel()
+    {
+        _playerService.QueueChanged += _ => Queue = _playerService.CurrentQueue;
+        Queue = _playerService.CurrentQueue;
+    }
 }

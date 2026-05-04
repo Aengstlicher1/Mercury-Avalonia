@@ -41,7 +41,6 @@ public class DiscordService : IDiscordService
                 Type = ActivityType.Listening,
                 Assets = new Assets
                 {
-                    LargeImageKey = track.Thumbnails.HighestRes.Url,
                     LargeImageUrl = track.Thumbnails.HighestRes.Url
                 },
                 Buttons = 

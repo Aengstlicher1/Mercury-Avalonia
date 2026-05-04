@@ -38,6 +38,7 @@ public interface IPlayerService : IServiceBase
     event Action<int>? VolumeChanged;
     event Action<Track>? CurrentTrackChanged;
     event Action<Playlist>? CurrentPlaylistChanged;
+    event Action<Track[]>? QueueChanged;
     
     void Dispose();
 }
