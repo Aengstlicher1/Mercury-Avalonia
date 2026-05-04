@@ -22,6 +22,7 @@ public interface IPlayerService : IServiceBase
     Playlist? CurrentPlaylist { get; }
     
     Task SetTrack(Track track, bool autoPlay = true, CancellationToken cToken = default);
+    Task SetPlaylistTrack(Track track, bool autoPlay = true, CancellationToken cToken = default);
     Task SetPlaylist(Playlist playlist, bool autoPlay = true, CancellationToken cToken = default);
 
     void StartPlayblack();

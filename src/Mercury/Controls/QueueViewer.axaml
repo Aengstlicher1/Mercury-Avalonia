@@ -3,51 +3,88 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:imageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:icon="clr-namespace:IconPacks.Avalonia.MaterialDesign;assembly=IconPacks.Avalonia.MaterialDesign"
+             xmlns:behaviors="clr-namespace:Mercury.Resources.Behaviors"
              xmlns:vm="using:Mercury.ViewModels"
              xmlns:cmodels="clr-namespace:Mercury.Core.Models;assembly=Mercury.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             Name="Viewer"
-             x:Class="Mercury.Controls.QueueViewer"
-             x:DataType="vm:QueueViewerViewModel">
+             x:DataType="vm:QueueViewerViewModel"
+             x:Class="Mercury.Controls.QueueViewer">
     <Design.DataContext>
         <vm:QueueViewerViewModel/>
     </Design.DataContext>
     
     <Grid>
-        <ItemsControl x:Name="Queue" ItemsSource="{Binding Queue}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.DataTemplates>
-                <DataTemplate DataType="cmodels:Track" x:DataType="cmodels:Track">
-                    <Button>
-                        <Grid ColumnDefinitions="Auto, Auto, *, Auto">
-                            <TextBlock Grid.Column="0">
-                                <TextBlock.Text>
-                                    <MultiBinding Converter="{StaticResource CollectionIndexConverter}">
-                                        <Binding Path="."/>
-                                        <Binding ElementName="Viewer"
-                                                 Path="((vm:QueueViewerViewModel)DataContext).Queue"
-                                                 x:DataType="vm:ExplorePageViewModel"/>
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
-                            
-                            <Border Grid.Column="1">
-                                <Border.Background>
-                                    <ImageBrush imageLoader:ImageBrushLoader.Source="{Binding Thumbnails.LowestRes.Url}"/>
-                                </Border.Background>
-                            </Border>
-                            
-                            <StackPanel Grid.Column="2">
-                                <TextBlock Text="{Binding Title}"/>
-                            </StackPanel>
-                        </Grid>
-                    </Button>
-                </DataTemplate>
-            </ItemsControl.DataTemplates>
-        </ItemsControl>
+        <TextBlock Text="The Queue is empty."
+                   IsVisible="{Binding Queue, Converter={StaticResource CollectionNotAnyConverter}}"
+                   FontSize="24"
+                   Foreground="{DynamicResource SubTextBrush}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+        <ScrollViewer behaviors:SmoothScrollBehavior.IsEnabled="True">
+            <ItemsControl x:Name="Queue" ItemsSource="{Binding Queue}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.DataTemplates>
+                    <DataTemplate DataType="cmodels:Track" x:DataType="cmodels:Track">
+                        <Button
+                            Height="48"
+                            HorizontalAlignment="Stretch"
+                            VerticalContentAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
+                            Command="{Binding ElementName=Queue, Path=((vm:QueueViewerViewModel)DataContext).PlayTrackCommand}"
+                            CommandParameter="{Binding .}">
+                            <Grid ColumnDefinitions="Auto, Auto, *, Auto">
+                                <TextBlock Grid.Column="0"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,8,0">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource CollectionIndexConverter}">
+                                            <Binding Path="."/>
+                                            <Binding ElementName="Queue"
+                                                     Path="((vm:QueueViewerViewModel)DataContext).Queue"
+                                                     x:DataType="vm:ExplorePageViewModel"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                
+                                <Panel Grid.Column="1"
+                                       Width="{Binding $self.Bounds.Height}"
+                                       Margin="0,0,8,0">
+                                    <Border CornerRadius="8" ClipToBounds="True">
+                                        <Image imageLoader:ImageLoader.Source="{Binding Thumbnails.LowestRes.Url}"
+                                               Stretch="UniformToFill"/>
+                                    </Border>
+                                    <Border Background="{DynamicResource HoverBrush}"
+                                            CornerRadius="8">
+                                        <icon:PackIconMaterialDesign Kind="PlayArrowRound"
+                                                                     Width="16"
+                                                                     Height="16"
+                                                                     Foreground="{DynamicResource SurfaceBrush}"/>
+                                        <Border.IsVisible>
+                                            <MultiBinding Converter="{StaticResource TracksEqualConverter}">
+                                                <Binding Path="."/>
+                                                <Binding ElementName="Queue"
+                                                         Path="((vm:QueueViewerViewModel)DataContext).CurrentTrack"/>
+                                            </MultiBinding>
+                                        </Border.IsVisible>
+                                    </Border>
+                                </Panel>
+                                
+                                <StackPanel Grid.Column="2" 
+                                            VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Title}"/>
+                                    <TextBlock Text="{Binding Artist}"
+                                               Foreground="{DynamicResource SubTextBrush}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.DataTemplates>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </UserControl>

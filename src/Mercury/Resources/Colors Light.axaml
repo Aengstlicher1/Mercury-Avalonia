@@ -9,7 +9,7 @@
     <Color x:Key="HoverColor">#14000000</Color>
     <Color x:Key="SelectedColor">#3a72e1</Color>
     <Color x:Key="TextColor">#494c40</Color>
-    <Color x:Key="SubTextColor">#b7bbb6</Color>
+    <Color x:Key="SubTextColor">#a2a7a1</Color>
     
     
     <SolidColorBrush x:Key="WindowSurfaceBrush" Color="{StaticResource WindowSurfaceColor}"/>

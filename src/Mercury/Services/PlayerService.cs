@@ -129,7 +129,7 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
         RepeatState = settings.RepeatState;
         
         if (settings.LastTrack != null && CurrentTrack == null)
-            _ = BaseSetTrack(settings.LastTrack, autoPlay: false, preStop: false);
+            _ = BaseSetTrack(settings.LastTrack, autoPlay: false);
     }
     
     private void OnEndReached(object? sender, EventArgs e)
@@ -138,19 +138,19 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
         {
             case RepeatState.RepeatSingle:
                 if (CurrentTrack != null)
-                    _ = BaseSetTrack(CurrentTrack, true, false);
+                    _ = BaseSetTrack(CurrentTrack, true);
                 break;
             case RepeatState.RepeatAll:
                 _ = BaseSkip(+1, true, false);
                 break;
             case RepeatState.Shuffle:
                 var track = GetRandomTrack();
-                _ = BaseSetTrack(track, true, false);
+                _ = BaseSetTrack(track, true);
                 break;
             case RepeatState.NoRepeat:
                 if (CurrentTrack != null)
-                    /* Prepare the track to be able to start it again afterwards */
-                    _ = BaseSetTrack(CurrentTrack, false, false); 
+                    /* Prepare the track to be able to start it again afterward */
+                    _ = BaseSetTrack(CurrentTrack, false); 
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -189,12 +189,23 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
         CurrentPlaylist = null;
         await BaseSetTrack(track, autoPlay, cToken: cToken);
     }
-    private async Task BaseSetTrack(Track track, bool autoPlay, bool preStop = true, CancellationToken cToken = default)
+
+    public async Task SetPlaylistTrack(Track track, bool autoPlay, CancellationToken cToken = default)
+    {
+        if (CurrentQueue.Contains(track))
+        {
+            await BaseSetTrack(track, autoPlay, cToken);
+        }
+        else
+        {
+            throw new ArgumentException("Track is not in the queue");
+        }
+    }
+    
+    private async Task BaseSetTrack(Track track, bool autoPlay, CancellationToken cToken = default)
     {
         try
         {
-            if (preStop)
-                _mediaPlayer.Stop();
             _currentMedia?.Dispose();
 
             var streamData = await YoutubeMusic.Player.GetStreamDataAsync(track.Id, cToken);
@@ -225,9 +236,6 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
 
 
     public async Task SetPlaylist(Playlist playlist, bool autoPlay, CancellationToken cToken = default)
-        => await BaseSetPlaylist(playlist, autoPlay, cToken: cToken);
-
-    private async Task BaseSetPlaylist(Playlist playlist, bool autoPlay, bool preStop = true, CancellationToken cToken = default)
     {
         var mediaInfo = await YoutubeMusic.Browse.GetInfoAsync(playlist, cToken);
 
@@ -239,7 +247,7 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
                 CurrentQueue.Add(track);
             }
             
-            await BaseSetTrack(playlistInfo.Tracks.First(), autoPlay, preStop, cToken);
+            await BaseSetTrack(playlistInfo.Tracks.First(), autoPlay, cToken);
             
             CurrentPlaylist = playlist;
         }
@@ -292,7 +300,7 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
                 : CurrentQueue.Last();
         }
         
-        await BaseSetTrack(target, autoPlay, preStop);
+        await BaseSetTrack(target, autoPlay);
     } 
     
     
@@ -330,8 +338,6 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
 
     public override void OnExit()
     {
-        Dispose();
-        
         _settingsService.PlayerSettings.LastTrack = CurrentTrack;
         _settingsService.PlayerSettings.LastPlaylist = CurrentPlaylist;
         _settingsService.PlayerSettings.Queue = CurrentQueue;
@@ -340,5 +346,6 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
         _settingsService.PlayerSettings.RepeatState = RepeatState;
         
         _settingsService.Save();
+        Dispose();
     }
 }

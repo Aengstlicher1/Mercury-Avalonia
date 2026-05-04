@@ -27,11 +27,14 @@ public partial class MainWindow : Window
 
     private void OnClosed(object? s, EventArgs e)
     {
-        var serviceBases = App.Services.GetServices<IServiceBase>();
-        foreach (var service in serviceBases)
+        Task.Run(() =>
         {
-            service.OnExit();
-        }
+            var serviceBases = App.Services.GetServices<IServiceBase>();
+            foreach (var service in serviceBases)
+            {
+                service.OnExit();
+            }
+        });
     }
     
     private void SearchBox_GotFocus(object? sender, FocusChangedEventArgs e)

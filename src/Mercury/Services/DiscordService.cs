@@ -14,11 +14,14 @@ public class DiscordService : IDiscordService
     
     public void Initialize()
     {
-        _client.Initialize();
-        _playerService.PositionChanged += _
-            => UpdatePresence();
-        _playerService.CurrentTrackChanged += _
-            => UpdatePresence();
+        if (!_client.IsInitialized)
+        {
+            _client.Initialize();
+            _playerService.PositionChanged += _
+                => UpdatePresence();
+            _playerService.CurrentTrackChanged += _
+                => UpdatePresence();
+        }
     }
     
     private void UpdatePresence()
@@ -65,5 +68,6 @@ public class DiscordService : IDiscordService
     public void OnExit()
     {
         ClearPresence();
+        _client.Deinitialize();
     }
 }

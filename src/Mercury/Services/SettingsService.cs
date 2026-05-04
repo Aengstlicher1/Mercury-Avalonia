@@ -20,9 +20,13 @@ public class SettingsService : ServiceBase, ISettingsService
     
     public SettingsService()
     {
-        _ = Load();
+        _ = InitializeAsync();
     }
     
+    public async Task InitializeAsync()
+    {
+        await Load();
+    }
     
     public async Task Save()
     {
@@ -89,8 +93,8 @@ public class SettingsService : ServiceBase, ISettingsService
         var designTarget = Path.Combine(targetFolder, "design.json");
         if (File.Exists(designTarget))
         {
-            var text = await File.ReadAllTextAsync(playerTarget);
-            PlayerSettings = JsonSerializer.Deserialize<PlayerSettings>(text) ?? PlayerSettings.Default;
+            var text = await File.ReadAllTextAsync(designTarget);
+            DesignSettings = JsonSerializer.Deserialize<DesignSettings>(text) ?? DesignSettings.Default;
         }
     }
     
