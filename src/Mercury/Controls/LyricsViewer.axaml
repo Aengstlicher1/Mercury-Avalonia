@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Mercury.ViewModels"
              xmlns:behaviors="clr-namespace:Mercury.Resources.Behaviors"
+             xmlns:controls="clr-namespace:Mercury.Controls"
              x:DataType="vm:LyricsViewerViewModel"
              x:Class="Mercury.Controls.LyricsViewer">
     <Design.DataContext>

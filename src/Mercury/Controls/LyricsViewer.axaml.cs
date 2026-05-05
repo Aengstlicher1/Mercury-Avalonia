@@ -10,8 +10,7 @@ public partial class LyricsViewer : UserControl
     public LyricsViewer()
     {
         InitializeComponent();
-        DataContext = App.Services.GetRequiredService<LyricsViewerViewModel>();
-        
+        DataContext = App.Services.GetRequiredService<ViewModels.LyricsViewerViewModel>();
         LyricsScroller.AddHandler(
             InputElement.PointerWheelChangedEvent,
             OnLyricsScrollerWheelChanged,
@@ -21,7 +20,7 @@ public partial class LyricsViewer : UserControl
 
     private void OnLyricsScrollerWheelChanged(object? sender, PointerWheelEventArgs e)
     {
-        if (DataContext is LyricsViewerViewModel vm)
+        if (DataContext is ViewModels.LyricsViewerViewModel vm)
             vm.SetAutoScrollCommand.Execute(false);
     }
 }

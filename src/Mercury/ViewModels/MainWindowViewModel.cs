@@ -28,9 +28,10 @@ public partial class MainWindowViewModel : ViewModelBase
                 s != SearchFilter.Episodes &&
                 s != SearchFilter.Profiles
             );
-
+    
     [ObservableProperty]
     public partial Track? CurrentTrack { get; set; }
+    
     [ObservableProperty]
     public partial bool IsPlaying { get; set; }
 
@@ -47,7 +48,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public partial IImage? CurrentBackgroundImage { get; set; }
 
     [ObservableProperty]
-    public partial string SearchText { get; set; } = "";
+    public partial string SearchText { get; set; } = string.Empty;
 
     [ObservableProperty]
     public partial SearchFilter SearchFilter { get; set; } = SearchFilter.All;
@@ -62,9 +63,7 @@ public partial class MainWindowViewModel : ViewModelBase
         NavigationService = App.Services.GetRequiredService<INavigationService>();
         _searchService = App.Services.GetRequiredService<ISearchService>(); 
         _playerService = App.Services.GetRequiredService<IPlayerService>();
-        var discordService = App.Services.GetRequiredService<IDiscordService>();
-        discordService.Initialize();
-
+        
         _playerService.CurrentTrackChanged += track => CurrentTrack = track;
         _playerService.PositionChanged += pos => CurrentTrackPosition = pos;
         _playerService.VolumeChanged += vol => Volume = vol;
@@ -72,11 +71,6 @@ public partial class MainWindowViewModel : ViewModelBase
         _playerService.RepeatStateChanged += state => RepeatState = state;
         RepeatState = _playerService.RepeatState;
         Volume = _playerService.Volume;
-        
-        NavigationService.Register<HomePage, HomePageViewModel>("Home", PackIconMaterialDesignKind.HomeRound, isTab: true);
-        NavigationService.Register<ExplorePage, ExplorePageViewModel>("Explore", PackIconMaterialDesignKind.ExploreRound, isTab: true);
-        NavigationService.Register<SearchPage, SearchPageViewModel>("Search", PackIconMaterialDesignKind.SearchRound, isTab: false);
-        NavigationService.Register<PlayingPage, PlayingPageViewModel>("Playing", PackIconMaterialDesignKind.PlayArrowRound, isTab: false);
     }
     
     private async Task<Bitmap> LoadTrackImageAsync(string url)

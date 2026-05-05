@@ -1,6 +1,9 @@
+// src/Mercury/Services/NavigationService.cs
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -16,7 +19,8 @@ public partial class NavigationService : ServiceBase, INavigationService
     private readonly IServiceProvider _serviceProvider;
     private readonly Dictionary<Type, PageDescriptor> _registry = new();
     private readonly ObservableCollection<PageDescriptor> _tabs = [];
-    private readonly Stack<(Type VmType, Control View)> _backStack = new();
+    
+    private readonly Stack<(Type ViewType, Control View)> _backStack = new();
     private readonly Dictionary<Type, (Control View, object ViewModel)> _pageCache = new();
 
     private Control? _currentView;
@@ -28,6 +32,19 @@ public partial class NavigationService : ServiceBase, INavigationService
     public NavigationService(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
+    }
+
+    private void PushStack(Type viewType, Control view)
+    {
+        _backStack.Push((viewType, view));
+        CanGoBack = _backStack.Count > 0;
+    }
+
+    private (Type ViewType, Control View) PopStack()
+    {
+        var result = _backStack.Pop();
+        CanGoBack = _backStack.Count > 0;
+        return result;
     }
 
     public void SetHost(TransitioningContentControl host) => _host = host;
@@ -49,33 +66,39 @@ public partial class NavigationService : ServiceBase, INavigationService
 
     private PageDescriptor AutoRegister(Type viewType)
     {
-        // HomePage → HomePageViewModel
-        var viewModelTypeName = viewType.FullName!.Replace(".Views.", ".ViewModels.") + "ViewModel";
-        var viewModelType = viewType.Assembly.GetType(viewModelTypeName);
+        var candidates = new[]
+        {
+            viewType.FullName!.Replace(".Views.", ".ViewModels.") + "ViewModel",
+            viewType.FullName!.Replace(".Controls.", ".ViewModels.") + "ViewModel",
+            viewType.FullName! + "ViewModel",
+        };
+
+        var viewModelType = candidates
+            .Select(name => viewType.Assembly.GetType(name))
+            .FirstOrDefault(t => t is not null);
 
         if (viewModelType is null)
             throw new InvalidOperationException(
                 $"Could not auto-resolve ViewModel for '{viewType.Name}'. " +
-                $"Expected '{viewModelTypeName}'. Register it manually instead.");
+                $"Expected one of: {string.Join(", ", candidates)}. Register it manually instead.");
 
-        // Derive a title from the type name: "PlaylistPage" → "Playlist"
         var title = viewType.Name.EndsWith("Page")
             ? viewType.Name[..^4]
             : viewType.Name;
 
         var descriptor = new PageDescriptor(
             Title: title,
-            Icon: PackIconMaterialDesignKind.PagesRound, // default icon
+            Icon: PackIconMaterialDesignKind.PagesRound,
             ViewType: viewType,
             ViewModelType: viewModelType,
             IsTab: false,
-            IsDetail: true// auto-registered pages are never tabs
+            IsDetail: true
         );
 
         _registry[viewType] = descriptor;
         return descriptor;
     }
-    
+
     // ── Navigation ───────────────────────────────────────────────
     public void NavigateTo<TView>(bool slideLeft = false)
         where TView : Control
@@ -99,13 +122,17 @@ public partial class NavigationService : ServiceBase, INavigationService
         if (!_registry.TryGetValue(viewType, out var descriptor))
             descriptor = AutoRegister(viewType);
 
+        if (_currentView is not null && _currentView.GetType() == viewType)
+            return;
+        
         if (_currentView is not null && CurrentDescriptor is not null)
-            _backStack.Push((CurrentDescriptor.ViewType, _currentView));
-
+        {
+            PushStack(CurrentDescriptor.ViewType, _currentView);
+        }
+        
         Control view;
         object viewModel;
 
-        // Cache tab pages, always create fresh detail pages
         if (!descriptor.IsDetail && _pageCache.TryGetValue(viewType, out var cached))
         {
             view = cached.View;
@@ -134,25 +161,26 @@ public partial class NavigationService : ServiceBase, INavigationService
         GoBackInternalCommand.NotifyCanExecuteChanged();
     }
 
-
-
     // ── Back navigation ──────────────────────────────────────────
-    public bool CanGoBack => _backStack.Count > 0;
+    [ObservableProperty]
+    public partial bool CanGoBack { get; set; }
 
     public bool GoBack()
     {
         if (_backStack.Count == 0) return false;
 
-        var (_, prevView) = _backStack.Pop();
+        var (prevViewType, prevView) = PopStack();
 
         if (_host is not null)
         {
             _host.PageTransition = new DirectionalPageSlide(slideLeft: true);
             _host.Content = prevView;
         }
-
+        
         _currentView = prevView;
-        CurrentDescriptor = _registry.GetValueOrDefault(prevView.DataContext?.GetType()!);
+        
+        CurrentDescriptor = _registry.GetValueOrDefault(prevViewType);
+
         GoBackInternalCommand.NotifyCanExecuteChanged();
         return true;
     }
@@ -162,7 +190,7 @@ public partial class NavigationService : ServiceBase, INavigationService
     private void GoBackInternal() => GoBack();
 
     IRelayCommand INavigationService.GoBackCommand => GoBackInternalCommand;
-    
+
     [RelayCommand]
     private void NavigateToDescriptor(PageDescriptor descriptor)
     {
@@ -170,9 +198,6 @@ public partial class NavigationService : ServiceBase, INavigationService
     }
 
     IRelayCommand<PageDescriptor> INavigationService.NavigateToCommand => NavigateToDescriptorCommand;
-    
-    public override void OnExit()
-    {
-        
-    }
+
+    public override void OnExit() { }
 }

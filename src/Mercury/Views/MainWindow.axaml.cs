@@ -21,7 +21,11 @@ public partial class MainWindow : Window
         DataContext = App.Services.GetRequiredService<MainWindowViewModel>();
         
         _ns = App.Services.GetRequiredService<INavigationService>();
-        Loaded += (_ , _) => _ns.SetHost(Navigator);
+        Loaded += (_, _) =>
+        {
+            _ns.SetHost(Navigator);
+            _ns.NavigateTo<HomePage>();
+        };
         Closed += OnClosed;
     }
 

@@ -11,6 +11,6 @@ public partial class QueueViewer : UserControl
     public QueueViewer()
     {
         InitializeComponent();
-        DataContext = App.Services.GetRequiredService<QueueViewerViewModel>();
+        DataContext = App.Services.GetRequiredService<ViewModels.QueueViewerViewModel>();
     }
 }

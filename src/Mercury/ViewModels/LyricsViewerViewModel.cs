@@ -6,7 +6,6 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mercury.Core.Models;
-using Mercury.Resources.Behaviors;
 using Mercury.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -64,7 +63,7 @@ public partial class LyricsViewerViewModel : ViewModelBase
     [RelayCommand]
     private void GoToLine(LyricLine line)
     {
-        if (_currentTrack is not null && LyricLines.Any(l => l.Line == line))
+        if (_currentTrack is not null && Enumerable.Any<LyricLineViewModel>(LyricLines, l => l.Line == line))
         {
             var pos = (line.Timing + TimeSpan.FromMilliseconds(5)) / _currentTrack.DurationTimeSpan;
             if (!_playerService.IsPlaying)

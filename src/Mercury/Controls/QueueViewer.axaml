@@ -7,6 +7,7 @@
              xmlns:behaviors="clr-namespace:Mercury.Resources.Behaviors"
              xmlns:vm="using:Mercury.ViewModels"
              xmlns:cmodels="clr-namespace:Mercury.Core.Models;assembly=Mercury.Core"
+             xmlns:controls="clr-namespace:Mercury.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:QueueViewerViewModel"
              x:Class="Mercury.Controls.QueueViewer">
@@ -44,9 +45,7 @@
                                     <TextBlock.Text>
                                         <MultiBinding Converter="{StaticResource CollectionIndexConverter}">
                                             <Binding Path="."/>
-                                            <Binding ElementName="Queue"
-                                                     Path="((vm:QueueViewerViewModel)DataContext).Queue"
-                                                     x:DataType="vm:ExplorePageViewModel"/>
+                                            <Binding Path="$parent[ItemsControl].((vm:QueueViewerViewModel)DataContext).Queue"/>
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
@@ -67,8 +66,7 @@
                                         <Border.IsVisible>
                                             <MultiBinding Converter="{StaticResource TracksEqualConverter}">
                                                 <Binding Path="."/>
-                                                <Binding ElementName="Queue"
-                                                         Path="((vm:QueueViewerViewModel)DataContext).CurrentTrack"/>
+                                                <Binding Path="$parent[ItemsControl].((vm:QueueViewerViewModel)DataContext).CurrentTrack"/>
                                             </MultiBinding>
                                         </Border.IsVisible>
                                     </Border>
@@ -77,8 +75,12 @@
                                 <StackPanel Grid.Column="2" 
                                             VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Title}"/>
-                                    <TextBlock Text="{Binding Artist}"
-                                               Foreground="{DynamicResource SubTextBrush}"/>
+                                    <Button Content="{Binding Artist}"
+                                            Command="{Binding $parent[ItemsControl].((vm:QueueViewerViewModel)DataContext).NavigateToEntityCommand}"
+                                            CommandParameter="{Binding Artist}"
+                                            Classes="Link"
+                                            HorizontalAlignment="Left"
+                                            Foreground="{DynamicResource SubTextBrush}"/>
                                 </StackPanel>
                             </Grid>
                         </Button>

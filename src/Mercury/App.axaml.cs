@@ -1,10 +1,15 @@
 using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using IconPacks.Avalonia.MaterialDesign;
+using Mercury.Controls;
 using Mercury.Services;
 using Mercury.ViewModels;
 using Mercury.Views;
 using Microsoft.Extensions.DependencyInjection;
+using EntityViewerViewModel = Mercury.ViewModels.EntityViewerViewModel;
+using LyricsViewerViewModel = Mercury.ViewModels.LyricsViewerViewModel;
+using QueueViewerViewModel = Mercury.ViewModels.QueueViewerViewModel;
 
 
 namespace Mercury;
@@ -46,6 +51,10 @@ public partial class App : Application
         services.AddTransient<ViewModelBase>(sp => sp.GetRequiredService<LyricsViewerViewModel>());
         services.AddTransient<QueueViewerViewModel>();
         services.AddTransient<ViewModelBase>(sp => sp.GetRequiredService<QueueViewerViewModel>());
+        services.AddTransient<EntityViewerViewModel>();
+        services.AddTransient<ViewModelBase>(sp => sp.GetRequiredService<EntityViewerViewModel>());
+        services.AddTransient<PlaylistViewerViewModel>();
+        services.AddTransient<ViewModelBase>(sp => sp.GetRequiredService<PlaylistViewerViewModel>());
 
         // Register Views
         services.AddTransient<MainWindow>();
@@ -53,6 +62,8 @@ public partial class App : Application
         services.AddTransient<ExplorePage>();
         services.AddTransient<SearchPage>();
         services.AddTransient<PlayingPage>();
+        services.AddTransient<EntityViewer>();
+        services.AddTransient<PlaylistViewer>();
 
         Services = services.BuildServiceProvider();
 
@@ -61,6 +72,16 @@ public partial class App : Application
             desktop.MainWindow = Services.GetRequiredService<MainWindow>();
         }
 
+        /* Initialization */
+        var nav = Services.GetRequiredService<INavigationService>();
+        nav.Register<HomePage, HomePageViewModel>("Home", PackIconMaterialDesignKind.HomeRound, isTab: true);
+        nav.Register<ExplorePage, ExplorePageViewModel>("Explore", PackIconMaterialDesignKind.ExploreRound, isTab: true);
+        nav.Register<SearchPage, SearchPageViewModel>("Search", PackIconMaterialDesignKind.SearchRound, isTab: false);
+        nav.Register<PlayingPage, PlayingPageViewModel>("Playing", PackIconMaterialDesignKind.PlayArrowRound, isTab: false);
+        
+        var discordService = Services.GetRequiredService<IDiscordService>();
+        discordService.Initialize();
+        
         base.OnFrameworkInitializationCompleted();
     }
 }

@@ -260,7 +260,8 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
             {
                 CurrentQueue.Add(track);
             }
-            
+
+            RepeatState = RepeatState.RepeatAll;
             await BaseSetTrack(playlistInfo.Tracks.First(), autoPlay, cToken);
             
             CurrentPlaylist = playlist;
