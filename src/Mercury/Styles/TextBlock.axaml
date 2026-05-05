@@ -8,5 +8,7 @@
 
     <Style Selector="TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+        <Setter Property="TextWrapping" Value="NoWrap"/>
     </Style>
 </Styles>

@@ -6,16 +6,33 @@
         </Border>
     </Design.PreviewWith>
 
+    <!-- Base Button -->
     <Style Selector="Button">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Padding" Value="8"/>
         <Setter Property="CornerRadius" Value="8"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
     </Style>
-    <Style Selector="Button:pointerover">
+    <Style Selector="Button:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
+    </Style>
+    
+    
+    <!-- Link Button -->
+    <Style Selector="Button.Link">
+        <Setter Property="Padding" Value="2"/>
+        <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+    
+    <Style Selector="Button.Link:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+    </Style>
+    
+    <Style Selector="Button.Link:pressed">
+        <Setter Property="Foreground" Value="{DynamicResource SubTextBrush}"/>
     </Style>
 </Styles>

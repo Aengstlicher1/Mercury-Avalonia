@@ -6,7 +6,7 @@
     <Color x:Key="SubSurfaceColor">#62c7c8ce</Color>
     <Color x:Key="SurfaceItemColor">#ffffff</Color>
     <Color x:Key="OutlineColor">#c4c4cc</Color>
-    <Color x:Key="HoverColor">#14000000</Color>
+    <Color x:Key="HoverColor">#10000000</Color>
     <Color x:Key="SelectedColor">#3a72e1</Color>
     <Color x:Key="TextColor">#494c40</Color>
     <Color x:Key="SubTextColor">#a2a7a1</Color>
