@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Mercury.Controls;
 using Mercury.Core;
 using Mercury.Core.Models;
 using Mercury.Models;
@@ -96,5 +97,12 @@ public partial class SearchPageViewModel : ViewModelBase
         // Don't wait to keep UI responsive and active
         _ = _ps.SetPlaylist(playlist);
         _ps.RepeatState = RepeatState.RepeatAll;
+    }
+
+    [RelayCommand]
+    private void EnterPlaylist(Playlist playlist)
+    {
+        var nav = App.Services.GetRequiredService<INavigationService>();
+        nav.NavigateTo<PlaylistViewer, PlaylistNavParameter>(new PlaylistNavParameter(playlist));
     }
 }

@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mercury.Controls;
 using Mercury.Core.Models;
-using Mercury.Models.NavigationParameters;
+using Mercury.Models;
 using Mercury.Services;
 using Microsoft.Extensions.DependencyInjection;
 

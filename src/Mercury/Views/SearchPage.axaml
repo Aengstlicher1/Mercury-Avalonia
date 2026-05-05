@@ -67,7 +67,7 @@
                                                TextWrapping="NoWrap"
                                                Foreground="{DynamicResource TextBrush}">
                                     </TextBlock>
-                                    <TextBlock Text="{Binding Artist}"
+                                    <TextBlock Text="{Binding Artist.Name}"
                                                FontSize="12"
                                                TextTrimming="CharacterEllipsis"
                                                TextWrapping="NoWrap"
@@ -128,7 +128,7 @@
                                                TextTrimming="WordEllipsis"
                                                TextWrapping="NoWrap"
                                                Foreground="{DynamicResource TextBrush}"/>
-                                    <TextBlock Text="{Binding Artist}"
+                                    <TextBlock Text="{Binding Artist.Name}"
                                                FontSize="12"
                                                TextTrimming="CharacterEllipsis"
                                                TextWrapping="NoWrap"
@@ -190,7 +190,7 @@
                                                TextTrimming="WordEllipsis"
                                                TextWrapping="NoWrap"
                                                Foreground="{DynamicResource TextBrush}"/>
-                                    <TextBlock Text="{Binding Artist}"
+                                    <TextBlock Text="{Binding Artist.Name}"
                                                FontSize="12"
                                                TextTrimming="CharacterEllipsis"
                                                TextWrapping="NoWrap"
@@ -220,25 +220,26 @@
                                 HorizontalAlignment="Stretch"
                                 HorizontalContentAlignment="Stretch"
                                 VerticalContentAlignment="Stretch"
-                                Command="{Binding $parent[ItemsControl].((vm:SearchPageViewModel)DataContext).PlayPlaylistCommand}"
+                                Command="{Binding $parent[ItemsControl].((vm:SearchPageViewModel)DataContext).EnterPlaylistCommand}"
                                 CommandParameter="{Binding .}">
                             <Grid ColumnDefinitions="Auto, *, Auto">
-                                <Border Grid.Column="0" 
+                                <Button Grid.Column="0"
                                         VerticalAlignment="Stretch"
+                                        Padding="0"
                                         Margin="8"
                                         Width="{Binding $self.Bounds.Height}"
+                                        Command="{Binding $parent[ItemsControl].((vm:SearchPageViewModel)DataContext).PlayPlaylistCommand}"
+                                        CommandParameter="{Binding .}"
                                         CornerRadius="8">
-                                    <Border.Background>
-                                        <ImageBrush Stretch="UniformToFill" imageLoader:ImageBrushLoader.Source="{Binding Thumbnails.LowestRes.Url}" />
-                                    </Border.Background>
-                                </Border>
+                                        <Image Stretch="UniformToFill" imageLoader:ImageLoader.Source="{Binding Thumbnails.LowestRes.Url}" />
+                                </Button>
                                 <StackPanel Grid.Column="1" Margin="4,0" HorizontalAlignment="Left" VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Title}"
                                                FontSize="16"
                                                TextTrimming="WordEllipsis"
                                                TextWrapping="NoWrap"
                                                Foreground="{DynamicResource TextBrush}"/>
-                                    <TextBlock Text="{Binding Artist}"
+                                    <TextBlock Text="{Binding Artist.Name}"
                                                FontSize="12"
                                                TextTrimming="CharacterEllipsis"
                                                TextWrapping="NoWrap"
@@ -276,7 +277,7 @@
                                                TextTrimming="WordEllipsis"
                                                TextWrapping="NoWrap"
                                                Foreground="{DynamicResource TextBrush}"/>
-                                    <TextBlock Text="{Binding Artist}"
+                                    <TextBlock Text="{Binding Artist.Name}"
                                                FontSize="12"
                                                TextTrimming="CharacterEllipsis"
                                                TextWrapping="NoWrap"

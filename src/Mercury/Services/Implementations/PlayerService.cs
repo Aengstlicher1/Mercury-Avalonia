@@ -1,6 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -249,11 +251,19 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     }
 
 
-    public async Task SetPlaylist(Playlist playlist, bool autoPlay, CancellationToken cToken = default)
+    public async Task SetPlaylist(Playlist playlist, bool autoPlay = true, CancellationToken cToken = default)
     {
         var mediaInfo = await YoutubeMusic.Browse.GetInfoAsync(playlist, cToken);
 
-        if (mediaInfo is PlaylistInfo playlistInfo && playlistInfo.TracksCount > 0)
+        if (mediaInfo is PlaylistInfo playlistInfo)
+        {
+            await SetPlaylist(playlistInfo, autoPlay, cToken);
+        }
+    }
+
+    public async Task SetPlaylist(PlaylistInfo playlistInfo, bool autoPlay, CancellationToken cToken = default)
+    {
+        if (playlistInfo.TracksCount > 0)
         {
             CurrentQueue.Clear();
             foreach (var track in playlistInfo.Tracks)
@@ -264,7 +274,7 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
             RepeatState = RepeatState.RepeatAll;
             await BaseSetTrack(playlistInfo.Tracks.First(), autoPlay, cToken);
             
-            CurrentPlaylist = playlist;
+            CurrentPlaylist = playlistInfo.Base;
         }
     }
     

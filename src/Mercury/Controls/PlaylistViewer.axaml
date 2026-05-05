@@ -2,7 +2,93 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:cmodels="clr-namespace:Mercury.Core.Models;assembly=Mercury.Core"
+             xmlns:behaviors="clr-namespace:Mercury.Resources.Behaviors"
+             xmlns:imageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:vm="clr-namespace:Mercury.ViewModels"
+             xmlns:icon="https://github.com/MahApps/IconPacks.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Mercury.Controls.PlaylistViewer">
-    Welcome to Avalonia!
+             x:Class="Mercury.Controls.PlaylistViewer"
+             x:DataType="vm:PlaylistViewerViewModel">
+    <Design.DataContext>
+        <vm:PlaylistViewerViewModel/>
+    </Design.DataContext>
+    
+    <Grid ColumnDefinitions="240, *">
+        <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+            <Image imageLoader:ImageLoader.Source="{Binding Info.Base.Thumbnails.HighestRes.Url}"
+                   Height="{Binding $self.Bounds.Width}"
+                   Stretch="UniformToFill"/>
+            <TextBlock Text="{Binding Info.Base.Title}"/>
+            <TextBlock Text="{Binding Info.Base.Artist.Name}"/>
+        </StackPanel>
+        
+        <ScrollViewer Grid.Column="1" behaviors:SmoothScrollBehavior.IsEnabled="True">
+            <ItemsControl ItemsSource="{Binding Info.Tracks}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="cmodels:Track" x:DataType="cmodels:Track">
+                        <Button
+                            Height="48"
+                            HorizontalAlignment="Stretch"
+                            VerticalContentAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
+                            Command="{Binding $parent[ItemsControl].((vm:PlaylistViewerViewModel)DataContext).PlayTrackCommand}"
+                            CommandParameter="{Binding .}">
+                            <Grid ColumnDefinitions="Auto, Auto, *, Auto">
+                                <TextBlock Grid.Column="0"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,8,0">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource CollectionIndexConverter}">
+                                            <Binding Path="."/>
+                                            <Binding Path="$parent[ItemsControl].((vm:PlaylistViewerViewModel)DataContext).Info.Tracks"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                
+                                <Panel Grid.Column="1"
+                                       Width="{Binding $self.Bounds.Height}"
+                                       Margin="0,0,8,0">
+                                    <Border CornerRadius="8" ClipToBounds="True">
+                                        <Image imageLoader:ImageLoader.Source="{Binding Thumbnails.LowestRes.Url}"
+                                               Stretch="UniformToFill"/>
+                                    </Border>
+                                    <Border Background="{DynamicResource HoverBrush}"
+                                            CornerRadius="8">
+                                        <icon:PackIconMaterialDesign Kind="PlayArrowRound"
+                                                                     Width="16"
+                                                                     Height="16"
+                                                                     Foreground="{DynamicResource SurfaceBrush}"/>
+                                        <Border.IsVisible>
+                                            <MultiBinding Converter="{StaticResource TracksEqualConverter}">
+                                                <Binding Path="."/>
+                                                <Binding Path="$parent[ItemsControl].((vm:PlaylistViewerViewModel)DataContext).CurrentTrack"/>
+                                            </MultiBinding>
+                                        </Border.IsVisible>
+                                    </Border>
+                                </Panel>
+                                
+                                <StackPanel Grid.Column="2" 
+                                            VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Title}"/>
+                                    <Button Content="{Binding Artist.Name}"
+                                            Command="{Binding $parent[ItemsControl].((vm:PlaylistViewerViewModel)DataContext).NavigateToEntityCommand}"
+                                            CommandParameter="{Binding Artist}"
+                                            Classes="Link"
+                                            HorizontalAlignment="Left"
+                                            Foreground="{DynamicResource SubTextBrush}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+    
 </UserControl>

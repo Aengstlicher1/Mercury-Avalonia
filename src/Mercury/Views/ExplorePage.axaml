@@ -55,7 +55,7 @@
                                                    TextTrimming="CharacterEllipsis"
                                                    TextWrapping="NoWrap"
                                                    FontSize="18"/>
-                                        <TextBlock Text="{Binding Artist}"
+                                        <TextBlock Text="{Binding Artist.Name}"
                                                    TextTrimming="CharacterEllipsis"
                                                    TextWrapping="NoWrap"
                                                    Foreground="{DynamicResource SubTextBrush}"
@@ -168,7 +168,7 @@
                                         <TextBlock Text="{Binding Title}"
                                                    TextTrimming="CharacterEllipsis"
                                                    FontSize="20"/>
-                                        <TextBlock Text="{Binding Artist}"
+                                        <TextBlock Text="{Binding Artist.Name}"
                                                    TextTrimming="CharacterEllipsis"
                                                    Foreground="{DynamicResource SubTextBrush}"
                                                    FontSize="16"/>

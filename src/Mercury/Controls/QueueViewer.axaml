@@ -75,9 +75,9 @@
                                 <StackPanel Grid.Column="2" 
                                             VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Title}"/>
-                                    <Button Content="{Binding Artist}"
+                                    <Button Content="{Binding Artist.Name}"
                                             Command="{Binding $parent[ItemsControl].((vm:QueueViewerViewModel)DataContext).NavigateToEntityCommand}"
-                                            CommandParameter="{Binding Artist}"
+                                            CommandParameter="{Binding Artist.Name}"
                                             Classes="Link"
                                             HorizontalAlignment="Left"
                                             Foreground="{DynamicResource SubTextBrush}"/>
