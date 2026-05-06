@@ -38,9 +38,11 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
     {
         Directory.CreateDirectory(ThemesDir);
 
-        var defaultsSrc = Path.Combine(AppContext.BaseDirectory, "Themes");
-        if (Directory.Exists(defaultsSrc))
-            DirectoryHelper.CopyAll(defaultsSrc, ThemesDir);
+        var defaultThemes = Path.Combine(AppContext.BaseDirectory, "Themes");
+        if (Directory.Exists(defaultThemes))
+            /* Installing all default themes */
+            DirectoryHelper.CopyAll(defaultThemes, ThemesDir);
+            
 
         var found = new List<UiTheme>();
         foreach (var dir in Directory.EnumerateDirectories(ThemesDir))

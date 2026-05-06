@@ -1,0 +1,28 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Color x:Key="WindowSurfaceColor">#f6f8fa</Color>
+    <Color x:Key="SurfaceColor">#ffffff</Color>
+    <Color x:Key="SurfaceHighlightColor">#0f0044ff</Color>
+    <Color x:Key="SubSurfaceColor">#f6f8fa</Color>
+    <Color x:Key="SurfaceItemColor">#1100001e</Color>
+    <Color x:Key="OutlineColor">#d1d9e0</Color>
+    <Color x:Key="OutlineHighlightColor">#a7d8ff</Color>
+    <Color x:Key="HoverColor">#0c000024</Color>
+    <Color x:Key="SelectedColor">#0969da</Color>
+    <Color x:Key="TextColor">#1f2328</Color>
+    <Color x:Key="SubTextColor">#59636e</Color>
+    
+    
+    <SolidColorBrush x:Key="WindowSurfaceBrush" Color="{StaticResource WindowSurfaceColor}"/>
+    <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
+    <SolidColorBrush x:Key="SurfaceHighlightBrush" Color="{StaticResource SurfaceHighlightColor}"/>
+    <SolidColorBrush x:Key="SubSurfaceBrush" Color="{StaticResource SubSurfaceColor}"/>
+    <SolidColorBrush x:Key="SurfaceItemBrush" Color="{StaticResource SurfaceItemColor}"/>
+    <SolidColorBrush x:Key="OutlineBrush" Color="{StaticResource OutlineColor}"/>
+    <SolidColorBrush x:Key="OutlineHighlightBrush" Color="{StaticResource OutlineHighlightColor}"/>
+    <SolidColorBrush x:Key="HoverBrush" Color="{StaticResource HoverColor}"/>
+    <SolidColorBrush x:Key="SelectedBrush" Color="{StaticResource SelectedColor}"/>
+    <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}"/>
+    <SolidColorBrush x:Key="SubTextBrush" Color="{StaticResource SubTextColor}"/>
+</ResourceDictionary>

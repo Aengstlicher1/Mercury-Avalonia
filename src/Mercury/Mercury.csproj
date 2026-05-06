@@ -54,12 +54,16 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="Themes\Default\Assets\**\*"
+        <Content Include="Themes\**\Assets\**\*"
+                 Exclude="Themes\Template\**\*"
                  CopyToOutputDirectory="PreserveNewest" />
-        <Content Include="Themes\Default\theme.json"
+        <Content Include="Themes\**\theme.json"
+                 Exclude="Themes\Template\**\*"
                  CopyToOutputDirectory="PreserveNewest" />
-        <AvaloniaXaml Include="Themes\Default\**\*.axaml" />
-        <Content Include="Themes\Default\**\*.axaml"
+        <AvaloniaXaml Include="Themes\**\*.axaml"
+                      Exclude="Themes\Template\**\*" />
+        <Content Include="Themes\**\*.axaml"
+                 Exclude="Themes\Template\**\*"
                  CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 </Project>
