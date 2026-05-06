@@ -20,12 +20,13 @@ Mercury is a native music player that lets you search, stream, and enjoy music f
 
 ## Features
 
-- **Search & Stream** — Find and play any song, album, artist, or playlist from YouTube Music
-- **Synchronized Lyrics** — Follow along with real-time synced lyrics as the music plays
-- **Queue & Playback Controls** — Build your queue, shuffle, repeat, skip, and seek
-- **Home Feed** — Browse recommended and trending music right from the home page
-- **Cross-Platform** — One app for Windows, macOS, and Linux
-- **Native** — No Electron, no WebView — just a fast native desktop app
+- **Search & Stream** - Find and play any song, album, artist, or playlist from YouTube Music
+- **Synchronized Lyrics** - Follow along with real-time synced lyrics as the music plays
+- **Queue & Playback Controls** - Build your queue, shuffle, repeat, skip, and seek
+- **Home Feed** - Browse recommended and trending music right from the home page
+- **Cross-Platform** - One app for Windows, macOS, and Linux
+- **Native** - No Electron, no WebView, just a fast native desktop app
+- **UserThemes** - Fully Customizable theme support that can be installed and then used Instantly without needing to restart!
 
 ## Screenshots
 
