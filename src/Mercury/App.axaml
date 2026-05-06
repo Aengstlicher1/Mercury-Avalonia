@@ -21,11 +21,11 @@
                     <converters:TracksEqualConverter x:Key="TracksEqualConverter"/>
                     
                     <ResourceDictionary.ThemeDictionaries>
-                        <ResourceInclude x:Key="Light" Source="Resources/Colors Light.axaml"/>
-                        <ResourceInclude x:Key="Dark" Source="Resources/Colors Dark.axaml"/>
+                        <ResourceInclude x:Key="Light" Source="Themes/Default/Colors Light.axaml"/>
+                        <ResourceInclude x:Key="Dark" Source="Themes/Default/Colors Dark.axaml"/>
                     </ResourceDictionary.ThemeDictionaries>
                 </ResourceDictionary>
-                <ResourceInclude Source="Resources/WindowDrawnDecorations.axaml"/>
+                <ResourceInclude Source="Themes/Default/Resources/WindowDrawnDecorations.axaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
@@ -34,9 +34,9 @@
         <semi:SemiTheme />
         <StyleInclude Source="avares://IconPacks.Avalonia.MaterialDesign/MaterialDesign.axaml" />
         
-        <StyleInclude Source="Styles/Button.axaml"/>
-        <StyleInclude Source="Styles/TextBlock.axaml"/>
-        <StyleInclude Source="Styles/MaterialDesignIcon.axaml"/>
+        <StyleInclude Source="Themes/Default/Styles/Button.axaml"/>
+        <StyleInclude Source="Themes/Default/Styles/TextBlock.axaml"/>
+        <StyleInclude Source="Themes/Default/Styles/MaterialDesignIcon.axaml"/>
     </Application.Styles>
              
     

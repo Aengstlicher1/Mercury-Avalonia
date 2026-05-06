@@ -10,6 +10,7 @@ using Mercury.Core;
 using Mercury.Core.Models;
 using Mercury.Models;
 using Mercury.Services;
+using Mercury.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Mercury.ViewModels;

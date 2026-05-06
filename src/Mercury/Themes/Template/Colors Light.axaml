@@ -1,7 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
-    <Color x:Key="WindowSurfaceColor">#f1f2f7</Color>
+    <Color x:Key="WindowSurfaceColor">#ff0000</Color>
     <Color x:Key="SurfaceColor">#e7e8ee</Color>
     <Color x:Key="SubSurfaceColor">#62c7c8ce</Color>
     <Color x:Key="SurfaceItemColor">#ffffff</Color>

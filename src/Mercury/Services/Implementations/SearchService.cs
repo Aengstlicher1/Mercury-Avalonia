@@ -1,6 +1,7 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mercury.Core.Models;
+using Mercury.Services.Interfaces;
 
 namespace Mercury.Services;
 

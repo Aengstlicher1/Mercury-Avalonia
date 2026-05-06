@@ -1,13 +1,13 @@
 using System.Threading.Tasks;
 using Mercury.Models;
 
-namespace Mercury.Services;
+namespace Mercury.Services.Interfaces;
 
 public interface ISettingsService : IServiceBase
 {
     PlayerSettings PlayerSettings { get; }
     DesignSettings DesignSettings { get; }
     
-    Task Save();
-    Task Load();
+    void Save();
+    void Load();
 }

@@ -1,8 +1,7 @@
 using System;
-using CommunityToolkit.Mvvm.ComponentModel;
 using Mercury.Core.Models;
 
-namespace Mercury.Services;
+namespace Mercury.Services.Interfaces;
 
 public interface ISearchService : IServiceBase
 {

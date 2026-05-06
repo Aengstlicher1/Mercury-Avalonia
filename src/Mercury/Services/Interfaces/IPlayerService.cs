@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Mercury.Core.Models;
 using Mercury.Models;
 
-namespace Mercury.Services;
+namespace Mercury.Services.Interfaces;
 
 public interface IPlayerService : IServiceBase
 {

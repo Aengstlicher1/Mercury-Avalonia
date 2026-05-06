@@ -11,6 +11,7 @@ using IconPacks.Avalonia.MaterialDesign;
 using Mercury.Core.Models;
 using Mercury.Models;
 using Mercury.Services;
+using Mercury.Services.Interfaces;
 using Mercury.Views;
 using Microsoft.Extensions.DependencyInjection;
 using static System.Enum;

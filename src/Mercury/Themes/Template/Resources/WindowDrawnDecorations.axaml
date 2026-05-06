@@ -1,0 +1,50 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:icon="clr-namespace:IconPacks.Avalonia.MaterialDesign;assembly=IconPacks.Avalonia.MaterialDesign">
+
+    <ControlTheme x:Key="CaptionButton" TargetType="Button">
+        <Setter Property="WindowDecorationProperties.ElementRole" Value="DecorationsElement" />
+    </ControlTheme>
+    
+    <ControlTheme x:Key="{x:Type WindowDrawnDecorations}" TargetType="WindowDrawnDecorations">
+        <Setter Property="Template">
+            <WindowDrawnDecorationsTemplate>
+                <WindowDrawnDecorationsContent>
+                    <WindowDrawnDecorationsContent.Underlay>
+                        <Panel WindowDecorationProperties.ElementRole="TitleBar"/>
+                    </WindowDrawnDecorationsContent.Underlay>
+                    <WindowDrawnDecorationsContent.Overlay>
+                        <Grid RowDefinitions="64, *">
+                            <StackPanel
+                                Grid.Row="0"
+                                Height="32"
+                                Margin="12"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Orientation="Horizontal">
+                                <Button
+                                    Name="PART_MinimizeButton"
+                                    Theme="{StaticResource CaptionButton}"
+                                    Content="{icon:MaterialDesign Kind=RemoveRound}"
+                                    Width="32" Height="32"
+                                    WindowDecorationProperties.ElementRole="MinimizeButton" />
+                                <Button
+                                    Name="PART_MaximizeButton"
+                                    Theme="{StaticResource CaptionButton}"
+                                    Content="{icon:MaterialDesign Kind=FullscreenRound}"
+                                    Width="32" Height="32"
+                                    WindowDecorationProperties.ElementRole="MaximizeButton" />
+                                <Button
+                                    Name="PART_CloseButton"
+                                    Theme="{StaticResource CaptionButton}"
+                                    Content="{icon:MaterialDesign Kind=CloseRound}"
+                                    Width="32" Height="32"
+                                    WindowDecorationProperties.ElementRole="CloseButton" />
+                            </StackPanel>
+                        </Grid>
+                    </WindowDrawnDecorationsContent.Overlay>
+                </WindowDrawnDecorationsContent>
+            </WindowDrawnDecorationsTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

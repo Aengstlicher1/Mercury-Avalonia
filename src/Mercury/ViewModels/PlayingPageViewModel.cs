@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mercury.Core.Models;
 using Mercury.Services;
+using Mercury.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Mercury.ViewModels;

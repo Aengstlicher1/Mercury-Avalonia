@@ -14,26 +14,27 @@
 
     <ItemGroup>
         <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.7.1-nightly.0.2" />
-        <PackageReference Include="Avalonia" Version="12.0.1" />
+        <PackageReference Include="Avalonia" Version="12.0.2" />
         <PackageReference Include="Avalonia.Angle.Windows.Natives" Version="2.1.25547.20250602" />
         <PackageReference Include="Avalonia.BuildServices" Version="11.3.2">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Avalonia.Controls.ColorPicker" Version="12.0.1" />
-        <PackageReference Include="Avalonia.Desktop" Version="12.0.1" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.1" />
+        <PackageReference Include="Avalonia.Controls.ColorPicker" Version="12.0.2" />
+        <PackageReference Include="Avalonia.Desktop" Version="12.0.2" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.2" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Include="Avalonia.Diagnostics" Version="11.3.13">
             <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Avalonia.FreeDesktop" Version="12.0.1" />
-        <PackageReference Include="Avalonia.Native" Version="12.0.1" />
-        <PackageReference Include="Avalonia.Remote.Protocol" Version="12.0.1" />
-        <PackageReference Include="Avalonia.Skia" Version="12.0.1" />
-        <PackageReference Include="Avalonia.Win32" Version="12.0.1" />
-        <PackageReference Include="Avalonia.X11" Version="12.0.1" />
+        <PackageReference Include="Avalonia.FreeDesktop" Version="12.0.2" />
+        <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="12.0.2" />
+        <PackageReference Include="Avalonia.Native" Version="12.0.2" />
+        <PackageReference Include="Avalonia.Remote.Protocol" Version="12.0.2" />
+        <PackageReference Include="Avalonia.Skia" Version="12.0.2" />
+        <PackageReference Include="Avalonia.Win32" Version="12.0.2" />
+        <PackageReference Include="Avalonia.X11" Version="12.0.2" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
         <PackageReference Include="DiscordRichPresence" Version="1.6.1.70" />
         <PackageReference Include="LibVLCSharp" Version="3.9.6" />
@@ -46,5 +47,44 @@
     <ItemGroup>
       <ProjectReference Include="..\Core\src\Mercury.Core\Mercury.Core.csproj" />
       <ProjectReference Include="..\IconPacks.Avalonia\IconPacks.Avalonia.MaterialDesign\IconPacks.Avalonia.MaterialDesign.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Themes\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Themes\Default\Assets\preview.png" />
+      <Content Include="Themes\Default\Assets\preview.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <AvaloniaXaml Remove="Themes\Default\Resources\WindowDrawnDecorations.axaml" />
+      <Content Include="Themes\Default\Resources\WindowDrawnDecorations.axaml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <AvaloniaXaml Remove="Themes\Default\Styles\Button.axaml" />
+      <Content Include="Themes\Default\Styles\Button.axaml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <AvaloniaXaml Remove="Themes\Default\Styles\MaterialDesignIcon.axaml" />
+      <Content Include="Themes\Default\Styles\MaterialDesignIcon.axaml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <AvaloniaXaml Remove="Themes\Default\Styles\TextBlock.axaml" />
+      <Content Include="Themes\Default\Styles\TextBlock.axaml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <AvaloniaXaml Remove="Themes\Default\Colors Dark.axaml" />
+      <Content Include="Themes\Default\Colors Dark.axaml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <AvaloniaXaml Remove="Themes\Default\Colors Light.axaml" />
+      <Content Include="Themes\Default\Colors Light.axaml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Themes\Default\theme.json" />
+      <Content Include="Themes\Default\theme.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 </Project>

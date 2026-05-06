@@ -1,6 +1,4 @@
-using System;
-
-namespace Mercury.Services;
+namespace Mercury.Services.Interfaces;
 
 public interface IDiscordService : IServiceBase
 {

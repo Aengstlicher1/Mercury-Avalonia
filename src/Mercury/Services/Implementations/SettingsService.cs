@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Mercury.Core;
 using Mercury.Core.Models;
 using Mercury.Models;
+using Mercury.Services.Interfaces;
 
 namespace Mercury.Services;
 
@@ -20,15 +21,10 @@ public class SettingsService : ServiceBase, ISettingsService
     
     public SettingsService()
     {
-        _ = InitializeAsync();
+        Load();
     }
     
-    public async Task InitializeAsync()
-    {
-        await Load();
-    }
-    
-    public async Task Save()
+    public void Save()
     {
         string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         string targetFolder = Path.Combine(appData, "Mercury");
@@ -39,13 +35,13 @@ public class SettingsService : ServiceBase, ISettingsService
         var options = new JsonSerializerOptions { WriteIndented = true };
 
         string playerJson = JsonSerializer.Serialize(PlayerSettings.AsJson(), options);
-        await File.WriteAllTextAsync(Path.Combine(targetFolder, "player.json"), playerJson);
+        File.WriteAllText(Path.Combine(targetFolder, "player.json"), playerJson);
 
         string designJson = JsonSerializer.Serialize(DesignSettings, options);
-        await File.WriteAllTextAsync(Path.Combine(targetFolder, "design.json"), designJson);
+        File.WriteAllText(Path.Combine(targetFolder, "design.json"), designJson);
     }
 
-    public async Task Load()
+    public void Load()
     {
         string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         string targetFolder = Path.Combine(appData, "Mercury");
@@ -56,7 +52,7 @@ public class SettingsService : ServiceBase, ISettingsService
         var playerTarget = Path.Combine(targetFolder, "player.json");
         if (File.Exists(playerTarget))
         {
-            var text = await File.ReadAllTextAsync(playerTarget);
+            var text = File.ReadAllText(playerTarget);
             var json = JsonSerializer.Deserialize<JsonPlayerSettings>(text);
 
             if (json != null)
@@ -66,13 +62,13 @@ public class SettingsService : ServiceBase, ISettingsService
 
                 if (!string.IsNullOrWhiteSpace(json.LastTrackId))
                 {
-                    var lastTrack = await YoutubeMusic.Browse.GetAsync(json.LastTrackId);
+                    var lastTrack = YoutubeMusic.Browse.GetAsync(json.LastTrackId).GetAwaiter().GetResult();
                     PlayerSettings.LastTrack = lastTrack as Track;
                 }
 
                 if (!string.IsNullOrWhiteSpace(json.LastPlaylistId))
                 {
-                    var lastPlaylist = await YoutubeMusic.Browse.GetAsync(json.LastPlaylistId);
+                    var lastPlaylist = YoutubeMusic.Browse.GetAsync(json.LastPlaylistId).GetAwaiter().GetResult();
                     PlayerSettings.LastPlaylist = lastPlaylist as Playlist;
                 }
 
@@ -81,7 +77,7 @@ public class SettingsService : ServiceBase, ISettingsService
                     Collection<Track> queue = [];
                     foreach (var id in json.QueueIds)
                     {
-                        var queueItem = await YoutubeMusic.Browse.GetAsync(id);
+                        var queueItem = YoutubeMusic.Browse.GetAsync(id).GetAwaiter().GetResult();
                         if (queueItem is Track track) queue.Add(track);
                     }
                 
@@ -93,8 +89,14 @@ public class SettingsService : ServiceBase, ISettingsService
         var designTarget = Path.Combine(targetFolder, "design.json");
         if (File.Exists(designTarget))
         {
-            var text = await File.ReadAllTextAsync(designTarget);
-            DesignSettings = JsonSerializer.Deserialize<DesignSettings>(text) ?? DesignSettings.Default;
+            var text = File.ReadAllText(designTarget);
+            var json = JsonSerializer.Deserialize<DesignSettings>(text);
+
+            if (json != null)
+            {
+                DesignSettings.SystemTheme = json.SystemTheme;
+                DesignSettings.UserThemeId = json.UserThemeId;
+            }
         }
     }
     

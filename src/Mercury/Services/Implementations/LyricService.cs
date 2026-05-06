@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mercury.Core;
 using Mercury.Core.Models;
+using Mercury.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Mercury.Services;

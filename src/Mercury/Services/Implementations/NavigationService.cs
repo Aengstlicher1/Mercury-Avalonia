@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using IconPacks.Avalonia.MaterialDesign;
 using Mercury.Models;
 using Mercury.Resources;
+using Mercury.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Mercury.Services;

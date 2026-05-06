@@ -1,7 +1,7 @@
 using System;
 using Mercury.Core.Models;
 
-namespace Mercury.Services;
+namespace Mercury.Services.Interfaces;
 
 public interface ILyricService : IServiceBase
 {

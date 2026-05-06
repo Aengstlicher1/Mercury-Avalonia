@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using IconPacks.Avalonia.MaterialDesign;
 using Mercury.Models;
 
-namespace Mercury.Services;
+namespace Mercury.Services.Interfaces;
 
 public interface INavigationService : IServiceBase
 {

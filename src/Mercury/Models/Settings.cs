@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mercury.Core.Models;
-using Microsoft.VisualBasic;
 
 namespace Mercury.Models;
 
@@ -66,7 +64,8 @@ internal class JsonPlayerSettings
 
 public class DesignSettings
 {
-    public SystemTheme Theme { get; set; } = SystemTheme.UseSystemTheme;
+    public SystemTheme SystemTheme { get; set; } = SystemTheme.UseSystemTheme;
+    public string UserThemeId { get; set; } = UiTheme.Default.Manifest.Id;
     
     public static readonly DesignSettings Default = new DesignSettings();
 }

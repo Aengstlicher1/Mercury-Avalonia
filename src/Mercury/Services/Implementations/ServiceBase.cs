@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using Mercury.Services.Interfaces;
 
 namespace Mercury.Services;
 
