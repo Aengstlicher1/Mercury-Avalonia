@@ -24,11 +24,28 @@ public class UiTheme(ThemeManifest manifest, string folderName)
     public static readonly UiTheme Default = new(
         new ThemeManifest
         {
-            Id = "com.mercury.template",
+            Id = "com.mercury.default",
             Name = "Default",
             Author = "Mercury",
             Version = new Version(1, 0, 0),
-            SupportedThemes = new[] { "Light", "Dark" }
+            SupportedThemes = 
+            [
+                "Light", 
+                "Dark"
+            ],
+            LightPath = "Colors.Light.axaml",
+            DarkPath = "Colors.Dark.axaml",
+            StylesPaths = 
+            [
+                "Button.axaml", 
+                "MaterialDesignIcon.axaml", 
+                "TextBlock.axaml"
+            ],
+            ResourcesPaths = 
+            [
+                "WindowDrawnDecorations.axaml"
+            ],
+            PreviewPath = "Assets/preview.png"
         },
         folderName: string.Empty);
 }

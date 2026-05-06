@@ -1,11 +1,11 @@
 {
   "id": "com.mercury.default",
   "name": "Default",
-  "author": "Aengstlicher1",
+  "author": "Mercury",
   "version": "1.0.0",
   "supports": ["Light", "Dark"],
-  "colorsLight": "Colors Light.axaml",
-  "colorsDark": "Colors Dark.axaml",
+  "colorsLight": "Colors.Light.axaml",
+  "colorsDark": "Colors.Dark.axaml",
   "styles": ["Button.axaml", "MaterialDesignIcon.axaml", "TextBlock.axaml"],
   "resources": ["WindowDrawnDecorations.axaml"],
   "preview": "Assets/preview.png"

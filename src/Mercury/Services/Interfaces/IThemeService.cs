@@ -9,16 +9,15 @@ namespace Mercury.Services.Interfaces;
 
 public interface IThemeService : IServiceBase
 {
-    Task InitializeAsync();
+    void Initialize();
     
     ObservableCollection<UiTheme> AvailableThemes { get; }
     UiTheme? CurrentTheme { get; }
     
-    Task InstallFromPackageAsync(string packagePath);
-    Task ApplyThemeAsync(string themeId);
-    Task ApplyThemeAsync(UiTheme theme);
-    Task ResetToDefaultThemeAsync();
-    Task UninstallPackageAsync(string themeId);
+    void InstallFromPackage(string packagePath);
+    void ApplyTheme(string themeId);
+    void ApplyTheme(UiTheme theme);
+    void UninstallPackage(string themeId);
     
     event Action<UiTheme?> ThemeChanged;
     event Action<UiTheme?> ThemeInstalled;

@@ -12,8 +12,12 @@ using Mercury.ViewModels;
 using Mercury.Views;
 using Microsoft.Extensions.DependencyInjection;
 using EntityViewerViewModel = Mercury.ViewModels.EntityViewerViewModel;
+using LyricService = Mercury.Services.Implementations.LyricService;
 using LyricsViewerViewModel = Mercury.ViewModels.LyricsViewerViewModel;
+using NavigationService = Mercury.Services.Implementations.NavigationService;
+using PlayerService = Mercury.Services.Implementations.PlayerService;
 using QueueViewerViewModel = Mercury.ViewModels.QueueViewerViewModel;
+using SearchService = Mercury.Services.Implementations.SearchService;
 
 
 namespace Mercury;
@@ -22,7 +26,7 @@ public class App : Application
 {
     public static IServiceProvider Services { get; private set; } = null!;
 
-    public override async void OnFrameworkInitializationCompleted()
+    public override void OnFrameworkInitializationCompleted()
     {
         var services = new ServiceCollection();
 
@@ -75,7 +79,7 @@ public class App : Application
         var discordService = Services.GetRequiredService<IDiscordService>();
         discordService.Initialize();
         var themeService = Services.GetRequiredService<IThemeService>();
-        await themeService.InitializeAsync();
+        themeService.Initialize();
         
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {

@@ -54,37 +54,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Themes\Default\Assets\preview.png" />
-      <Content Include="Themes\Default\Assets\preview.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <AvaloniaXaml Remove="Themes\Default\Resources\WindowDrawnDecorations.axaml" />
-      <Content Include="Themes\Default\Resources\WindowDrawnDecorations.axaml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <AvaloniaXaml Remove="Themes\Default\Styles\Button.axaml" />
-      <Content Include="Themes\Default\Styles\Button.axaml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <AvaloniaXaml Remove="Themes\Default\Styles\MaterialDesignIcon.axaml" />
-      <Content Include="Themes\Default\Styles\MaterialDesignIcon.axaml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <AvaloniaXaml Remove="Themes\Default\Styles\TextBlock.axaml" />
-      <Content Include="Themes\Default\Styles\TextBlock.axaml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <AvaloniaXaml Remove="Themes\Default\Colors Dark.axaml" />
-      <Content Include="Themes\Default\Colors Dark.axaml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <AvaloniaXaml Remove="Themes\Default\Colors Light.axaml" />
-      <Content Include="Themes\Default\Colors Light.axaml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Themes\Default\theme.json" />
-      <Content Include="Themes\Default\theme.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
+        <Content Include="Themes\Default\Assets\**\*"
+                 CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="Themes\Default\theme.json"
+                 CopyToOutputDirectory="PreserveNewest" />
+        <AvaloniaXaml Include="Themes\Default\**\*.axaml" />
+        <Content Include="Themes\Default\**\*.axaml"
+                 CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 </Project>

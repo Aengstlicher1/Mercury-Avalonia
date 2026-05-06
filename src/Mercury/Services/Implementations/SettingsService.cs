@@ -1,16 +1,16 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using Mercury.Core;
 using Mercury.Core.Models;
 using Mercury.Models;
 using Mercury.Services.Interfaces;
 
-namespace Mercury.Services;
+namespace Mercury.Services.Implementations;
 
 public class SettingsService : ServiceBase, ISettingsService
 {
@@ -60,29 +60,11 @@ public class SettingsService : ServiceBase, ISettingsService
                 PlayerSettings.Volume = json.Volume;
                 PlayerSettings.RepeatState = json.RepeatState;
 
-                if (!string.IsNullOrWhiteSpace(json.LastTrackId))
+                _ = Task.Run(async () =>
                 {
-                    var lastTrack = YoutubeMusic.Browse.GetAsync(json.LastTrackId).GetAwaiter().GetResult();
-                    PlayerSettings.LastTrack = lastTrack as Track;
-                }
-
-                if (!string.IsNullOrWhiteSpace(json.LastPlaylistId))
-                {
-                    var lastPlaylist = YoutubeMusic.Browse.GetAsync(json.LastPlaylistId).GetAwaiter().GetResult();
-                    PlayerSettings.LastPlaylist = lastPlaylist as Playlist;
-                }
-
-                if (json.QueueIds.Any())
-                {
-                    Collection<Track> queue = [];
-                    foreach (var id in json.QueueIds)
-                    {
-                        var queueItem = YoutubeMusic.Browse.GetAsync(id).GetAwaiter().GetResult();
-                        if (queueItem is Track track) queue.Add(track);
-                    }
-                
-                    PlayerSettings.Queue = new (queue);
-                }
+                    try { await LoadAsync(json); }
+                    catch (Exception ex) { Console.WriteLine(ex); }
+                });
             }
         }
 
@@ -97,6 +79,33 @@ public class SettingsService : ServiceBase, ISettingsService
                 DesignSettings.SystemTheme = json.SystemTheme;
                 DesignSettings.UserThemeId = json.UserThemeId;
             }
+        }
+    }
+
+    private async Task LoadAsync(JsonPlayerSettings json)
+    {
+        if (!string.IsNullOrWhiteSpace(json.LastTrackId))
+        {
+            var lastTrack = await YoutubeMusic.Browse.GetAsync(json.LastTrackId);
+            PlayerSettings.LastTrack = lastTrack as Track;
+        }
+
+        if (!string.IsNullOrWhiteSpace(json.LastPlaylistId))
+        {
+            var lastPlaylist = await YoutubeMusic.Browse.GetAsync(json.LastPlaylistId);
+            PlayerSettings.LastPlaylist = lastPlaylist as Playlist;
+        }
+
+        if (json.QueueIds.Any())
+        {
+            Collection<Track> queue = [];
+            foreach (var id in json.QueueIds)
+            {
+                var queueItem = await YoutubeMusic.Browse.GetAsync(id);
+                if (queueItem is Track track) queue.Add(track);
+            }
+                
+            PlayerSettings.Queue = new (queue);
         }
     }
     

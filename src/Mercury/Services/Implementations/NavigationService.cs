@@ -13,7 +13,7 @@ using Mercury.Resources;
 using Mercury.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Mercury.Services;
+namespace Mercury.Services.Implementations;
 
 public partial class NavigationService : ServiceBase, INavigationService
 {

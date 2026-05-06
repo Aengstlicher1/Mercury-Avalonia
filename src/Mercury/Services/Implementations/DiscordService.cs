@@ -1,10 +1,9 @@
 using System;
 using DiscordRPC;
-using Mercury.Core.Models;
 using Mercury.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Mercury.Services;
+namespace Mercury.Services.Implementations;
 
 public class DiscordService : IDiscordService
 {

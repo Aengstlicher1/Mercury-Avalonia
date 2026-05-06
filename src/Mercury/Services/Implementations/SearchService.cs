@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Mercury.Core.Models;
 using Mercury.Services.Interfaces;
 
-namespace Mercury.Services;
+namespace Mercury.Services.Implementations;
 
 public partial class SearchService : ServiceBase, ISearchService 
 {

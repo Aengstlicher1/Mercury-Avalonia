@@ -12,6 +12,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Mercury.Helpers;
 using Mercury.Models;
 using Mercury.Services.Interfaces;
 
@@ -33,55 +34,42 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
     public event Action<UiTheme?>? ThemeInstalled;
     public event Action<UiTheme?>? ThemeUninstalled;
     
-    public async Task InitializeAsync()
+    public void Initialize()
     {
-        Console.WriteLine("Initializing theme...");
-
         Directory.CreateDirectory(ThemesDir);
-        
-        // Discover all installed themes
+
+        var defaultsSrc = Path.Combine(AppContext.BaseDirectory, "Themes");
+        if (Directory.Exists(defaultsSrc))
+            DirectoryHelper.CopyAll(defaultsSrc, ThemesDir);
+
         var found = new List<UiTheme>();
         foreach (var dir in Directory.EnumerateDirectories(ThemesDir))
         {
             var manifestPath = Path.Combine(dir, "theme.json");
             if (!File.Exists(manifestPath)) continue;
-        
             try
             {
-                var json = await File.ReadAllTextAsync(manifestPath);
-                var manifest = JsonSerializer.Deserialize<ThemeManifest>(json);
+                var manifest = JsonSerializer.Deserialize<ThemeManifest>(File.ReadAllText(manifestPath));
                 if (manifest is null || string.IsNullOrWhiteSpace(manifest.Id)) continue;
-                
                 found.Add(new UiTheme(manifest, Path.GetFileName(dir)));
             }
-            catch
-            {
-                // Skip broken themes — don't let one bad folder kill startup.
-            }
+            catch { /* skip */ }
         }
-        
-        // AvailableThemes = new ObservableCollection<UiTheme>(found);
-        Console.WriteLine("Initialized theme!");
-        
-        
-        // Restore last theme, or fall back to Default
+
+        AvailableThemes = new ObservableCollection<UiTheme>(found);
+
         var lastId = _settingsService.DesignSettings.UserThemeId;
         var match  = found.FirstOrDefault(t => t.Manifest.Id == lastId);
-        
-        if (match is not null)
-            await ApplyThemeAsync(match.Manifest.Id);
-        else
-            await ResetToDefaultThemeAsync();
+        ApplyTheme(match?.Manifest.Id ?? UiTheme.Default.Manifest.Id);
     }
-
     
-    public async Task InstallFromPackageAsync(string packagePath)
+    public void InstallFromPackage(string packagePath)
     {
         Console.WriteLine("Installing theme...");
         
         if (!File.Exists(packagePath)) return;
         if (!packagePath.EndsWith(".mercuryTheme", StringComparison.OrdinalIgnoreCase) &&
-            !packagePath.EndsWith(".zip",          StringComparison.OrdinalIgnoreCase))
+            !packagePath.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
             return;
 
         Directory.CreateDirectory(ThemesDir);
@@ -91,7 +79,7 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
 
         try
         {
-            await ZipFile.ExtractToDirectoryAsync(packagePath, tempPath, overwriteFiles: true);
+            ZipFile.ExtractToDirectory(packagePath, tempPath, overwriteFiles: true);
 
             // Find theme.json, as it indicates the actual content of the Theme — root first, then any single subfolder, then a recursive search as last resort.
             var manifestPath = LocateManifest(tempPath);
@@ -108,7 +96,7 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
             ThemeManifest? manifest;
             try
             {
-                manifest = JsonSerializer.Deserialize<ThemeManifest>(await File.ReadAllTextAsync(manifestPath));
+                manifest = JsonSerializer.Deserialize<ThemeManifest>(File.ReadAllText(manifestPath));
             }
             catch (JsonException)
             {
@@ -122,7 +110,7 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
             var folderName = SanitizeFolderName(manifest.Id);
             var targetPath = Path.Combine(ThemesDir, folderName);
 
-            // 5. Replace any existing install of this theme.
+            // 5. Replace any existing installation of this theme.
             if (Directory.Exists(targetPath))
                 Directory.Delete(targetPath, recursive: true);
 
@@ -153,7 +141,7 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
         finally
         {
             // Clean up staging if it still exists (success path with subfolder, or any failure).
-            if (tempPath is not null && Directory.Exists(tempPath))
+            if (Directory.Exists(tempPath))
             {
                 try { Directory.Delete(tempPath, recursive: true); } catch { /* ignore */ }
             }
@@ -200,144 +188,71 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
     }
 
 
-    public async Task ApplyThemeAsync(UiTheme theme)
+    public void ApplyTheme(UiTheme theme)
     {
         if (AvailableThemes.Any(x => x.Manifest.Id == theme.Manifest.Id))
         {
-            await ApplyThemeAsync(theme.Manifest.Id);
+            ApplyTheme(theme.Manifest.Id);
         }
         else
         {
-            AvailableThemes.Add(theme);
-            ThemeInstalled?.Invoke(theme);
-            await ApplyThemeAsync(theme.Manifest.Id);
+            throw new ArgumentException($"Theme:({theme.Manifest.Id}) is not Available.");
         }
     }
     
-    public async Task ApplyThemeAsync(string themeId)
+    public void ApplyTheme(string themeId)
     {
-        Console.WriteLine("Applying theme...");
-        
-        if (themeId == UiTheme.Default.Manifest.Id) { await ResetToDefaultThemeAsync(); return; }
-
         var theme = AvailableThemes.FirstOrDefault(x => x.Manifest.Id == themeId);
         if (theme is null) return;
 
-        // Phase 1 — file I/O (will jump off UI thread on the awaits, fine)
-        var lightDict = theme.SupportsLight ? await LoadDictionaryAsync(theme.FullLightPath) : null;
-        var darkDict  = theme.SupportsDark  ? await LoadDictionaryAsync(theme.FullDarkPath)  : null;
+        var lightDict = theme.SupportsLight ? Load<ResourceDictionary>(theme.FullLightPath) : null;
+        var darkDict  = theme.SupportsDark  ? Load<ResourceDictionary>(theme.FullDarkPath)  : null;
+        var styleContainers    = theme.FullStylesPaths.Select(LoadStyles).ToList();
+        var resourceContainers = theme.FullResourcesPaths.Select(LoadResources).ToList();
 
-        var styleContainers    = new List<UserThemeStyles>();
-        foreach (var p in theme.FullStylesPaths)
-            styleContainers.Add(await LoadStylesAsync(p));
+        var app = Application.Current!;
+        var dicts = app.Resources.ThemeDictionaries;
+        if (lightDict is not null) dicts[ThemeVariant.Light] = lightDict;
+        if (darkDict  is not null) dicts[ThemeVariant.Dark]  = darkDict;
 
-        var resourceContainers = new List<UserThemeResources>();
-        foreach (var p in theme.FullResourcesPaths)
-            resourceContainers.Add(await LoadResourcesAsync(p));
+        for (int i = app.Styles.Count - 1; i >= 0; i--)
+            if (app.Styles[i] is UserThemeStyles) app.Styles.RemoveAt(i);
+        for (int i = app.Resources.MergedDictionaries.Count - 1; i >= 0; i--)
+            if (app.Resources.MergedDictionaries[i] is UserThemeResources)
+                app.Resources.MergedDictionaries.RemoveAt(i);
 
-        // Phase 2 — mutation. Jump back to UI thread if we're not on it.
-        if (!Dispatcher.UIThread.CheckAccess())
-            await Dispatcher.UIThread.InvokeAsync(ApplyToApp);
-        else
-            ApplyToApp();
+        foreach (var s in styleContainers) app.Styles.Add(s);
+        foreach (var r in resourceContainers) app.Resources.MergedDictionaries.Add(r);
 
-        void ApplyToApp()
-        {
-            var app = Application.Current!;
-            var dicts = app.Resources.ThemeDictionaries;
-
-            if (lightDict is not null) dicts[ThemeVariant.Light] = lightDict;
-            if (darkDict  is not null) dicts[ThemeVariant.Dark]  = darkDict;
-
-            for (int i = app.Styles.Count - 1; i >= 0; i--)
-                if (app.Styles[i] is UserThemeStyles) app.Styles.RemoveAt(i);
-
-            for (int i = app.Resources.MergedDictionaries.Count - 1; i >= 0; i--)
-                if (app.Resources.MergedDictionaries[i] is UserThemeResources)
-                    app.Resources.MergedDictionaries.RemoveAt(i);
-
-            foreach (var s in styleContainers)    app.Styles.Add(s);
-            foreach (var r in resourceContainers) app.Resources.MergedDictionaries.Add(r);
-
-            CurrentTheme = theme;
-            _settingsService.DesignSettings.UserThemeId = theme.Manifest.Id;
-            
-            Console.WriteLine("Theme applied!");
-        }
+        CurrentTheme = theme;
+        _settingsService.DesignSettings.UserThemeId = theme.Manifest.Id;
     }
 
-    private async Task<ResourceDictionary> LoadDictionaryAsync(string colorPath)
+    private static T Load<T>(string path) => (T)AvaloniaRuntimeXamlLoader.Load(File.ReadAllText(path));
+
+    private static UserThemeStyles LoadStyles(string p)
     {
-        var xaml = await File.ReadAllTextAsync(colorPath);
-        var obj = AvaloniaRuntimeXamlLoader.Load(xaml);
-        return (ResourceDictionary)obj;
+        var m = new UserThemeStyles(); 
+        foreach (var s in Load<Styles>(p)) 
+            m.Add(s); 
+        return m;
     }
-    private async Task<UserThemeStyles> LoadStylesAsync(string stylesPath)
+
+    private static UserThemeResources LoadResources(string p)
     {
-        var xaml   = await File.ReadAllTextAsync(stylesPath);
-        var loaded = (Styles)AvaloniaRuntimeXamlLoader.Load(xaml);
-
-        var marker = new UserThemeStyles();
-        foreach (var s in loaded) marker.Add(s);
-        return marker;
+        var m = new UserThemeResources(); 
+        m.MergedDictionaries.Add(Load<ResourceDictionary>(p)); 
+        return m;
     }
-    private async Task<UserThemeResources> LoadResourcesAsync(string resourcesPath)
-    {
-        var xaml   = await File.ReadAllTextAsync(resourcesPath);
-        var loaded = (ResourceDictionary)AvaloniaRuntimeXamlLoader.Load(xaml);
-
-        var marker = new UserThemeResources();
-        marker.MergedDictionaries.Add(loaded);
-        return marker;
-    }
-
-    /// <summary>
-    /// HAS to be called from the UiThread!
-    /// (You can use <c>Dispatcher.UiThread.Invoke()</c>)
-    /// </summary>
-    public Task ResetToDefaultThemeAsync()
-    {
-        Console.WriteLine("Resetting theme...");
-        
-        if (!Dispatcher.UIThread.CheckAccess())
-            return Dispatcher.UIThread.InvokeAsync(Reset).GetTask();
-
-        Reset();
-        return Task.CompletedTask;
-        
-        void Reset()
-        {
-            var app = Application.Current!;
-
-            // Remove user-injected styles
-            for (int i = app.Styles.Count - 1; i >= 0; i--)
-                if (app.Styles[i] is UserThemeStyles)
-                    app.Styles.RemoveAt(i);
-
-            // Remove user-injected resource dictionaries
-            for (int i = app.Resources.MergedDictionaries.Count - 1; i >= 0; i--)
-                if (app.Resources.MergedDictionaries[i] is UserThemeResources)
-                    app.Resources.MergedDictionaries.RemoveAt(i);
-
-            // Restore the original Light/Dark dictionaries from App.axaml.
-            // The cleanest way: keep references to the originals captured at startup.
-            // TODO: Unshittify this and copy default on init
-
-            CurrentTheme = UiTheme.Default;
-            _settingsService.DesignSettings.UserThemeId = UiTheme.Default.Manifest.Id;
-            
-            Console.WriteLine("Theme reset!");
-        }
-    }
-
     
-    public async Task UninstallPackageAsync(string themeId)
+    
+    public void UninstallPackage(string themeId)
     {
         var theme = AvailableThemes.FirstOrDefault(x => x.Manifest.Id == themeId);
         if (theme is null) return;
 
         if (CurrentTheme.Manifest.Id == themeId)
-            await ResetToDefaultThemeAsync();
+            ApplyTheme(UiTheme.Default);
 
         var folder = Path.Combine(ThemesDir, theme.ThemeFolderName);
         if (Directory.Exists(folder))
@@ -347,8 +262,7 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
         ThemeUninstalled?.Invoke(theme);
     }
 
-
-    partial void OnCurrentThemeChanged(UiTheme? value)
+    partial void OnCurrentThemeChanged(UiTheme value)
     {
         ThemeChanged?.Invoke(value);
     }

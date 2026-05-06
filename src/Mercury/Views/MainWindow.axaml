@@ -180,7 +180,7 @@
                                 <TextBlock Text="{Binding CurrentTrack.Title}"
                                            TextTrimming="CharacterEllipsis"
                                            FontSize="16"/>
-                                <Button Content="{Binding CurrentTrack.Artist}"
+                                <Button Content="{Binding CurrentTrack.Artist.Name}"
                                         Classes="Link"
                                         Foreground="{DynamicResource SubTextBrush}"
                                         FontSize="12"/>

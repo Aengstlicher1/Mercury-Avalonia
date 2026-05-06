@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mercury.Core;
@@ -7,7 +6,7 @@ using Mercury.Core.Models;
 using Mercury.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Mercury.Services;
+namespace Mercury.Services.Implementations;
 
 public partial class LyricService : ServiceBase, ILyricService
 {
@@ -21,7 +20,7 @@ public partial class LyricService : ServiceBase, ILyricService
             Lyrics = await YoutubeMusic.Lyrics.GetLyricsAsync(track);
         };
 
-        Task.Run(async () => Lyrics = await YoutubeMusic.Lyrics.GetLyricsAsync(_playerService.CurrentTrack!));
+        Task.Run<Lyrics?>(async () => Lyrics = await YoutubeMusic.Lyrics.GetLyricsAsync(_playerService.CurrentTrack!));
     }
     
     

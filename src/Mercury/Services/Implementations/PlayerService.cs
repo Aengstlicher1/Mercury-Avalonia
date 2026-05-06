@@ -1,8 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -14,7 +12,7 @@ using Mercury.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Media = LibVLCSharp.Shared.Media;
 
-namespace Mercury.Services;
+namespace Mercury.Services.Implementations;
 
 public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
 {
@@ -85,12 +83,12 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
     public partial ObservableCollection<Track> CurrentQueue { get; private set; } = [];
     private Collection<Track> ShuffledTracks { get; set; } = [];
     
-    public PlayerService()
+    public PlayerService(ISettingsService settingsService)
     {
         // "--no-video" ensures no video decoding/rendering — audio only
         _libVlc = new LibVLC("--no-video");
         _mediaPlayer = new MediaPlayer(_libVlc);
-        _settingsService = App.Services.GetRequiredService<ISettingsService>();
+        _settingsService = settingsService;
         
         _mediaPlayer.PositionChanged += (_, e) =>
         {
