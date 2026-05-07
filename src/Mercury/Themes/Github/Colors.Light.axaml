@@ -1,14 +1,15 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
-    <Color x:Key="WindowSurfaceColor">#f6f8fa</Color>
-    <Color x:Key="SurfaceColor">#ffffff</Color>
-    <Color x:Key="SurfaceHighlightColor">#0f0044ff</Color>
+    <!-- Light Theme colors -->
+    <Color x:Key="WindowSurfaceColor">#ffffff</Color>
+    <Color x:Key="SurfaceColor">#f6f8fa</Color>
+    <Color x:Key="SurfaceHighlightColor">#2200ACFF</Color>
     <Color x:Key="SubSurfaceColor">#f6f8fa</Color>
-    <Color x:Key="SurfaceItemColor">#1100001e</Color>
+    <Color x:Key="SurfaceItemColor">#13001B36</Color>
     <Color x:Key="OutlineColor">#d1d9e0</Color>
     <Color x:Key="OutlineHighlightColor">#a7d8ff</Color>
-    <Color x:Key="HoverColor">#0c000024</Color>
+    <Color x:Key="HoverColor">#0817395B</Color>
     <Color x:Key="SelectedColor">#0969da</Color>
     <Color x:Key="TextColor">#1f2328</Color>
     <Color x:Key="SubTextColor">#59636e</Color>
