@@ -35,4 +35,11 @@
     <Style Selector="Button.Link:pressed">
         <Setter Property="Foreground" Value="{DynamicResource SubTextBrush}"/>
     </Style>
+    
+    
+    <!-- LyricLine Button -->
+    <Style Selector="Button.LyricLine">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
 </Styles>

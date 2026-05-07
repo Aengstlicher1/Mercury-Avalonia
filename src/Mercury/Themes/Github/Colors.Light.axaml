@@ -1,7 +1,6 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
-    <!-- Light Theme colors -->
     <Color x:Key="WindowSurfaceColor">#ffffff</Color>
     <Color x:Key="SurfaceColor">#f6f8fa</Color>
     <Color x:Key="SurfaceHighlightColor">#2200ACFF</Color>
