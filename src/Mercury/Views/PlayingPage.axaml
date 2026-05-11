@@ -29,11 +29,14 @@
         </Border>
         <Border Grid.Column="1">
             <Grid RowDefinitions="42, *">
-                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="Lyrics"/>
-                    <Button Content="Queue"/>
-                    <Button Content="Info"/>
-                </StackPanel>
+                <Border Grid.Row="0" Classes="Decor"
+                        HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Lyrics" Classes="Ghost"/>
+                        <Button Content="Queue" Classes="Ghost"/>
+                        <Button Content="Info" Classes="Ghost"/>
+                    </StackPanel>
+                </Border>
                 <controls:LyricsViewer Grid.Row="1"/>
             </Grid>
         </Border>

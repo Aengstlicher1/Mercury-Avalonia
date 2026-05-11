@@ -27,5 +27,6 @@
     <SolidColorBrush x:Key="SubTextBrush" Color="{StaticResource SubTextColor}"/>
     
     
-    <CornerRadius x:Key="CornerRadius">8</CornerRadius>
+    <CornerRadius x:Key="CornerRadius">0</CornerRadius>
+    <Thickness x:Key="OutlineThickness">1</Thickness>
 </ResourceDictionary>

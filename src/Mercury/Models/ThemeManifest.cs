@@ -27,12 +27,6 @@ public class ThemeManifest
     [JsonPropertyName("colorsDark")]
     public string DarkPath { get; init; } = string.Empty;
     
-    [JsonPropertyName("styles")]
-    public string[] StylesPaths { get; init; } = Array.Empty<string>();
-    
-    [JsonPropertyName("resources")]
-    public string[] ResourcesPaths { get; init; } = Array.Empty<string>();
-    
     [JsonPropertyName("preview")]
     public string PreviewPath { get; init; } = string.Empty;
 }

@@ -17,8 +17,19 @@ public class UiTheme(ThemeManifest manifest, string folderName)
     
     public string FullLightPath => Path.Combine(ThemeService.ThemesDir, ThemeFolderName, Manifest.LightPath);
     public string FullDarkPath => Path.Combine(ThemeService.ThemesDir, ThemeFolderName, Manifest.DarkPath);
-    public string[] FullStylesPaths => Manifest.StylesPaths.Select(x => Path.Combine(ThemeService.ThemesDir, ThemeFolderName, "Styles", x)).ToArray();
-    public string[] FullResourcesPaths => Manifest.ResourcesPaths.Select(x => Path.Combine(ThemeService.ThemesDir, ThemeFolderName, "Resources", x)).ToArray();
+    
+    /* Cache the dirs */
+    private string[]? _fullStylesPaths;
+    private string[]? _fullResourcesPaths;
+
+    public string[] FullStylesPaths    => _fullStylesPaths    ??= GetPaths("Styles");
+    public string[] FullResourcesPaths => _fullResourcesPaths ??= GetPaths("Resources");
+
+    private string[] GetPaths(string folderName)
+    {
+        var targetDir = Path.Combine(ThemeService.ThemesDir, ThemeFolderName, folderName);
+        return Directory.GetFiles(targetDir, "*.axaml"); // already returns string[], no need for ToArray()
+    }
 
 
     public static readonly UiTheme Default = new(
@@ -33,19 +44,9 @@ public class UiTheme(ThemeManifest manifest, string folderName)
                 "Light", 
                 "Dark"
             ],
-            LightPath = "Colors.Light.axaml",
-            DarkPath = "Colors.Dark.axaml",
-            StylesPaths = 
-            [
-                "Button.axaml", 
-                "MaterialDesignIcon.axaml", 
-                "TextBlock.axaml"
-            ],
-            ResourcesPaths = 
-            [
-                "WindowDrawnDecorations.axaml"
-            ],
+            LightPath = "Light.axaml",
+            DarkPath = "Dark.axaml",
             PreviewPath = "Assets/preview.png"
         },
-        folderName: string.Empty);
+        folderName: "Default");
 }

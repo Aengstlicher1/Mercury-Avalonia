@@ -20,7 +20,7 @@
                     <converters:CollectionNotAnyConverter x:Key="CollectionNotAnyConverter"/>
                     <converters:TracksEqualConverter x:Key="TracksEqualConverter"/>
                 </ResourceDictionary>
-                <ResourceInclude Source="Themes/ThemeContract.axaml"/>
+                <ResourceInclude Source="Themes/ResourceContract.axaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
@@ -28,6 +28,7 @@
     <Application.Styles>
         <semi:SemiTheme />
         <StyleInclude Source="avares://IconPacks.Avalonia.MaterialDesign/MaterialDesign.axaml" />
+        <StyleInclude Source="Themes/StyleContract.axaml"/>
     </Application.Styles>
              
     

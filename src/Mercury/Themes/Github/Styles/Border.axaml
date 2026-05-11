@@ -1,0 +1,23 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <Border Classes="Decor">
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="1" Classes="Ghost"/>
+                    <Button Content="2" Classes="Ghost"/>
+                    <Button Content="3" Classes="Ghost"/>
+                </StackPanel>
+            </Border>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="Border.Decor">
+        <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource OutlineBrush}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource OutlineThickness}"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+</Styles>

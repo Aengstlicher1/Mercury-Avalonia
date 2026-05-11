@@ -6,7 +6,5 @@
   "supports": ["Light", "Dark"],
   "colorsLight": "Light.axaml",
   "colorsDark": "Dark.axaml",
-  "styles": ["Button.axaml", "MaterialDesignIcon.axaml", "TextBlock.axaml"],
-  "resources": ["WindowDrawnDecorations.axaml"],
   "preview": "Assets/preview.png"
 }

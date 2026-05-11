@@ -13,7 +13,6 @@
     <Color x:Key="SelectedColor">#1f6feb</Color>
     <Color x:Key="TextColor">#f0f6fc</Color>
     <Color x:Key="SubTextColor">#9198a1</Color>
-
     
     <SolidColorBrush x:Key="WindowSurfaceBrush" Color="{StaticResource WindowSurfaceColor}"/>
     <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
@@ -27,4 +26,8 @@
     <SolidColorBrush x:Key="SelectedBrush" Color="{StaticResource SelectedColor}"/>
     <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}"/>
     <SolidColorBrush x:Key="SubTextBrush" Color="{StaticResource SubTextColor}"/>
+    
+    
+    <CornerRadius x:Key="CornerRadius">8</CornerRadius>
+    <Thickness x:Key="OutlineThickness">2</Thickness>
 </ResourceDictionary>

@@ -42,40 +42,41 @@
             <Border Grid.Row="0" Grid.Column="0">
                 <Grid ColumnDefinitions="48, *, *, 96" Margin="12,0,60,0">
                     <Button Grid.Column="0"
-                            Padding="4"
+                            Classes="Ghost"
                             Width="{Binding $self.Bounds.Height}"
                             Command="{Binding NavigationService.GoBackCommand}"
                             IsVisible="{Binding NavigationService.CanGoBack}"
                             HorizontalAlignment="Left"
                             Content="{icon:MaterialDesign Kind=ArrowBackRound, Width=16}"/>
                     <Grid Grid.Column="1">
-                        <ItemsControl
-                            VerticalAlignment="Top"
-                            Margin="8,12,0,0"
-                            ItemsSource="{Binding NavigationService.Tabs}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Horizontal"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
+                        <Border Classes="Decor"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left"
+                                Margin="8,12,0,0">
+                            <ItemsControl
+                                ItemsSource="{Binding NavigationService.Tabs}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
                             
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="models:PageDescriptor">
-                                    <Button 
-                                        Margin="4,0" 
-                                        Padding="8" 
-                                        Background="Transparent"
-                                        IsVisible="{Binding IsTab}"
-                                        Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).NavigateToCommand}"
-                                        CommandParameter="{Binding }">
-                                        <Grid RowDefinitions="*, Auto">
-                                            <TextBlock Grid.Row="0" Text="{Binding Title}" />
-                                            <Border Grid.Row="1" Height="3" CornerRadius="8"/>
-                                        </Grid>
-                                    </Button>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="models:PageDescriptor">
+                                        <Button 
+                                            Classes="Ghost"
+                                            IsVisible="{Binding IsTab}"
+                                            Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).NavigateToCommand}"
+                                            CommandParameter="{Binding }">
+                                            <Grid RowDefinitions="*, Auto">
+                                                <TextBlock Grid.Row="0" Text="{Binding Title}" />
+                                                <Border Grid.Row="1" Height="3" CornerRadius="8"/>
+                                            </Grid>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Border>
                     </Grid>
                     <Grid Grid.Column="2"
                           ColumnDefinitions="*, Auto, Auto" 
@@ -124,19 +125,19 @@
                         <Grid Grid.Column="0" Margin="16,4,4,4">
                             <StackPanel VerticalAlignment="Stretch" Orientation="Horizontal">
                                 <!-- Skip back -->
-                                <Button CornerRadius="64"
+                                <Button Classes="Round"
                                         Content="{icon:MaterialDesign Kind=SkipPreviousRound, Width=22, Height=22}"
                                         Command="{Binding SkipBackCommand}"/>
                                 
                                 <!-- Toggle Playback -->
-                                <Button CornerRadius="64"
+                                <Button Classes="Round"
                                         Command="{Binding TogglePlayCommand}">
                                     <icon:PackIconMaterialDesign Width="32" Height="32"
                                         Kind="{Binding IsPlaying, Converter={StaticResource PlayIconConverter}}"/>
                                 </Button>
                                 
                                 <!-- Skip forward -->
-                                <Button CornerRadius="64"
+                                <Button Classes="Round"
                                         Content="{icon:MaterialDesign Kind=SkipNextRound, Width=22, Height=22}"
                                         Command="{Binding SkipForwardCommand}"/>
                             </StackPanel>
@@ -158,9 +159,7 @@
                             <Button Grid.Column="0" 
                                     Command="{Binding EnterPlayingCommand}"
                                     Width="{Binding $self.Bounds.Height}"
-                                    VerticalAlignment="Stretch"
-                                    VerticalContentAlignment="Stretch"
-                                    HorizontalContentAlignment="Stretch"
+                                    Classes="Ghost"
                                     Padding="0">
                                 <icon:PackIconMaterialDesign Kind="FullscreenRound" Height="24" Width="24"
                                                              IsVisible="False"/>
@@ -192,12 +191,15 @@
                                     Orientation="Horizontal"
                                     Margin="4,4,16,4"
                                     Spacing="8">
-                            <Button Command="{Binding SwitchRepeatStateCommand}">
+                            <Button Classes="Round"
+                                    Command="{Binding SwitchRepeatStateCommand}">
                                 <icon:PackIconMaterialDesign Width="16" Height="16"
                                                              Kind="{Binding RepeatState, Converter={StaticResource RepeatIconConverter}}"/>
                             </Button>
-                            <icon:PackIconMaterialDesign Width="16" Height="16"
-                                                         Kind="{Binding Volume, Converter={StaticResource VolumeIconConverter}}"/>
+                            <Button Classes="Round">
+                                <icon:PackIconMaterialDesign Width="16" Height="16"
+                                                             Kind="{Binding Volume, Converter={StaticResource VolumeIconConverter}}"/>
+                            </Button>
                             <Slider Value="{Binding Volume, Mode=TwoWay}"
                                     VerticalAlignment="Center"
                                     Width="120"
