@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -27,21 +28,8 @@ public partial class MainWindow : Window
             _ns.SetHost(Navigator);
             _ns.NavigateTo<HomePage>();
         };
-        Closed += OnClosed;
     }
 
-    private void OnClosed(object? s, EventArgs e)
-    {
-        Task.Run(() =>
-        {
-            var serviceBases = App.Services.GetServices<IServiceBase>();
-            foreach (var service in serviceBases)
-            {
-                service.OnExit();
-            }
-        });
-    }
-    
     private void SearchBox_GotFocus(object? sender, FocusChangedEventArgs e)
     {
         _ns.NavigateTo<SearchPage>();

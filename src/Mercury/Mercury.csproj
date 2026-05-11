@@ -48,11 +48,7 @@
       <ProjectReference Include="..\Core\src\Mercury.Core\Mercury.Core.csproj" />
       <ProjectReference Include="..\IconPacks.Avalonia\IconPacks.Avalonia.MaterialDesign\IconPacks.Avalonia.MaterialDesign.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Themes\" />
-    </ItemGroup>
-
+    
     <ItemGroup>
         <Content Include="Themes\**\Assets\**\*"
                  Exclude="Themes\Template\**\*"

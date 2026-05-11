@@ -15,7 +15,7 @@
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="12.0.0"/>
         <PackageReference Include="JetBrains.Annotations" PrivateAssets="All" IncludeAssets="build;compile" Version="2025.2.4"/>
-        <PackageReference Include="System.Text.Json" Version="8.0.6" />
+        <PackageReference Include="System.Text.Json" Version="10.0.7" />
     </ItemGroup>
 
 </Project>

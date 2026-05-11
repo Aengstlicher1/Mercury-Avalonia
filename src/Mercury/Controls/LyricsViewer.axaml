@@ -34,7 +34,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="vm:LyricLineViewModel">
                         <Button HorizontalAlignment="Center" VerticalAlignment="Center"
-                                Classes="LyricLine"
+                                Classes="Ghost"
                                 Command="{Binding $parent[ItemsControl].((vm:LyricsViewerViewModel)DataContext).GoToLineCommand}"
                                 CommandParameter="{Binding Line}"
                                 ToolTip.Tip="{Binding Timing}"

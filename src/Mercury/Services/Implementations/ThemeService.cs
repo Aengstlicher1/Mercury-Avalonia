@@ -37,13 +37,12 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
     public void Initialize()
     {
         Directory.CreateDirectory(ThemesDir);
-
+        
+        /* Install all default themes on startup */
         var defaultThemes = Path.Combine(AppContext.BaseDirectory, "Themes");
         if (Directory.Exists(defaultThemes))
-            /* Installing all default themes */
             DirectoryHelper.CopyAll(defaultThemes, ThemesDir);
-            
-
+        
         var found = new List<UiTheme>();
         foreach (var dir in Directory.EnumerateDirectories(ThemesDir))
         {
@@ -57,7 +56,7 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
             }
             catch { /* skip */ }
         }
-
+        
         AvailableThemes = new ObservableCollection<UiTheme>(found);
 
         var lastId = _settingsService.DesignSettings.UserThemeId;

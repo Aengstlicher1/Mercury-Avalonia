@@ -52,12 +52,12 @@ public partial class PlayerSettings : ObservableObject
         };
 }
 
-internal class JsonPlayerSettings
+public class JsonPlayerSettings
 {
-    public required int Volume { get; init; }
-    public required RepeatState RepeatState { get; init; }
-    public required string LastTrackId { get; init; }
-    public required string LastPlaylistId { get; init; }
+    public int Volume { get; init; }
+    public RepeatState RepeatState { get; init; }
+    public string LastTrackId { get; init; } = string.Empty;
+    public string LastPlaylistId { get; init; } = string.Empty;
     public string[] QueueIds { get; init; } = [];
 }
 

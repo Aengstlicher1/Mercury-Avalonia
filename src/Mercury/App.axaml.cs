@@ -69,21 +69,32 @@ public class App : Application
 
         Services = services.BuildServiceProvider();
         
+        
         /* Initialization */
+        var discordService = Services.GetRequiredService<IDiscordService>();
+        discordService.Initialize();
+        var themeService = Services.GetRequiredService<IThemeService>();
+        themeService.Initialize();
+        
         var nav = Services.GetRequiredService<INavigationService>();
         nav.Register<HomePage, HomePageViewModel>("Home", PackIconMaterialDesignKind.HomeRound, isTab: true);
         nav.Register<ExplorePage, ExplorePageViewModel>("Explore", PackIconMaterialDesignKind.ExploreRound, isTab: true);
         nav.Register<SearchPage, SearchPageViewModel>("Search", PackIconMaterialDesignKind.SearchRound, isTab: false);
         nav.Register<PlayingPage, PlayingPageViewModel>("Playing", PackIconMaterialDesignKind.PlayArrowRound, isTab: false);
         
-        var discordService = Services.GetRequiredService<IDiscordService>();
-        discordService.Initialize();
-        var themeService = Services.GetRequiredService<IThemeService>();
-        themeService.Initialize();
         
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = Services.GetRequiredService<MainWindow>();
+            
+            /* Let the Services shutdown correctly and save the Settings */
+            desktop.ShutdownRequested += (_, _) =>
+            {
+                foreach (var svc in Services.GetServices<IServiceBase>())
+                    svc.OnExit();
+
+                Services.GetService<ISettingsService>()?.Save();
+            };
         }
         
         base.OnFrameworkInitializationCompleted();

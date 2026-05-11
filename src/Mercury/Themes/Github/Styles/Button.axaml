@@ -9,64 +9,41 @@
     <!-- Base Button -->
     <Style Selector="Button">
         <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
-        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource OutlineBrush}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Padding" Value="8"/>
-        <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}"/>
+        <Setter Property="Padding" Value="4"/>
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
-                    <!-- Base layer: the actual button surface -->
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{TemplateBinding CornerRadius}"/>
-
-                    <!-- Overlay layer: composites on top of the base -->
-                    <Border Name="PART_Overlay"
-                            Background="Transparent"
-                            CornerRadius="{TemplateBinding CornerRadius}"
-                            IsHitTestVisible="False"/>
-
-                    <!-- Content sits on top, no background of its own -->
-                    <ContentPresenter Name="PART_ContentPresenter"
-                                      Background="Transparent"
-                                      CornerRadius="{TemplateBinding CornerRadius}"
-                                      Content="{TemplateBinding Content}"
-                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                    <Border Name="#PART_Border" Background="{TemplateBinding Background}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                        <Border.Transitions>
+                            <Transitions>
+                                <BrushTransition Property="Background" Duration="0:0:0.04"/>
+                            </Transitions>
+                        </Border.Transitions>
+                    </Border>
+                    <ContentPresenter Content="{TemplateBinding Content}"
                                       Padding="{TemplateBinding Padding}"
-                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                       VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                      RecognizesAccessKey="True"/>
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"/>
                 </Panel>
             </ControlTemplate>
         </Setter>
     </Style>
-
-    <Style Selector="Button:pointerover /template/ Border#PART_Overlay">
+    
+    <Style Selector="Button:pointerover /template/ >
         <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
     </Style>
-
-    <Style Selector="Button:disabled /template/ Border#PART_Overlay">
-        <Setter Property="Background" Value="Transparent"/>
-    </Style>
-    
-    
     
     <!-- Link Button -->
     <Style Selector="Button.Link">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="2"/>
         <Setter Property="BorderThickness" Value="0"/>
-    </Style>
-    
-    <Style Selector="Button.Link:pointerover /template/ ContentPresenter">
-        <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
-    </Style>
-    <Style Selector="Button.Link:pointerover /template/ Border#PART_Overlay">
-        <Setter Property="Background" Value="Transparent"/>
     </Style>
     
     <Style Selector="Button.Link:pressed">
@@ -76,7 +53,7 @@
     
     
     <!-- LyricLine Button -->
-    <Style Selector="Button.LyricLine">
+    <Style Selector="Button.Ghost">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
     </Style>

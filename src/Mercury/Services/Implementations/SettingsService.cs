@@ -14,9 +14,9 @@ namespace Mercury.Services.Implementations;
 
 public class SettingsService : ServiceBase, ISettingsService
 {
-    public PlayerSettings PlayerSettings { get; private set; } = PlayerSettings.Default;
+    public PlayerSettings PlayerSettings { get; } = PlayerSettings.Default;
     
-    public DesignSettings DesignSettings { get; private set; } = DesignSettings.Default;
+    public DesignSettings DesignSettings { get; } = DesignSettings.Default;
 
     
     public SettingsService()
@@ -28,18 +28,28 @@ public class SettingsService : ServiceBase, ISettingsService
     {
         string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         string targetFolder = Path.Combine(appData, "Mercury");
-        
-        if (!Directory.Exists(targetFolder))
-            Directory.CreateDirectory(targetFolder);
-        
-        var options = new JsonSerializerOptions { WriteIndented = true };
+        Directory.CreateDirectory(targetFolder); // no need to check first
 
-        string playerJson = JsonSerializer.Serialize(PlayerSettings.AsJson(), options);
-        File.WriteAllText(Path.Combine(targetFolder, "player.json"), playerJson);
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true
+        };
 
-        string designJson = JsonSerializer.Serialize(DesignSettings, options);
-        File.WriteAllText(Path.Combine(targetFolder, "design.json"), designJson);
+        try
+        {
+            string playerJson = JsonSerializer.Serialize<JsonPlayerSettings>(PlayerSettings.AsJson(), options);
+            File.WriteAllText(Path.Combine(targetFolder, "player.json"), playerJson);
+
+            string designJson = JsonSerializer.Serialize(DesignSettings, options);
+            File.WriteAllText(Path.Combine(targetFolder, "design.json"), designJson);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Settings] Save failed: {ex}");
+            throw;
+        }
     }
+
 
     public void Load()
     {

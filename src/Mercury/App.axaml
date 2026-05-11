@@ -19,13 +19,8 @@
                     <converters:NotConverter x:Key="NotConverter"/>
                     <converters:CollectionNotAnyConverter x:Key="CollectionNotAnyConverter"/>
                     <converters:TracksEqualConverter x:Key="TracksEqualConverter"/>
-                    
-                    <ResourceDictionary.ThemeDictionaries>
-                        <ResourceInclude x:Key="Light" Source="Themes/Default/Colors.Light.axaml"/>
-                        <ResourceInclude x:Key="Dark" Source="Themes/Default/Colors.Dark.axaml"/>
-                    </ResourceDictionary.ThemeDictionaries>
                 </ResourceDictionary>
-                <ResourceInclude Source="Themes/Default/Resources/WindowDrawnDecorations.axaml"/>
+                <ResourceInclude Source="Themes/ThemeContract.axaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
@@ -33,10 +28,6 @@
     <Application.Styles>
         <semi:SemiTheme />
         <StyleInclude Source="avares://IconPacks.Avalonia.MaterialDesign/MaterialDesign.axaml" />
-        
-        <StyleInclude Source="Themes/Default/Styles/Button.axaml"/>
-        <StyleInclude Source="Themes/Default/Styles/TextBlock.axaml"/>
-        <StyleInclude Source="Themes/Default/Styles/MaterialDesignIcon.axaml"/>
     </Application.Styles>
              
     

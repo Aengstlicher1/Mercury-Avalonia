@@ -368,8 +368,6 @@ public partial class PlayerService : ServiceBase, IPlayerService, IDisposable
         
         _settingsService.PlayerSettings.Volume = Volume;
         _settingsService.PlayerSettings.RepeatState = RepeatState;
-        
-        _settingsService.Save();
         Dispose();
     }
 }
