@@ -5,70 +5,23 @@
             <Button Content="Styled Button!"/>
         </Border>
     </Design.PreviewWith>
-
-    <!-- Base Button -->
-    <Style Selector="Button">
-        <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
-        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource OutlineBrush}"/>
-        <Setter Property="BorderThickness" Value="{DynamicResource OutlineThickness}"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}"/>
-        <Setter Property="Padding" Value="8"/>
-        <Setter Property="Template">
-            <ControlTemplate>
-                <Panel>
-                    <Border Name="PART_Base"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Background="{TemplateBinding Background}"
-                            CornerRadius="{TemplateBinding CornerRadius}"/>
-                    
-                    <ContentPresenter Name="PART_Content"
-                               Foreground="{TemplateBinding Foreground}"
-                               Content="{TemplateBinding Content}"
-                               Padding="{TemplateBinding Padding}"
-                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"/>
-                    
-                    <Border Name="PART_Overlay"
-                            Background="Transparent"
-                            CornerRadius="{TemplateBinding CornerRadius}">
-                        <Border.Transitions>
-                            <Transitions>
-                                <BrushTransition Property="Background" Duration="0:0:0.06"/>
-                            </Transitions>
-                        </Border.Transitions>
-                    </Border>
-                </Panel>
-            </ControlTemplate>
-        </Setter>
-    </Style>
-    
-    <Style Selector="Button:pointerover /template/ Border#PART_Overlay">
-        <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
-    </Style>
-    
-    <Style Selector="Button:pressed /template/ Border#PART_Overlay">
-        <Setter Property="Background" Value="{DynamicResource PressedBrush}"/>
-    </Style>
     
     
-
+    <!-- Ghost button (clear variant) -->
     <Style Selector="Button.Ghost">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
     </Style>
     
-    
+    <!-- circle / extra-round variant (also clear) -->
     <Style Selector="Button.Round">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="CornerRadius" Value="64"/>
+        <Setter Property="CornerRadius" Value="512"/>
     </Style>
     
     
+    <!-- Link button (underlined when hovered and clear otherwise) -->
     <Style Selector="Button.Link">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>

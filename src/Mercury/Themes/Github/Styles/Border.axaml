@@ -12,12 +12,22 @@
         </Border>
     </Design.PreviewWith>
 
+    <Style Selector="Border">
+        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    </Style>
+    
     <Style Selector="Border.Decor">
         <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource OutlineBrush}"/>
         <Setter Property="BorderThickness" Value="{DynamicResource OutlineThickness}"/>
-        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+    
+    <Style Selector="Border.Outline">
+        <Setter Property="BorderBrush" Value="{DynamicResource OutlineBrush}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource OutlineThickness}"/>
     </Style>
 </Styles>
