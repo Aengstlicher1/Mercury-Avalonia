@@ -9,4 +9,5 @@
     
     <!-- All Border classes -->
     <Style Selector="Border.Decor"/>
+    <Style Selector="Border.Outline"/>
 </Styles>

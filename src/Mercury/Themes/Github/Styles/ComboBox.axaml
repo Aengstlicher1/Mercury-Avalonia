@@ -1,0 +1,71 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20" Background="{DynamicResource WindowSurfaceBrush}">
+            <StackPanel Spacing="8" Width="220">
+                <ComboBox PlaceholderText="Pick one...">
+                    <ComboBoxItem Content="Apple"/>
+                    <ComboBoxItem Content="Banana"/>
+                    <ComboBoxItem Content="Cherry"/>
+                </ComboBox>
+                <ComboBox SelectedIndex="0">
+                    <ComboBoxItem Content="One"/>
+                    <ComboBoxItem Content="Two"/>
+                </ComboBox>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <!-- Base ComboBox -->
+    <Style Selector="ComboBox">
+        <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource OutlineBrush}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource OutlineThickness}"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}"/>
+        <Setter Property="Padding" Value="8"/>
+        <Setter Property="MinHeight" Value="32"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="PlaceholderForeground" Value="{DynamicResource SubTextBrush}"/>
+        <Setter Property="Template" Value="{DynamicResource DefaultComboBoxTemplate}"/>
+    </Style>
+    
+    <Style Selector="ComboBox:pointerover /template/ Border#PART_Overlay">
+        <Setter Property="BorderBrush" Value="{DynamicResource OutlineBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
+    </Style>
+
+    <Style Selector="ComboBox:pressed /template/ Border#PART_Overlay">
+        <Setter Property="Background" Value="{DynamicResource PressedBrush}"/>
+    </Style>
+
+    <Style Selector="ComboBox:dropdownopen /template/ Border#PART_Overlay">
+        <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
+    </Style>
+
+    <!-- ComboBoxItem -->
+    <Style Selector="ComboBoxItem">
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Padding" Value="8,6"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template" Value="{DynamicResource DefaultComboBoxItemTemplate}"/>
+    </Style>
+
+    <Style Selector="ComboBoxItem:pointerover /template/ Border#PART_Overlay">
+        <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
+    </Style>
+
+    <Style Selector="ComboBoxItem:pressed /template/ Border#PART_Overlay">
+        <Setter Property="Background" Value="{DynamicResource PressedBrush}"/>
+    </Style>
+
+    <Style Selector="ComboBoxItem:selected /template/ Border#PART_Base">
+        <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
+    </Style>
+</Styles>

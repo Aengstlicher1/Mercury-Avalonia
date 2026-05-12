@@ -1,11 +1,6 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:icon="clr-namespace:IconPacks.Avalonia.MaterialDesign;assembly=IconPacks.Avalonia.MaterialDesign">
-
-    <ControlTheme x:Key="CaptionButton" TargetType="Button">
-        <Setter Property="WindowDecorationProperties.ElementRole" Value="DecorationsElement" />
-    </ControlTheme>
-    
     <ControlTheme x:Key="{x:Type WindowDrawnDecorations}" TargetType="WindowDrawnDecorations">
         <Setter Property="Template">
             <WindowDrawnDecorationsTemplate>
@@ -14,33 +9,40 @@
                         <Panel WindowDecorationProperties.ElementRole="TitleBar"/>
                     </WindowDrawnDecorationsContent.Underlay>
                     <WindowDrawnDecorationsContent.Overlay>
-                        <Grid RowDefinitions="64, *">
-                            <StackPanel
-                                Grid.Row="0"
-                                Height="32"
-                                Margin="12"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Top"
-                                Orientation="Horizontal">
-                                <Button
-                                    Name="PART_MinimizeButton"
-                                    Theme="{StaticResource CaptionButton}"
-                                    Content="{icon:MaterialDesign Kind=RemoveRound}"
-                                    Width="32" Height="32"
-                                    WindowDecorationProperties.ElementRole="MinimizeButton" />
-                                <Button
-                                    Name="PART_MaximizeButton"
-                                    Theme="{StaticResource CaptionButton}"
-                                    Content="{icon:MaterialDesign Kind=FullscreenRound}"
-                                    Width="32" Height="32"
-                                    WindowDecorationProperties.ElementRole="MaximizeButton" />
-                                <Button
-                                    Name="PART_CloseButton"
-                                    Theme="{StaticResource CaptionButton}"
-                                    Content="{icon:MaterialDesign Kind=CloseRound}"
-                                    Width="32" Height="32"
-                                    WindowDecorationProperties.ElementRole="CloseButton" />
-                            </StackPanel>
+                        <Grid RowDefinitions="64, *" ColumnDefinitions="*, Auto">
+                            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+                            <Border Grid.Row="0" Grid.Column="1"
+                                    Classes="Decor"
+                                    Margin="8"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Top">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button
+                                        Name="PART_MinimizeButton"
+                                        Classes="Ghost"
+                                        VerticalAlignment="Stretch"
+                                        Width="{Binding $self.Bounds.Height}"
+                                        WindowDecorationProperties.ElementRole="MinimizeButton">
+                                        <icon:PackIconMaterialDesign Kind="RemoveRound" Width="16"/>
+                                    </Button>
+                                    <Button
+                                        Name="PART_MaximizeButton"
+                                        Classes="Ghost"
+                                        VerticalAlignment="Stretch"
+                                        Width="{Binding $self.Bounds.Height}"
+                                        WindowDecorationProperties.ElementRole="MaximizeButton">
+                                        <icon:PackIconMaterialDesign Kind="FullscreenRound" Width="16"/>
+                                    </Button>
+                                    <Button
+                                        Name="PART_CloseButton"
+                                        Classes="Ghost"
+                                        VerticalAlignment="Stretch"
+                                        Width="{Binding $self.Bounds.Height}"
+                                        WindowDecorationProperties.ElementRole="CloseButton">
+                                        <icon:PackIconMaterialDesign Kind="CloseRound" Width="16"/>
+                                    </Button>
+                                </StackPanel>
+                            </Border>
                         </Grid>
                     </WindowDrawnDecorationsContent.Overlay>
                 </WindowDrawnDecorationsContent>

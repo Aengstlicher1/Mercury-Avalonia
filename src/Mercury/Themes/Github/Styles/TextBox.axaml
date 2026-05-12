@@ -11,58 +11,7 @@
         <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource OutlineBrush}"/>
         <Setter Property="BorderThickness" Value="{DynamicResource OutlineThickness}"/>
-        <Setter Property="Template">
-            <ControlTemplate>
-                <Border Name="PART_Base"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{TemplateBinding CornerRadius}"
-                        VerticalAlignment="Stretch"
-                        HorizontalAlignment="Stretch">
-                    <Panel>
-                        <Panel Margin="4">
-                            <TextBlock Name="PART_Placeholder"
-                                       VerticalAlignment="Center"
-                                       Foreground="{DynamicResource SubTextBrush}"
-                                       Text="{TemplateBinding PlaceholderText}"
-                                       Opacity="0">
-                                <TextBlock.Transitions>
-                                    <Transitions>
-                                        <DoubleTransition Property="Opacity" Duration="0:0:0.15"/>
-                                    </Transitions>
-                                </TextBlock.Transitions>
-                            </TextBlock>
-                            <TextPresenter Name="PART_TextPresenter"
-                                           Text="{TemplateBinding Text, Mode=TwoWay}"
-                                           CaretIndex="{TemplateBinding CaretIndex}"
-                                           SelectionStart="{TemplateBinding SelectionStart}"
-                                           SelectionEnd="{TemplateBinding SelectionEnd}"
-                                           TextAlignment="{TemplateBinding TextAlignment}"
-                                           TextWrapping="{TemplateBinding TextWrapping}"
-                                           LineHeight="{TemplateBinding LineHeight}"
-                                           LetterSpacing="{TemplateBinding LetterSpacing}"
-                                           PasswordChar="{TemplateBinding PasswordChar}"
-                                           RevealPassword="{TemplateBinding RevealPassword}"
-                                           SelectionBrush="{TemplateBinding SelectionBrush}"
-                                           SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
-                                           CaretBrush="{TemplateBinding CaretBrush}"
-                                           TextBlock.Foreground="{TemplateBinding Foreground}"
-                                           VerticalAlignment="Center"/>
-                        </Panel>
-                        <Border Name="PART_Overlay"
-                                Background="Transparent"
-                                CornerRadius="{TemplateBinding CornerRadius}">
-                            <Border.Transitions>
-                                <Transitions>
-                                    <BrushTransition Property="Background" Duration="0:0:0.06"/>
-                                </Transitions>
-                            </Border.Transitions>
-                        </Border>
-                    </Panel>
-                </Border>
-            </ControlTemplate>
-        </Setter>
+        <Setter Property="Template" Value="{DynamicResource DefaultTextBoxTemplate}"/>
     </Style>
     
     <Style Selector="TextBox:pointerover /template/ Border#PART_Overlay">

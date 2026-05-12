@@ -1,12 +1,11 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:Mercury.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:icon="clr-namespace:IconPacks.Avalonia.MaterialDesign;assembly=IconPacks.Avalonia.MaterialDesign"
         xmlns:imageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
         xmlns:models="clr-namespace:Mercury.Models"
-        xmlns:viewModels="clr-namespace:Mercury.ViewModels"
+        xmlns:vm="clr-namespace:Mercury.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Mercury.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -37,10 +36,9 @@
             </Border>
         </Panel>
         
-        <Grid Name="RootGrid"
-              RowDefinitions="64, *">
-            <Border Grid.Row="0" Grid.Column="0">
-                <Grid ColumnDefinitions="48, *, *, 96" Margin="12,0,60,0">
+        <Grid Name="RootGrid" RowDefinitions="64, *">
+            <Border Grid.Row="0">
+                <Grid ColumnDefinitions="48, *, *, 96" Margin="48,0">
                     <Button Grid.Column="0"
                             Classes="Ghost"
                             Width="{Binding $self.Bounds.Height}"
@@ -50,9 +48,9 @@
                             Content="{icon:MaterialDesign Kind=ArrowBackRound, Width=16}"/>
                     <Grid Grid.Column="1">
                         <Border Classes="Decor"
-                                VerticalAlignment="Top"
                                 HorizontalAlignment="Left"
-                                Margin="8,12,0,0">
+                                VerticalAlignment="Stretch"
+                                Margin="12">
                             <ItemsControl
                                 ItemsSource="{Binding NavigationService.Tabs}">
                                 <ItemsControl.ItemsPanel>
@@ -68,10 +66,7 @@
                                             IsVisible="{Binding IsTab}"
                                             Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).NavigateToCommand}"
                                             CommandParameter="{Binding }">
-                                            <Grid RowDefinitions="*, Auto">
-                                                <TextBlock Grid.Row="0" Text="{Binding Title}" />
-                                                <Border Grid.Row="1" Height="3" CornerRadius="8"/>
-                                            </Grid>
+                                            <TextBlock Text="{Binding Title}"/>
                                         </Button>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -79,24 +74,24 @@
                         </Border>
                     </Grid>
                     <Grid Grid.Column="2"
-                          ColumnDefinitions="*, Auto, Auto" 
-                          VerticalAlignment="Top"
-                          Margin="0,12,0,0">
+                          ColumnDefinitions="*, Auto" 
+                          VerticalAlignment="Stretch"
+                          Margin="12">
                         <TextBox Grid.Column="0" PlaceholderText="Search for Songs, Albums, Playlists"
                                  Text="{Binding SearchText, Mode=TwoWay}"
-                                 CornerRadius="8,0,0,8" 
+                                 CornerRadius="{DynamicResource LeftCornerRadius}"
+                                 VerticalAlignment="Stretch"
                                  GotFocus="SearchBox_GotFocus"
                                  WindowDecorationProperties.ElementRole="User"/>
-                        <Border Grid.Column="1" BorderBrush="{StaticResource OutlineBrush}" BorderThickness="0,0,1,0" />
-                        <ComboBox Grid.Column="2" CornerRadius="0,8,8,0"
+                        <ComboBox Grid.Column="1" CornerRadius="{DynamicResource RightCornerRadius}"
                                   ItemsSource="{Binding SearchFilters}"
                                   SelectedItem="{Binding SearchFilter}"
                                   WindowDecorationProperties.ElementRole="User"/>
                     </Grid>
                     
-                    <Border Grid.Column="1" Grid.ColumnSpan="3" Margin="12,4,12,8"
-                            Height="1" Background="{DynamicResource OutlineBrush}"
-                            CornerRadius="6" VerticalAlignment="Bottom"/>
+                    <Border Grid.Column="1" Grid.ColumnSpan="3" Margin="12,4,12,0"
+                            Height="1" BorderBrush="{DynamicResource OutlineBrush}"
+                            BorderThickness="1" VerticalAlignment="Bottom"/>
                 </Grid>
             </Border>
             
