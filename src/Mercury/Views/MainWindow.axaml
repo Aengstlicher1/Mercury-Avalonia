@@ -12,7 +12,6 @@
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaTitleBarHeightHint="48"
         Background="{StaticResource WindowSurfaceBrush}"
-        TransparencyLevelHint="AcrylicBlur, Mica, Transparent"
         Width="950"
         Height="500"
         Title="Mercury">
@@ -25,10 +24,10 @@
             <!-- WindowBrush base -->
             <Border Background="{DynamicResource WindowSurfaceBrush}"/>
     
-            <!-- 10% image on top -->
+            <!-- 4% image on top -->
             <Border>
                 <Border.Background>
-                    <ImageBrush Source="{Binding CurrentBackgroundImage}" Stretch="UniformToFill" Opacity="0.1"/>
+                    <ImageBrush Source="{Binding CurrentBackgroundImage}" Stretch="UniformToFill" Opacity="0.04"/>
                 </Border.Background>
                 <Border.Effect>
                     <BlurEffect Radius="80"/>
@@ -48,7 +47,7 @@
                             Content="{icon:MaterialDesign Kind=ArrowBackRound, Width=16}"/>
                     <Grid Grid.Column="1">
                         <Border Classes="Decor"
-                                HorizontalAlignment="Left"
+                                HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
                                 Margin="12">
                             <ItemsControl
@@ -80,12 +79,14 @@
                         <TextBox Grid.Column="0" PlaceholderText="Search for Songs, Albums, Playlists"
                                  Text="{Binding SearchText, Mode=TwoWay}"
                                  CornerRadius="{DynamicResource LeftCornerRadius}"
+                                 Margin="0,0,-1,0"
                                  VerticalAlignment="Stretch"
                                  GotFocus="SearchBox_GotFocus"
                                  WindowDecorationProperties.ElementRole="User"/>
                         <ComboBox Grid.Column="1" CornerRadius="{DynamicResource RightCornerRadius}"
                                   ItemsSource="{Binding SearchFilters}"
                                   SelectedItem="{Binding SearchFilter}"
+                                  Margin="-1,0,0,0"
                                   WindowDecorationProperties.ElementRole="User"/>
                     </Grid>
                     

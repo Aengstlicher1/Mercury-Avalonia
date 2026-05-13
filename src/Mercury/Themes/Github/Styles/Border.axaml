@@ -11,12 +11,6 @@
             </Border>
         </Border>
     </Design.PreviewWith>
-
-    <Style Selector="Border">
-        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}"/>
-        <Setter Property="VerticalAlignment" Value="Stretch"/>
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-    </Style>
     
     <Style Selector="Border.Decor">
         <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>

@@ -1,6 +1,7 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converters="clr-namespace:Mercury.Resources.Converters"
+             xmlns:simple="clr-namespace:Avalonia.Themes.Simple;assembly=Avalonia.Themes.Simple"
              x:Class="Mercury.App"
              xmlns:local="using:Mercury"
              RequestedThemeVariant="Default">

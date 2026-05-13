@@ -1,96 +1,109 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:icon="clr-namespace:IconPacks.Avalonia.MaterialDesign;assembly=IconPacks.Avalonia.MaterialDesign">
-    <ControlTemplate x:Key="DefaultComboBoxTemplate" TargetType="ComboBox">
-        <Panel>
-            <Border Name="PART_Base"
-                    Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    CornerRadius="{TemplateBinding CornerRadius}"/>
-            
-            <Grid ColumnDefinitions="*,Auto">
-                <Panel Grid.Column="0"
-                       Margin="{TemplateBinding Padding}"
-                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
-                    <ContentPresenter Name="PART_ContentPresenter"
-                                      Content="{TemplateBinding SelectionBoxItem}"
-                                      ContentTemplate="{TemplateBinding ItemTemplate}"
-                                      IsVisible="{TemplateBinding SelectionBoxItem, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-                    <TextBlock Name="PART_Placeholder"
-                               Text="{TemplateBinding PlaceholderText}"
-                               Foreground="{TemplateBinding PlaceholderForeground}"
-                               IsVisible="{TemplateBinding SelectionBoxItem, Converter={x:Static ObjectConverters.IsNull}}"/>
+    <Design.PreviewWith>
+        <Border Padding="32" Classes="Decor">
+            <ComboBox PlaceholderText="Pick something">
+                <ComboBoxItem Content="Banana"/>
+                <ComboBoxItem Content="Apple"/>
+                <ComboBoxItem Content="Melon"/>
+            </ComboBox>
+        </Border>
+    </Design.PreviewWith>
+    
+    <ControlTheme x:Key="{x:Type ComboBox}" TargetType="ComboBox">
+        <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource OutlineBrush}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource OutlineThickness}"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}"/>
+        <Setter Property="Padding" Value="8"/>
+        <Setter Property="MinHeight" Value="32"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="PlaceholderForeground" Value="{DynamicResource SubTextBrush}"/>
+        <Setter Property="Template">
+            <ControlTemplate TargetType="ComboBox">
+                <Panel>
+                    <Border Name="PART_Base"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Panel Grid.Column="0"
+                               Margin="{TemplateBinding Padding}"
+                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
+                            <ContentPresenter Name="PART_ContentPresenter"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              ContentTemplate="{TemplateBinding ItemTemplate}"
+                                              IsVisible="{TemplateBinding SelectionBoxItem, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                            <TextBlock Name="PART_Placeholder"
+                                       Text="{TemplateBinding PlaceholderText}"
+                                       Foreground="{TemplateBinding PlaceholderForeground}"
+                                       IsVisible="{TemplateBinding SelectionBoxItem, Converter={x:Static ObjectConverters.IsNull}}"/>
+                        </Panel>
+                        
+                        <icon:PackIconMaterialDesign Grid.Column="1"
+                                                     Name="PART_Chevron"
+                                                     Kind="KeyboardArrowDownRound"
+                                                     Width="12" Height="12"
+                                                     Margin="0,0,8,0"
+                                                     VerticalAlignment="Center"
+                                                     HorizontalAlignment="Center"
+                                                     Foreground="{TemplateBinding Foreground}"/>
+                    </Grid>
+                    
+                    <Border Name="PART_Overlay"
+                            Background="Transparent"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            IsHitTestVisible="False">
+                        <Border.Transitions>
+                            <Transitions>
+                                <BrushTransition Property="Background" Duration="0:0:0.06"/>
+                            </Transitions>
+                        </Border.Transitions>
+                    </Border>
+                    
+                    <Popup Name="PART_Popup"
+                           WindowManagerAddShadowHint="False"
+                           IsOpen="{TemplateBinding IsDropDownOpen, Mode=TwoWay}"
+                           MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
+                           MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                           PlacementTarget="{TemplateBinding}"
+                           Placement="BottomEdgeAlignedLeft">
+                        <Border Background="{DynamicResource SurfaceBrush}"
+                                BorderBrush="{DynamicResource OutlineBrush}"
+                                BorderThickness="{DynamicResource OutlineThickness}"
+                                CornerRadius="{DynamicResource CornerRadius}"
+                                Margin="0,4,0,0"
+                                Padding="4">
+                            <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                          VerticalScrollBarVisibility="Auto">
+                                <ItemsPresenter Name="PART_ItemsPresenter"
+                                                ItemsPanel="{TemplateBinding ItemsPanel}"/>
+                            </ScrollViewer>
+                        </Border>
+                    </Popup>
                 </Panel>
-                
-                <icon:PackIconMaterialDesign Grid.Column="1"
-                                             Name="PART_Chevron"
-                                             Kind="KeyboardArrowDownRound"
-                                             Width="12" Height="12"
-                                             Margin="0,0,8,0"
-                                             VerticalAlignment="Center"
-                                             HorizontalAlignment="Center"
-                                             Foreground="{TemplateBinding Foreground}"/>
-            </Grid>
-            
-            <Border Name="PART_Overlay"
-                    Background="Transparent"
-                    CornerRadius="{TemplateBinding CornerRadius}"
-                    IsHitTestVisible="False">
-                <Border.Transitions>
-                    <Transitions>
-                        <BrushTransition Property="Background" Duration="0:0:0.06"/>
-                    </Transitions>
-                </Border.Transitions>
-            </Border>
-            
-            <Popup Name="PART_Popup"
-                   WindowManagerAddShadowHint="False"
-                   IsOpen="{TemplateBinding IsDropDownOpen, Mode=TwoWay}"
-                   MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
-                   MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                   PlacementTarget="{TemplateBinding}"
-                   Placement="BottomEdgeAlignedLeft">
-                <Border Background="{DynamicResource SurfaceBrush}"
-                        BorderBrush="{DynamicResource OutlineBrush}"
-                        BorderThickness="{DynamicResource OutlineThickness}"
-                        CornerRadius="{DynamicResource CornerRadius}"
-                        Margin="0,4,0,0"
-                        Padding="4">
-                    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                                  VerticalScrollBarVisibility="Auto">
-                        <ItemsPresenter Name="PART_ItemsPresenter"
-                                        ItemsPanel="{TemplateBinding ItemsPanel}"/>
-                    </ScrollViewer>
-                </Border>
-            </Popup>
-        </Panel>
-    </ControlTemplate>
+            </ControlTemplate>
+        </Setter>
     
-    
-    <ControlTemplate x:Key="DefaultComboBoxItemTemplate" TargetType="ComboBoxItem">
-        <Panel>
-            <Border Name="PART_Base"
-                    Background="{TemplateBinding Background}"
-                    CornerRadius="{TemplateBinding CornerRadius}"/>
-            <ContentPresenter Name="PART_ContentPresenter"
-                              Content="{TemplateBinding Content}"
-                              ContentTemplate="{TemplateBinding ContentTemplate}"
-                              Foreground="{TemplateBinding Foreground}"
-                              Padding="{TemplateBinding Padding}"
-                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"/>
-            <Border Name="PART_Overlay"
-                    Background="Transparent"
-                    CornerRadius="{TemplateBinding CornerRadius}"
-                    IsHitTestVisible="False">
-                <Border.Transitions>
-                    <Transitions>
-                        <BrushTransition Property="Background" Duration="0:0:0.06"/>
-                    </Transitions>
-                </Border.Transitions>
-            </Border>
-        </Panel>
-    </ControlTemplate>
+        <Style Selector="^:pointerover /template/ Border#PART_Overlay">
+            <Setter Property="BorderBrush" Value="{DynamicResource OutlineBrush}"/>
+            <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
+        </Style>
+
+        <Style Selector="^:pressed /template/ Border#PART_Overlay">
+            <Setter Property="Background" Value="{DynamicResource PressedBrush}"/>
+        </Style>
+
+        <Style Selector="^:dropdownopen /template/ Border#PART_Overlay">
+            <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
+        </Style>
+    </ControlTheme>
 </ResourceDictionary>

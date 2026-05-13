@@ -2,15 +2,20 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:icon="clr-namespace:IconPacks.Avalonia.MaterialDesign;assembly=IconPacks.Avalonia.MaterialDesign">
     <ControlTheme x:Key="{x:Type WindowDrawnDecorations}" TargetType="WindowDrawnDecorations">
+        <Setter Property="DefaultTitleBarHeight" Value="32"/>
+        <Setter Property="DefaultFrameThickness" Value="1"/>
+        <Setter Property="DefaultShadowThickness" Value="8"/>
         <Setter Property="Template">
             <WindowDrawnDecorationsTemplate>
                 <WindowDrawnDecorationsContent>
                     <WindowDrawnDecorationsContent.Underlay>
-                        <Panel WindowDecorationProperties.ElementRole="TitleBar"/>
+                        <Panel IsVisible="{TemplateBinding HasTitleBar}"
+                               MinHeight="32"
+                               Height="{TemplateBinding TitleBarHeight}"
+                               WindowDecorationProperties.ElementRole="TitleBar"/>
                     </WindowDrawnDecorationsContent.Underlay>
                     <WindowDrawnDecorationsContent.Overlay>
                         <Grid RowDefinitions="64, *" ColumnDefinitions="*, Auto">
-                            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
                             <Border Grid.Row="0" Grid.Column="1"
                                     Classes="Decor"
                                     Margin="8"

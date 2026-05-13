@@ -41,4 +41,5 @@
         <Popup x:Name="PART_Popup"/>
     </ControlTemplate>
     <ControlTemplate x:Key="DefaultComboBoxItemTemplate" TargetType="ComboBoxItem"/>
+    <ControlTemplate x:Key="DefaultItemsControlTemplate" TargetType="ItemsControl"/>
 </ResourceDictionary>

@@ -1,35 +1,31 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <ControlTheme x:Key="{x:Type Button}" TargetType="Button">
-        <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+    <ControlTheme x:Key="{x:Type ComboBoxItem}" TargetType="ComboBoxItem">
         <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource OutlineBrush}"/>
-        <Setter Property="BorderThickness" Value="{DynamicResource OutlineThickness}"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Padding" Value="8,6"/>
         <Setter Property="CornerRadius" Value="{DynamicResource CornerRadius}"/>
-        <Setter Property="Padding" Value="8"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template">
-            <ControlTemplate TargetType="Button">
+            <ControlTemplate TargetType="ComboBoxItem">
                 <Panel>
                     <Border Name="PART_Base"
-                            Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
                             CornerRadius="{TemplateBinding CornerRadius}"/>
-                    
-                    <ContentPresenter Name="PART_Content"
-                                      Foreground="{TemplateBinding Foreground}"
+                    <ContentPresenter Name="PART_ContentPresenter"
                                       Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      Foreground="{TemplateBinding Foreground}"
                                       Padding="{TemplateBinding Padding}"
                                       VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"/>
-                    
                     <Border Name="PART_Overlay"
                             Background="Transparent"
-                            CornerRadius="{TemplateBinding CornerRadius}">
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            IsHitTestVisible="False">
                         <Border.Transitions>
                             <Transitions>
                                 <BrushTransition Property="Background" Duration="0:0:0.06"/>
@@ -39,13 +35,18 @@
                 </Panel>
             </ControlTemplate>
         </Setter>
-    
+        
+        
         <Style Selector="^:pointerover /template/ Border#PART_Overlay">
             <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
         </Style>
-    
+
         <Style Selector="^:pressed /template/ Border#PART_Overlay">
             <Setter Property="Background" Value="{DynamicResource PressedBrush}"/>
+        </Style>
+
+        <Style Selector="^:selected /template/ Border#PART_Base">
+            <Setter Property="Background" Value="{DynamicResource SurfaceHighlightBrush}"/>
         </Style>
     </ControlTheme>
 </ResourceDictionary>

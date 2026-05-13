@@ -3,13 +3,11 @@
         xmlns:icon="clr-namespace:IconPacks.Avalonia.MaterialDesign;assembly=IconPacks.Avalonia.MaterialDesign">
     <Design.PreviewWith>
         <Border Padding="20">
-            <icon:PackIconMaterialDesign Kind="FullscreenRound" Height="24" Width="24"/>
+            <!-- Add Controls for Previewer Here -->
         </Border>
     </Design.PreviewWith>
 
     <Style Selector="icon|PackIconMaterialDesign">
         <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
 </Styles>

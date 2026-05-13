@@ -1,6 +1,12 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <ControlTemplate x:Key="DefaultTextBoxTemplate" TargetType="TextBox">
+    <ControlTheme x:Key="{x:Type TextBox}" TargetType="TextBox">
+        <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource OutlineBrush}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource OutlineThickness}"/>
+        <Setter Property="Template">
+            <ControlTemplate TargetType="TextBox">
                 <Border Name="PART_Base"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
@@ -50,4 +56,18 @@
                     </Panel>
                 </Border>
             </ControlTemplate>
+        </Setter>
+        
+        <Style Selector="^:pointerover /template/ Border#PART_Overlay">
+            <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
+        </Style>
+    
+        <Style Selector="^:empty /template/ TextBlock#PART_Placeholder">
+            <Setter Property="Opacity" Value="1"/>
+        </Style>
+    
+        <Style Selector="^:focus">
+            <Setter Property="BorderBrush" Value="{DynamicResource SelectedBrush}"/>
+        </Style>
+    </ControlTheme>
 </ResourceDictionary>

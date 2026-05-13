@@ -33,13 +33,13 @@
         <PackageReference Include="Avalonia.Native" Version="12.0.2" />
         <PackageReference Include="Avalonia.Remote.Protocol" Version="12.0.2" />
         <PackageReference Include="Avalonia.Skia" Version="12.0.2" />
+        <PackageReference Include="Avalonia.Themes.Simple" Version="12.0.2" />
         <PackageReference Include="Avalonia.Win32" Version="12.0.2" />
         <PackageReference Include="Avalonia.X11" Version="12.0.2" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
         <PackageReference Include="DiscordRichPresence" Version="1.6.1.70" />
         <PackageReference Include="LibVLCSharp" Version="3.9.6" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="11.0.0-preview.2.26159.112" />
-        <PackageReference Include="Semi.Avalonia" Version="12.0.1" />
         <PackageReference Include="VideoLAN.LibVLC.Mac" Version="3.1.3.1" />
         <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.23" />
     </ItemGroup>
@@ -50,16 +50,23 @@
     </ItemGroup>
     
     <ItemGroup>
-        <Content Include="Themes\**\Assets\**\*"
+        <!-- Assets (preview Icon) -->
+        <Content Include="Themes\**\Assets\*"
                  Exclude="Themes\Template\**\*"
                  CopyToOutputDirectory="PreserveNewest" />
+        <!-- Theme json manifest -->
         <Content Include="Themes\**\theme.json"
                  Exclude="Themes\Template\**\*"
                  CopyToOutputDirectory="PreserveNewest" />
-        <AvaloniaXaml Include="Themes\**\*.axaml"
-                      Exclude="Themes\Template\**\*" />
+        <!-- Theme Resources and Styles (Including Dark / Light mode) -->
         <Content Include="Themes\**\*.axaml"
                  Exclude="Themes\Template\**\*"
                  CopyToOutputDirectory="PreserveNewest" />
+        <Content Update="Assets\Fonts\Roboto.ttf">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Update="Assets\Fonts\Roboto_Italic.ttf">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 </Project>

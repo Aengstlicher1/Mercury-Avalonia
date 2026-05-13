@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using System;
+using Mercury.Models;
 
 namespace Mercury;
 
@@ -16,6 +17,10 @@ sealed class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
+            .ConfigureFonts(fontMngr =>
+            {
+                fontMngr.AddFontCollection(new MercuryFontCollection());
+            })
             .WithInterFont()
             .LogToTrace();
 }

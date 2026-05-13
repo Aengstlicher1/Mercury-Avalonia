@@ -6,7 +6,6 @@
         </Border>
     </Design.PreviewWith>
     
-    
     <!-- Ghost button (clear variant) -->
     <Style Selector="Button.Ghost">
         <Setter Property="Background" Value="Transparent"/>
