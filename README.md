@@ -36,6 +36,10 @@ Mercury is a native music player that lets you search, stream, and enjoy music f
 
 > Mercury is currently in active development. Pre-built releases will be available soon.
 
+> *Linux Dependencies Include:*
+> - webkitgtk (Only needed for the Sign-In feature)
+> - vlc
+
 ### Build from Source
 
 You will need the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) and Git installed.
