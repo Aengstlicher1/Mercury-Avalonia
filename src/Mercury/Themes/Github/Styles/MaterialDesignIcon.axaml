@@ -9,5 +9,7 @@
 
     <Style Selector="icon|PackIconMaterialDesign">
         <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
 </Styles>

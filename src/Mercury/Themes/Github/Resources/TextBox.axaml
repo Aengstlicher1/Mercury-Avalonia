@@ -5,6 +5,7 @@
         <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource OutlineBrush}"/>
         <Setter Property="BorderThickness" Value="{DynamicResource OutlineThickness}"/>
+        <Setter Property="FontSize" Value="14"/>
         <Setter Property="Template">
             <ControlTemplate TargetType="TextBox">
                 <Border Name="PART_Base"

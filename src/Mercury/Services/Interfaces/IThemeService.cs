@@ -11,15 +11,15 @@ public interface IThemeService : IServiceBase
 {
     void Initialize();
     
-    ObservableCollection<UiTheme> AvailableThemes { get; }
-    UiTheme? CurrentTheme { get; }
+    ObservableCollection<UserTheme> AvailableThemes { get; }
+    UserTheme CurrentTheme { get; }
     
-    void InstallFromPackage(string packagePath);
+    bool InstallFromPackage(string packagePath);
     void ApplyTheme(string themeId);
-    void ApplyTheme(UiTheme theme);
+    void ApplyTheme(UserTheme theme);
     void UninstallPackage(string themeId);
     
-    event Action<UiTheme?> ThemeChanged;
-    event Action<UiTheme?> ThemeInstalled;
-    event Action<UiTheme?> ThemeUninstalled;
+    event Action<UserTheme?>? ThemeChanged;
+    event Action<UserTheme?>? ThemeInstalled;
+    event Action<UserTheme?>? ThemeUninstalled;
 }

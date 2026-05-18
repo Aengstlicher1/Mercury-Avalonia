@@ -45,13 +45,17 @@ public class App : Application
         services.AddSingleton<IServiceBase>(sp => sp.GetRequiredService<IDiscordService>());
         services.AddSingleton<IThemeService, ThemeService>();
         services.AddSingleton<IServiceBase>(sp => sp.GetRequiredService<IThemeService>());
+        services.AddSingleton<IAccountService, AccountService>();
+        services.AddSingleton<IServiceBase>(sp => sp.GetRequiredService<IAccountService>());
 
         
         // Register ViewModels
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<HomePageViewModel>();
         services.AddTransient<ExplorePageViewModel>();
+        services.AddTransient<LibraryPageViewModel>();
         services.AddTransient<SearchPageViewModel>();
+        services.AddTransient<AccountPageViewModel>();
         services.AddTransient<PlayingPageViewModel>();
         services.AddTransient<LyricsViewerViewModel>();
         services.AddTransient<QueueViewerViewModel>();
@@ -62,7 +66,9 @@ public class App : Application
         services.AddTransient<MainWindow>();
         services.AddTransient<HomePage>();
         services.AddTransient<ExplorePage>();
+        services.AddTransient<LibraryPage>();
         services.AddTransient<SearchPage>();
+        services.AddTransient<AccountPage>();
         services.AddTransient<PlayingPage>();
         services.AddTransient<EntityViewer>();
         services.AddTransient<PlaylistViewer>();
@@ -79,7 +85,9 @@ public class App : Application
         var nav = Services.GetRequiredService<INavigationService>();
         nav.Register<HomePage, HomePageViewModel>("Home", PackIconMaterialDesignKind.HomeRound, isTab: true);
         nav.Register<ExplorePage, ExplorePageViewModel>("Explore", PackIconMaterialDesignKind.ExploreRound, isTab: true);
+        nav.Register<LibraryPage, LibraryPageViewModel>("Library", PackIconMaterialDesignKind.LibraryMusicRound, isTab: true);
         nav.Register<SearchPage, SearchPageViewModel>("Search", PackIconMaterialDesignKind.SearchRound, isTab: false);
+        nav.Register<AccountPage, AccountPageViewModel>("Accounts", PackIconMaterialDesignKind.PersonOutlineOutline, isTab: false);
         nav.Register<PlayingPage, PlayingPageViewModel>("Playing", PackIconMaterialDesignKind.PlayArrowRound, isTab: false);
         
         

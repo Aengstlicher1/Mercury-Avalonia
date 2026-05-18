@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia;
@@ -25,14 +27,14 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
     public static readonly string ThemesDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Mercury", "Themes");
     
     [ObservableProperty]
-    public partial ObservableCollection<UiTheme> AvailableThemes { get; set; } = new ();
+    public partial ObservableCollection<UserTheme> AvailableThemes { get; set; } = new ();
     
     [ObservableProperty]
-    public partial UiTheme CurrentTheme { get; set; } = UiTheme.Default;
+    public partial UserTheme CurrentTheme { get; set; } = UserTheme.Default;
     
-    public event Action<UiTheme?>? ThemeChanged;
-    public event Action<UiTheme?>? ThemeInstalled;
-    public event Action<UiTheme?>? ThemeUninstalled;
+    public event Action<UserTheme?>? ThemeChanged;
+    public event Action<UserTheme?>? ThemeInstalled;
+    public event Action<UserTheme?>? ThemeUninstalled;
     
     public void Initialize()
     {
@@ -40,10 +42,19 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
         
         /* Install all default themes on startup */
         var defaultThemes = Path.Combine(AppContext.BaseDirectory, "Themes");
-        if (Directory.Exists(defaultThemes))
-            DirectoryHelper.CopyAll(defaultThemes, ThemesDir);
+        var shipped = Directory.Exists(defaultThemes)
+            ? Directory.EnumerateDirectories(defaultThemes).Select(x => Path.GetFileName(x)).ToHashSet(StringComparer.OrdinalIgnoreCase)
+            : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var shippedName in shipped)
+        {
+            var from = Path.Combine(defaultThemes, shippedName);
+            var to = Path.Combine(ThemesDir, shippedName);
+            if (Directory.Exists(to)) Directory.Delete(to, recursive: true);
+            DirectoryHelper.CopyAll(from, to);
+        }
         
-        var found = new List<UiTheme>();
+        var found = new List<UserTheme>();
         foreach (var dir in Directory.EnumerateDirectories(ThemesDir))
         {
             var manifestPath = Path.Combine(dir, "theme.json");
@@ -52,26 +63,27 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
             {
                 var manifest = JsonSerializer.Deserialize<ThemeManifest>(File.ReadAllText(manifestPath));
                 if (manifest is null || string.IsNullOrWhiteSpace(manifest.Id)) continue;
-                found.Add(new UiTheme(manifest, Path.GetFileName(dir)));
+                found.Add(new UserTheme(manifest, Path.GetFileName(dir)));
             }
             catch { /* skip */ }
         }
-        
-        AvailableThemes = new ObservableCollection<UiTheme>(found);
+
+        foreach (var theme in found)
+            AvailableThemes.Add(theme);
 
         var lastId = _settingsService.DesignSettings.UserThemeId;
         var match  = found.FirstOrDefault(t => t.Manifest.Id == lastId);
-        ApplyTheme(match?.Manifest.Id ?? UiTheme.Default.Manifest.Id);
+        ApplyTheme(match?.Manifest.Id ?? UserTheme.Default.Manifest.Id);
     }
     
-    public void InstallFromPackage(string packagePath)
+    public bool InstallFromPackage(string packagePath)
     {
         Console.WriteLine("Installing theme...");
         
-        if (!File.Exists(packagePath)) return;
+        if (!File.Exists(packagePath)) return false;
         if (!packagePath.EndsWith(".mercuryTheme", StringComparison.OrdinalIgnoreCase) &&
             !packagePath.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
-            return;
+            return false;
 
         Directory.CreateDirectory(ThemesDir);
         
@@ -87,7 +99,7 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
             if (manifestPath is null)
             {
                 // No theme.json anywhere — invalid package.
-                return;
+                return false;
             }
 
             // The "theme root" is the directory containing theme.json.
@@ -101,11 +113,11 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
             }
             catch (JsonException)
             {
-                return;
+                return false;
             }
 
             if (manifest is null || string.IsNullOrWhiteSpace(manifest.Id))
-                return;
+                return false;
 
             // 4. Pick a folder name. Prefer manifest id (sanitized) so re-installs land in the same place.
             var folderName = SanitizeFolderName(manifest.Id);
@@ -130,7 +142,7 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
             }
 
             // 7. Wire it up.
-            var theme = new UiTheme(manifest, folderName);
+            var theme = new UserTheme(manifest, folderName);
 
             // De-dupe in the in-memory list.
             var existing = AvailableThemes.FirstOrDefault(t => t.Manifest.Id == manifest.Id);
@@ -149,6 +161,8 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
             
             Console.WriteLine("Theme installed successfully!");
         }
+        
+        return true;
     }
 
     private static string? LocateManifest(string root)
@@ -189,23 +203,15 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
     }
 
 
-    public void ApplyTheme(UiTheme theme)
-    {
-        if (AvailableThemes.Any(x => x.Manifest.Id == theme.Manifest.Id))
-        {
-            ApplyTheme(theme.Manifest.Id);
-        }
-        else
-        {
-            throw new ArgumentException($"Theme:({theme.Manifest.Id}) is not Available.");
-        }
-    }
-    
     public void ApplyTheme(string themeId)
     {
         var theme = AvailableThemes.FirstOrDefault(x => x.Manifest.Id == themeId);
-        if (theme is null) return;
-
+        if (theme is null) throw new ArgumentNullException(nameof(theme));
+        ApplyTheme(theme);
+    }
+    
+    public void ApplyTheme(UserTheme theme)
+    {
         var lightDict = theme.SupportsLight ? Load<ResourceDictionary>(theme.FullLightPath) : null;
         var darkDict  = theme.SupportsDark  ? Load<ResourceDictionary>(theme.FullDarkPath)  : null;
         var styleContainers    = theme.FullStylesPaths.Select(LoadStyles).ToList();
@@ -229,7 +235,11 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
         _settingsService.DesignSettings.UserThemeId = theme.Manifest.Id;
     }
 
-    private static T Load<T>(string path) => (T)AvaloniaRuntimeXamlLoader.Load(File.ReadAllText(path));
+    private static T Load<T>(string path) => (T)AvaloniaRuntimeXamlLoader.Load(
+        File.ReadAllText(path), 
+        localAssembly:Assembly.GetCallingAssembly(),
+        uri: new Uri(path)
+    );
 
     private static UserThemeStyles LoadStyles(string p)
     {
@@ -253,7 +263,7 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
         if (theme is null) return;
 
         if (CurrentTheme.Manifest.Id == themeId)
-            ApplyTheme(UiTheme.Default);
+            ApplyTheme(UserTheme.Default);
 
         var folder = Path.Combine(ThemesDir, theme.ThemeFolderName);
         if (Directory.Exists(folder))
@@ -263,7 +273,7 @@ public partial class ThemeService(ISettingsService settingsService) : ServiceBas
         ThemeUninstalled?.Invoke(theme);
     }
 
-    partial void OnCurrentThemeChanged(UiTheme value)
+    partial void OnCurrentThemeChanged(UserTheme value)
     {
         ThemeChanged?.Invoke(value);
     }

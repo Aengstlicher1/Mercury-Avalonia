@@ -31,15 +31,4 @@
     <CornerRadius x:Key="LeftCornerRadius">0</CornerRadius>
     <CornerRadius x:Key="RightCornerRadius">0</CornerRadius>
     <Thickness x:Key="OutlineThickness">1</Thickness>
-    
-    
-    <ControlTemplate x:Key="DefaultButtonTemplate" TargetType="Button"/>
-    <ControlTemplate x:Key="DefaultTextBoxTemplate" TargetType="TextBox">
-        <TextPresenter x:Name="PART_TextPresenter"/>
-    </ControlTemplate>
-    <ControlTemplate x:Key="DefaultComboBoxTemplate" TargetType="ComboBox">
-        <Popup x:Name="PART_Popup"/>
-    </ControlTemplate>
-    <ControlTemplate x:Key="DefaultComboBoxItemTemplate" TargetType="ComboBoxItem"/>
-    <ControlTemplate x:Key="DefaultItemsControlTemplate" TargetType="ItemsControl"/>
 </ResourceDictionary>

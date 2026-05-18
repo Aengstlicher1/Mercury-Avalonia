@@ -1,0 +1,83 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20" Background="White">
+            <Slider Maximum="100" Value="60"
+                    Width="100"
+                    
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"/>
+        </Border>
+    </Design.PreviewWith>
+    <ControlTheme x:Key="{x:Type Slider}" TargetType="Slider">
+        <Style Selector="^:horizontal">
+            <Setter Property="MinWidth" Value="40" />
+            <Setter Property="MinHeight" Value="20" />
+            <Setter Property="Background" Value="{DynamicResource SurfaceItemBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource HighlightBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource SurfaceHighlightBrush}" />
+            <Setter Property="Template">
+                <ControlTemplate TargetType="Slider">
+                    <Border Background="{TemplateBinding Background}"
+                            CornerRadius="16"
+                            ClipToBounds="True"
+                            Height="10"
+                            Padding="0"
+                            VerticalAlignment="Center">
+                        <Track Name="PART_Track"
+                               Minimum="{TemplateBinding Minimum}"
+                               Maximum="{TemplateBinding Maximum}"
+                               Value="{TemplateBinding Value, Mode=TwoWay}"
+                               Orientation="Horizontal">
+                            <!-- DecreaseButton == the filled portion to the LEFT of the thumb -->
+                            <Track.DecreaseButton>
+                                <RepeatButton Name="PART_DecreaseButton"
+                                              Focusable="False"
+                                              Background="{TemplateBinding Foreground}"
+                                              BorderThickness="0">
+                                    <RepeatButton.Template>
+                                        <ControlTemplate TargetType="RepeatButton">
+                                            <Border Background="{TemplateBinding Background}"
+                                                    CornerRadius="0"
+                                                    HorizontalAlignment="Stretch"
+                                                    VerticalAlignment="Stretch" />
+                                        </ControlTemplate>
+                                    </RepeatButton.Template>
+                                </RepeatButton>
+                            </Track.DecreaseButton>
+
+                            <!-- IncreaseButton == the empty portion to the RIGHT of the thumb -->
+                            <Track.IncreaseButton>
+                                <RepeatButton Name="PART_IncreaseButton"
+                                              Focusable="False"
+                                              Background="Transparent"
+                                              BorderThickness="0">
+                                    <RepeatButton.Template>
+                                        <ControlTemplate TargetType="RepeatButton">
+                                            <Border Background="{TemplateBinding Background}" />
+                                        </ControlTemplate>
+                                    </RepeatButton.Template>
+                                </RepeatButton>
+                            </Track.IncreaseButton>
+
+                            <!-- The thumb sits exactly at the boundary -->
+                            <Thumb Name="thumb"
+                                   Height="10"
+                                   Width="10"
+                                   CornerRadius="0,16,16,0"
+                                   Background="{TemplateBinding Foreground}">
+                                <Thumb.Template>
+                                    <ControlTemplate TargetType="Thumb">
+                                        <Border Background="{TemplateBinding Background}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="{TemplateBinding CornerRadius}" />
+                                    </ControlTemplate>
+                                </Thumb.Template>
+                            </Thumb>
+                        </Track>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

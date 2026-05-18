@@ -83,6 +83,10 @@ public partial class MainWindowViewModel : ViewModelBase
 
 
     [RelayCommand]
+    private void NavigateToAccounts()
+        => NavigationService.NavigateTo<AccountPage>();
+    
+    [RelayCommand]
     private void TogglePlay()
     {
         if (CurrentTrack != null)

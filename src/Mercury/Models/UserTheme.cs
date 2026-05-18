@@ -7,7 +7,7 @@ using Mercury.Services.Implementations;
 
 namespace Mercury.Models;
 
-public class UiTheme(ThemeManifest manifest, string folderName)
+public class UserTheme(ThemeManifest manifest, string folderName)
 {
     public ThemeManifest Manifest { get; } = manifest;
     public string ThemeFolderName { get; } = folderName;
@@ -32,7 +32,7 @@ public class UiTheme(ThemeManifest manifest, string folderName)
     }
 
 
-    public static readonly UiTheme Default = new(
+    public static readonly UserTheme Default = new(
         new ThemeManifest
         {
             Id = "com.mercury.default",

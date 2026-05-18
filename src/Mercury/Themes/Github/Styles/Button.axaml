@@ -9,14 +9,14 @@
     <!-- Ghost button (clear variant) -->
     <Style Selector="Button.Ghost">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
     </Style>
     
     <!-- circle / extra-round variant (also clear) -->
     <Style Selector="Button.Round">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="CornerRadius" Value="512"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="CornerRadius" Value="64"/>
     </Style>
     
     

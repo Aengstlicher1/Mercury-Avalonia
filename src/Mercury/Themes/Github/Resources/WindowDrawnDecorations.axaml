@@ -15,10 +15,10 @@
                                WindowDecorationProperties.ElementRole="TitleBar"/>
                     </WindowDrawnDecorationsContent.Underlay>
                     <WindowDrawnDecorationsContent.Overlay>
-                        <Grid RowDefinitions="64, *" ColumnDefinitions="*, Auto">
+                        <Grid RowDefinitions="48, *" ColumnDefinitions="*, Auto">
                             <Border Grid.Row="0" Grid.Column="1"
                                     Classes="Decor"
-                                    Margin="8"
+                                    Margin="6"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Top">
                                 <StackPanel Orientation="Horizontal">
@@ -28,7 +28,9 @@
                                         VerticalAlignment="Stretch"
                                         Width="{Binding $self.Bounds.Height}"
                                         WindowDecorationProperties.ElementRole="MinimizeButton">
-                                        <icon:PackIconMaterialDesign Kind="RemoveRound" Width="16"/>
+                                        <icon:PackIconMaterialDesign
+                                            Name="PART_MinimizeIcon"
+                                            Kind="RemoveRound" Width="16"/>
                                     </Button>
                                     <Button
                                         Name="PART_MaximizeButton"
@@ -36,7 +38,9 @@
                                         VerticalAlignment="Stretch"
                                         Width="{Binding $self.Bounds.Height}"
                                         WindowDecorationProperties.ElementRole="MaximizeButton">
-                                        <icon:PackIconMaterialDesign Kind="FullscreenRound" Width="16"/>
+                                        <icon:PackIconMaterialDesign 
+                                            Name="PART_MaximizeIcon"
+                                            Kind="FullscreenRound" Width="16"/>
                                     </Button>
                                     <Button
                                         Name="PART_CloseButton"
@@ -44,7 +48,9 @@
                                         VerticalAlignment="Stretch"
                                         Width="{Binding $self.Bounds.Height}"
                                         WindowDecorationProperties.ElementRole="CloseButton">
-                                        <icon:PackIconMaterialDesign Kind="CloseRound" Width="16"/>
+                                        <icon:PackIconMaterialDesign 
+                                            Name="PART_CloseIcon"
+                                            Kind="CloseRound" Width="16"/>
                                     </Button>
                                 </StackPanel>
                             </Border>
@@ -53,5 +59,9 @@
                 </WindowDrawnDecorationsContent>
             </WindowDrawnDecorationsTemplate>
         </Setter>
+        
+        <Style Selector="^:maximized /template/ icon|PackIconMaterialDesign#PART_MaximizeIcon">
+            <Setter Property="Kind" Value="FullscreenExitRound"/>
+        </Style>
     </ControlTheme>
 </ResourceDictionary>

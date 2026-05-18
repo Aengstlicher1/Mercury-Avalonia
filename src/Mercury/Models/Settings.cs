@@ -65,7 +65,7 @@ public class JsonPlayerSettings
 public class DesignSettings
 {
     public SystemTheme SystemTheme { get; set; } = SystemTheme.UseSystemTheme;
-    public string UserThemeId { get; set; } = UiTheme.Default.Manifest.Id;
+    public string UserThemeId { get; set; } = UserTheme.Default.Manifest.Id;
     
     public static readonly DesignSettings Default = new DesignSettings();
 }

@@ -5,7 +5,6 @@
              x:Class="Mercury.App"
              xmlns:local="using:Mercury"
              RequestedThemeVariant="Default">
-    
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -26,9 +25,8 @@
     </Application.Resources>
              
     <Application.Styles>
+        <simple:SimpleTheme/>
         <StyleInclude Source="avares://IconPacks.Avalonia.MaterialDesign/MaterialDesign.axaml" />
         <StyleInclude Source="Themes/StyleContract.axaml"/>
     </Application.Styles>
-             
-    
 </Application>

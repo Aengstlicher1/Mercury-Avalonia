@@ -10,6 +10,7 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
+        <AvaloniaResource Include="Themes\*.axaml"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -21,6 +22,7 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Avalonia.Controls.ColorPicker" Version="12.0.2" />
+        <PackageReference Include="Avalonia.Controls.WebView" Version="12.0.1" />
         <PackageReference Include="Avalonia.Desktop" Version="12.0.2" />
         <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.2" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
@@ -50,23 +52,30 @@
     </ItemGroup>
     
     <ItemGroup>
-        <!-- Assets (preview Icon) -->
-        <Content Include="Themes\**\Assets\*"
-                 Exclude="Themes\Template\**\*"
-                 CopyToOutputDirectory="PreserveNewest" />
         <!-- Theme json manifest -->
-        <Content Include="Themes\**\theme.json"
-                 Exclude="Themes\Template\**\*"
+        <Content Include="Themes\*\theme.json"
                  CopyToOutputDirectory="PreserveNewest" />
-        <!-- Theme Resources and Styles (Including Dark / Light mode) -->
-        <Content Include="Themes\**\*.axaml"
-                 Exclude="Themes\Template\**\*"
+        <!-- Theme Theme specific Resource (Dark / Light colors) -->
+        <Content Include="Themes\*\*.axaml"
                  CopyToOutputDirectory="PreserveNewest" />
-        <Content Update="Assets\Fonts\Roboto.ttf">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <!-- Theme Resources -->
+        <Content Include="Themes\*\Resources\*.axaml"
+                 CopyToOutputDirectory="PreserveNewest" />
+        <!-- Theme Styles -->
+        <Content Include="Themes\*\Styles\*.axaml"
+                 CopyToOutputDirectory="PreserveNewest" />
+        <!-- Assets (preview Icon) -->
+        <Content Include="Themes\*\Assets\*"
+                 CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <!-- Copy fonts -->
+        <Content Update="Assets\Fonts\*.ttf">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Update="Assets\Fonts\Roboto_Italic.ttf">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <Content Update="Assets\Fonts\*.otf">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 </Project>

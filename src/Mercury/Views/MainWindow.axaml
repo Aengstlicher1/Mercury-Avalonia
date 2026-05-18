@@ -35,21 +35,21 @@
             </Border>
         </Panel>
         
-        <Grid Name="RootGrid" RowDefinitions="64, *">
+        <Grid Name="RootGrid" RowDefinitions="48, *">
             <Border Grid.Row="0">
-                <Grid ColumnDefinitions="48, *, *, 96" Margin="48,0">
+                <Grid ColumnDefinitions="48, Auto, Auto, *, Auto, 120">
                     <Button Grid.Column="0"
                             Classes="Ghost"
                             Width="{Binding $self.Bounds.Height}"
                             Command="{Binding NavigationService.GoBackCommand}"
                             IsVisible="{Binding NavigationService.CanGoBack}"
-                            HorizontalAlignment="Left"
+                            HorizontalAlignment="Center"
                             Content="{icon:MaterialDesign Kind=ArrowBackRound, Width=16}"/>
                     <Grid Grid.Column="1">
                         <Border Classes="Decor"
-                                HorizontalAlignment="Stretch"
+                                HorizontalAlignment="Left"
                                 VerticalAlignment="Stretch"
-                                Margin="12">
+                                Margin="6">
                             <ItemsControl
                                 ItemsSource="{Binding NavigationService.Tabs}">
                                 <ItemsControl.ItemsPanel>
@@ -75,24 +75,29 @@
                     <Grid Grid.Column="2"
                           ColumnDefinitions="*, Auto" 
                           VerticalAlignment="Stretch"
-                          Margin="12">
+                          Margin="6">
                         <TextBox Grid.Column="0" PlaceholderText="Search for Songs, Albums, Playlists"
                                  Text="{Binding SearchText, Mode=TwoWay}"
                                  CornerRadius="{DynamicResource LeftCornerRadius}"
-                                 Margin="0,0,-1,0"
+                                 Margin="0,0,-2,0"
                                  VerticalAlignment="Stretch"
                                  GotFocus="SearchBox_GotFocus"
                                  WindowDecorationProperties.ElementRole="User"/>
                         <ComboBox Grid.Column="1" CornerRadius="{DynamicResource RightCornerRadius}"
                                   ItemsSource="{Binding SearchFilters}"
                                   SelectedItem="{Binding SearchFilter}"
-                                  Margin="-1,0,0,0"
                                   WindowDecorationProperties.ElementRole="User"/>
                     </Grid>
                     
                     <Border Grid.Column="1" Grid.ColumnSpan="3" Margin="12,4,12,0"
                             Height="1" BorderBrush="{DynamicResource OutlineBrush}"
                             BorderThickness="1" VerticalAlignment="Bottom"/>
+                    <Button Grid.Column="4" Classes="Round" Margin="6"
+                            Background="{DynamicResource SurfaceBrush}"
+                            BorderBrush="{DynamicResource OutlineBrush}"
+                            Command="{Binding NavigateToAccountsCommand}">
+                        <icon:PackIconMaterialDesign Kind="PersonOutlineOutline"/>
+                    </Button>
                 </Grid>
             </Border>
             
@@ -188,11 +193,12 @@
                                     Margin="4,4,16,4"
                                     Spacing="8">
                             <Button Classes="Round"
+                                    ToolTip.Tip="{Binding RepeatState}"
                                     Command="{Binding SwitchRepeatStateCommand}">
                                 <icon:PackIconMaterialDesign Width="16" Height="16"
                                                              Kind="{Binding RepeatState, Converter={StaticResource RepeatIconConverter}}"/>
                             </Button>
-                            <Button Classes="Round">
+                            <Button Classes="Round" ToolTip.Tip="{Binding Volume, StringFormat={}{0:F0} %}">
                                 <icon:PackIconMaterialDesign Width="16" Height="16"
                                                              Kind="{Binding Volume, Converter={StaticResource VolumeIconConverter}}"/>
                             </Button>

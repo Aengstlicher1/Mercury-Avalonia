@@ -31,5 +31,5 @@
     <CornerRadius x:Key="CornerRadius">8</CornerRadius>
     <CornerRadius x:Key="LeftCornerRadius">8,0,0,8</CornerRadius>
     <CornerRadius x:Key="RightCornerRadius">0,8,8,0</CornerRadius>
-    <Thickness x:Key="OutlineThickness">2</Thickness>
+    <Thickness x:Key="OutlineThickness">1.2</Thickness>
 </ResourceDictionary>
