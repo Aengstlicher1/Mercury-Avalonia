@@ -10,8 +10,7 @@ namespace Mercury.Services.Implementations;
 
 public class AccountService : ServiceBase, IAccountService
 {
-    public List<CookieAuthTokens> AuthTokens { get; } = new List<CookieAuthTokens>();
-    public CookieAuthTokens? CurrentAuthTokens => YoutubeMusic.User.CurrentAuthTokens;
+    public List<CookieAuthTokens> Accounts { get; } = new List<CookieAuthTokens>();
     
     public async Task AddAccount(NativeWebViewCookieManager manager)
     {
@@ -22,9 +21,9 @@ public class AccountService : ServiceBase, IAccountService
         var tokens = new CookieAuthTokens(wantedCookies);
 
         /* Only add if the Cookies are not already saved */
-        if (!AuthTokens.Any(t => t.Equals(tokens)))
+        if (!Accounts.Any(t => t.Equals(tokens)))
         {
-            AuthTokens.Add(tokens);
+            Accounts.Add(tokens);
             YoutubeMusic.User.SetTokens(tokens);
         }
     }

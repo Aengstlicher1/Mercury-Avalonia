@@ -5,11 +5,13 @@
              xmlns:vm="clr-namespace:Mercury.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Mercury.Views.AccountPage"
-             x:DataType="vm:AccountPageViewModel">
+             x:DataType="vm:AccountPageViewModel"
+             Background="Transparent">
     <Design.DataContext>
         <vm:AccountPageViewModel/>
     </Design.DataContext>
     <NativeWebView Name="WebView"
-                   Source="{Binding LoginUrl}"
-                   NavigationStarted="WebViewNavigated"/>
+                   NavigationStarted="OnNavigationStarted"
+                   AdapterCreated="OnAdapterCreated"
+                   Source="{Binding LoginUrl}"/>
 </ContentPage>
