@@ -61,6 +61,7 @@ public class App : Application
         services.AddTransient<QueueViewerViewModel>();
         services.AddTransient<EntityViewerViewModel>();
         services.AddTransient<PlaylistViewerViewModel>();
+        services.AddTransient<GoogleAuthViewerViewModel>();
 
         // Register Views
         services.AddTransient<MainWindow>();
@@ -72,6 +73,7 @@ public class App : Application
         services.AddTransient<PlayingPage>();
         services.AddTransient<EntityViewer>();
         services.AddTransient<PlaylistViewer>();
+        services.AddTransient<GoogleAuthViewer>();
 
         Services = services.BuildServiceProvider();
         
@@ -89,6 +91,7 @@ public class App : Application
         nav.Register<SearchPage, SearchPageViewModel>("Search", PackIconMaterialDesignKind.SearchRound, isTab: false);
         nav.Register<AccountPage, AccountPageViewModel>("Accounts", PackIconMaterialDesignKind.PersonOutlineOutline, isTab: false);
         nav.Register<PlayingPage, PlayingPageViewModel>("Playing", PackIconMaterialDesignKind.PlayArrowRound, isTab: false);
+        nav.Register<GoogleAuthViewer, GoogleAuthViewerViewModel>("OAuth", PackIconMaterialDesignKind.LockRound, isTab: false);
         
         
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)

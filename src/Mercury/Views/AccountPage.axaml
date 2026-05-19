@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Mercury.ViewModels"
+             xmlns:controls="clr-namespace:Mercury.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Mercury.Views.AccountPage"
              x:DataType="vm:AccountPageViewModel"
@@ -10,8 +11,10 @@
     <Design.DataContext>
         <vm:AccountPageViewModel/>
     </Design.DataContext>
-    <NativeWebView Name="WebView"
-                   NavigationStarted="OnNavigationStarted"
-                   AdapterCreated="OnAdapterCreated"
-                   Source="{Binding LoginUrl}"/>
+    <Panel>
+        <Button Content="Login to your Google Account"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Command="{Binding RedirectToLoginCommand}"/>
+    </Panel>
 </ContentPage>
