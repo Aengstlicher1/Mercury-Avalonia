@@ -9,6 +9,12 @@ namespace Mercury.ViewModels;
 
 public partial class AccountPageViewModel(INavigationService navigationService) : ViewModelBase
 {
+
+    public AccountPageViewModel() : this(App.Services.GetRequiredService<INavigationService>())
+    {
+        
+    }
+    
     [RelayCommand]
     private void RedirectToLogin()
     {

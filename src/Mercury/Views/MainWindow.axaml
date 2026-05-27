@@ -160,19 +160,9 @@
                             <Button Grid.Column="0" 
                                     Command="{Binding EnterPlayingCommand}"
                                     Width="{Binding $self.Bounds.Height}"
+                                    VerticalAlignment="Stretch"
                                     Classes="Ghost"
                                     Padding="0">
-                                <icon:PackIconMaterialDesign Kind="FullscreenRound" Height="24" Width="24"
-                                                             IsVisible="False"/>
-                                <Button.Styles>
-                                    <Style Selector="Button:pointerover">
-                                        <Setter Property="ContentTemplate">
-                                            <DataTemplate>
-                                                <icon:PackIconMaterialDesign Kind="FullscreenRound" Height="24" Width="24"/>
-                                            </DataTemplate>
-                                        </Setter>
-                                    </Style>
-                                </Button.Styles>
                             </Button>
                             
                             <!-- Title and artist for the current Track -->
